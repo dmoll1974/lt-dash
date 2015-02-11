@@ -1,0 +1,38 @@
+<section data-ng-controller="ProductsController" data-ng-init="find()">
+
+    <table ng-table class="table">
+        <tr ng-repeat="product in products">
+            <td data-title="'Product'">{{product.name}}</td>
+            <td data-title="'Description'">{{product.description}}</td>
+        </tr>
+    </table>
+
+    <div class="tree-border" style=" background: #555;">
+        <h3 style="color: white">Dark Tree</h3>
+        <div style="color: white">Selected: {{node3.label?node2.label:"N/A"}}</div>
+        <treecontrol class="tree-dark" tree-model="treedata" node-children="children" on-selection="showSelected(node)" selected-node="node3">
+            label: {{node.label}} ({{node.id}})
+        </treecontrol>
+    </div>
+    <!--<md-toolbar class="md-theme-light">-->
+        <!--<h1 class="md-toolbar-tools">-->
+            <!--<span>Products</span>-->
+        <!--</h1>-->
+    <!--</md-toolbar>-->
+    <!--<md-content>-->
+        <!--<md-list>-->
+            <!--<md-item data-ng-repeat="product in products">-->
+                <!--<md-item-content>-->
+                    <!--<div class="md-tile-content">-->
+                        <!--<h3><a data-ng-href="#!/products/{{product._id}}">{{product.name}}</a></h3>-->
+                        <!--<h4>{{product.description}}</h4>-->
+                    <!--</div>-->
+                <!--</md-item-content>-->
+            <!--<md-divider ng-if="!$last"></md-divider>-->
+            <!--</md-item>-->
+        <!--</md-list>-->
+    <!--</md-content>-->
+    <!--</div>-->
+
+</section>
+

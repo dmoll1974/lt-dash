@@ -16,4 +16,5 @@ module.exports = function(app) {
 
 	// Finish by binding the Dashboard middleware
 	app.param('dashboardId', dashboards.dashboardByID);
+    app.param('productId', dashboards.dashboardByProductId);
 };

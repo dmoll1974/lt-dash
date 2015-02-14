@@ -65,5 +65,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 				productId: $stateParams.productId
 			});
 		};
-	}
+
+        // Add dashboard to Product
+        $scope.addDashboard = function(product) {
+
+            $location.path('/dashboards/create/' + product._id);
+        };
+
+        $scope.isActive = function(route) {
+            return route === $location.path();
+        }
+    }
 ]);

@@ -96,6 +96,16 @@ exports.dashboardByID = function(req, res, next, id) {
 	});
 };
 
+exports.dashboardByProductId = function(req, res, next, productId) {
+    Dashboard.find({productId: productId}).populate('metrics').exec(function(err, dashboards) {
+        if (err) return next(err);
+        if (! dashboards) return next(new Error('Failed to load Dashboard ' + id));
+        req.dashboards = dashboards ;
+        next();
+    });
+};
+
+
 /**
  * Dashboard authorization middleware
  */

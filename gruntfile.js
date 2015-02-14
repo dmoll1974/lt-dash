@@ -8,7 +8,8 @@ module.exports = function(grunt) {
 		clientViews: ['public/modules/**/views/**/*.html'],
 		clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
 		clientCSS: ['public/modules/**/*.css'],
-		mochaTests: ['app/tests/**/*.js']
+		mochaTests: ['app/tests/**/*.js'],
+        sass: 'public/styles/{,*/}*.{scss,sass}'
 	};
 
 	// Project Configuration
@@ -47,7 +48,15 @@ module.exports = function(grunt) {
 				options: {
 					livereload: true
 				}
-			}
+			},
+//           sass: {
+//                files: watchFiles.sass,
+//                    tasks: ['sass:dev']
+//            }
+            compass: {
+                files: watchFiles.sass,
+                tasks: ["compass:server"]
+            },
 		},
 		jshint: {
 			all: {
@@ -113,7 +122,7 @@ module.exports = function(grunt) {
 			}
 		},
 		concurrent: {
-			default: ['nodemon', 'watch'],
+			default: ['nodemon', 'watch', 'compass:server'],
 			debug: ['nodemon', 'watch', 'node-inspector'],
 			options: {
 				logConcurrentOutput: true,
@@ -139,7 +148,55 @@ module.exports = function(grunt) {
 			unit: {
 				configFile: 'karma.conf.js'
 			}
-		}
+		},
+        /**
+         * Sass
+         */
+//        sass: {
+//            dev: {
+//                options: {
+//                    style: 'expanded',
+//                    compass: false
+//                },
+//                files: {
+//                    'public/css/style.css': 'public/styles/main.scss',
+//                    'public/css/bootstrap.css': 'public/lib/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss'
+//                }
+//            },
+//        }
+        compass: {
+//            options: {
+//                sassDir: "public/styles",
+//                cssDir: ".tmp/styles",
+//                generatedImagesDir: ".tmp/styles/ui/images/",
+//                imagesDir: "public/styles/ui/images/",
+//                javascriptsDir: "public/scripts",
+//                fontsDir: "public/fonts",
+//                importPath: "<%= yeoman.app %>/bower_components",
+//                httpImagesPath: "styles/ui/images/",
+//                httpGeneratedImagesPath: "styles/ui/images/",
+//                httpFontsPath: "fonts",
+//                relativeAssets: true
+//            },
+            dist: {
+                options: {
+                    outputStyle: 'compressed',
+                    debugInfo: false,
+                    noLineComments: true
+                }
+            },
+            server: {
+                options: {
+                    debugInfo: true
+                }
+            },
+            forvalidation: {
+                options: {
+                    debugInfo: false,
+                    noLineComments: false
+                }
+            }
+        },
 	});
 
 	// Load NPM tasks
@@ -158,9 +215,11 @@ module.exports = function(grunt) {
 	});
 
 	// Default task(s).
-	grunt.registerTask('default', ['lint', 'concurrent:default']);
+	grunt.registerTask('default', ['lint', 'concurrent:default' ]);
 
-	// Debug task.
+
+
+    // Debug task.
 	grunt.registerTask('debug', ['lint', 'concurrent:debug']);
 
 	// Secure task(s).

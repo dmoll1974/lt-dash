@@ -44,8 +44,10 @@
 </head>
 
 <body class="ng-cloak">
-	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-	<section class="content">
+	<!--<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>-->
+    <section data-ng-include=" '/modules/core/views/header.client.view.html' " id="header" class="top-header"></section>
+    <aside data-ng-include="'/modules/core/views/sidebar.client.view.html'" id="nav-container"></aside>
+    <section class="content">
 		<section class="container">
 			{% block content %}{% endblock %}
 		</section>

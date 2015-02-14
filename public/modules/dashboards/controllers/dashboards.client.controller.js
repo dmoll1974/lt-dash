@@ -3,13 +3,18 @@
 // Dashboards controller
 angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards',
 	function($scope, $stateParams, $location, Authentication, Dashboards) {
+
+        $scope.productId = $stateParams.productId;
+
 		$scope.authentication = Authentication;
 
 		// Create new Dashboard
 		$scope.create = function() {
 			// Create new Dashboard object
 			var dashboard = new Dashboards ({
-				name: this.name
+				name: this.name,
+                description: this.description,
+                productId: this.productId
 			});
 
 			// Redirect after save
@@ -18,6 +23,9 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 
 				// Clear form fields
 				$scope.name = '';
+                $scope.description = '';
+                $scope.productId = '';
+
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -52,8 +60,10 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 		};
 
 		// Find a list of Dashboards
-		$scope.find = function() {
-			$scope.dashboards = Dashboards.query();
+		$scope.find = function(productId) {
+			$scope.dashboards = Dashboards.query({
+                productId: productId
+            });
 		};
 
 		// Find existing Dashboard

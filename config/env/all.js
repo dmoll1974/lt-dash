@@ -13,11 +13,16 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
+                'public/css/bootstrap.css',
+                'public/css/style.css',
+                'public/lib/font-awesome/css/font-awesome.css',
+
 				'public/lib/bootstrap/dist/css/bootstrap.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
-                'public/lib/ng-table/dist/ng-table.css',
-                'public/lib/angular-tree-control/css/tree-control.css',
-                'public/lib/angular-tree-control/css/tree-control-attribute.css'
+				'public/lib/bootstrap/dist/css/bootstrap-theme.css'
+//                'public/lib/ng-table/dist/ng-table.css',
+//                'public/lib/angular-tree-control/css/tree-control.css',
+//                'public/lib/angular-tree-control/css/tree-control-attribute.css',
+//                'public/lib/styles/main.scss'
 			],
 			js: [
 				'public/lib/angular/angular.js',

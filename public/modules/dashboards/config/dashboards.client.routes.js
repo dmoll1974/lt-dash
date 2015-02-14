@@ -6,11 +6,11 @@ angular.module('dashboards').config(['$stateProvider',
 		// Dashboards state routing
 		$stateProvider.
 		state('listDashboards', {
-			url: '/dashboards',
+			url: ':/dashboards/:productId',
 			templateUrl: 'modules/dashboards/views/list-dashboards.client.view.html'
 		}).
 		state('createDashboard', {
-			url: '/dashboards/create',
+			url: '/dashboards/create/:productId',
 			templateUrl: 'modules/dashboards/views/create-dashboard.client.view.html'
 		}).
 		state('viewDashboard', {

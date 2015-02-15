@@ -72,8 +72,5 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $location.path('/dashboards/create/' + product._id);
         };
 
-        $scope.isActive = function(productId) {
-            return $location.path().indexOf(productId)!= -1;
-        }
-    }
+           }
 ]);

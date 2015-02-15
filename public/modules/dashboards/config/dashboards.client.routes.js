@@ -14,11 +14,11 @@ angular.module('dashboards').config(['$stateProvider',
 			templateUrl: 'modules/dashboards/views/create-dashboard.client.view.html'
 		}).
 		state('viewDashboard', {
-			url: '/dashboards/:dashboardId',
+			url: '/browse/:productId/:dashboardId',
 			templateUrl: 'modules/dashboards/views/view-dashboard.client.view.html'
 		}).
 		state('editDashboard', {
-			url: '/dashboards/:dashboardId/edit',
+			url: '/configure/:productId/:dashboardId',
 			templateUrl: 'modules/dashboards/views/edit-dashboard.client.view.html'
 		});
 	}

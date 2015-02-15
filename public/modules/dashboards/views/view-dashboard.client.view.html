@@ -10,12 +10,11 @@
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
 	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="dashboard.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="dashboard.user.displayName"></span>
-		</em>
-	</small>
+    <table ng-table class="table">
+        <tr ng-repeat="metric in dashboard.metrics">
+            <td data-title="'Metric'">{{metric.alias}}</td>
+            <td data-title="'Tag'">{{metric.tag}}</td>
+        </tr>
+    </table>
+
 </section>

@@ -6,19 +6,19 @@ angular.module('metrics').config(['$stateProvider',
 		// Metrics state routing
 		$stateProvider.
 		state('listMetrics', {
-			url: '/metrics',
+			url: '/metrics/:dashboardId',
 			templateUrl: 'modules/metrics/views/list-metrics.client.view.html'
 		}).
 		state('createMetric', {
-			url: '/metrics/create',
+			url: '/metrics/create/:dashboardId',
 			templateUrl: 'modules/metrics/views/create-metric.client.view.html'
 		}).
 		state('viewMetric', {
-			url: '/metrics/:metricId',
+			url: '/browse/:productId/:dashboardId/:metricId',
 			templateUrl: 'modules/metrics/views/view-metric.client.view.html'
 		}).
 		state('editMetric', {
-			url: '/metrics/:metricId/edit',
+			url: '/configure/:productId/:dashboardId/:metricId',
 			templateUrl: 'modules/metrics/views/edit-metric.client.view.html'
 		});
 	}

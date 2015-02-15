@@ -35,9 +35,9 @@ audio:not([controls]) {
 }
 [hidden],
 template {
-    display: none;
 }
 a {
+    display: none;
     background-color: transparent;
 }
 a:active,
@@ -11279,7 +11279,12 @@ button.toast-close-button {
 .bs-docs-sidebar .nav .nav>.active:focus>a {
     font-weight: 500;
 }
+/* selected dashboard*/
 
+.bs-docs-sidebar .nav .nav>.dashboard-selected>a{
+
+    font-weight: 700;
+}
 /*hide all (inactive) nested list */
 .bs-docs-sidebar .nav ul.nav {
     display: none;

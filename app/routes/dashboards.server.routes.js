@@ -9,12 +9,13 @@ module.exports = function(app) {
 		.get(dashboards.list)
 		.post(users.requiresLogin, dashboards.create);
 
-	app.route('/dashboards/:dashboardId')
+	app.route('dashboards/:productName/:dashboardName')
 		.get(dashboards.read)
 		.put(users.requiresLogin, dashboards.hasAuthorization, dashboards.update)
 		.delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);
 
 	// Finish by binding the Dashboard middleware
 	app.param('dashboardId', dashboards.dashboardByID);
-    app.param('productId', dashboards.dashboardByProductId);
+//    app.param('dashboardName', dashboards.dashboardByName);
+    app.param('productName', dashboards.dashboardByProductName);
 };

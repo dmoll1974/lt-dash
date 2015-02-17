@@ -14,11 +14,11 @@ angular.module('products').config(['$stateProvider',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
 		state('viewProduct', {
-			url: '/browse/:productId',
+			url: '/browse/:productName',
 			templateUrl: 'modules/products/views/view-product.client.view.html'
 		}).
 		state('editProduct', {
-			url: '/configure/:productId',
+			url: '/configure/:productName',
 			templateUrl: 'modules/products/views/edit-product.client.view.html'
 		});
 	}

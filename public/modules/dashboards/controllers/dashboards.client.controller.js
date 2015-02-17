@@ -19,7 +19,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 
 			// Redirect after save
 			dashboard.$save(function(response) {
-				$location.path('dashboards/' + response._id);
+				$location.path('browse/' + response.productName + '/' + response.name);
 
 				// Clear form fields
 				$scope.name = '';
@@ -51,7 +51,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 		// Update existing Dashboard
 		$scope.update = function() {
 			var dashboard = $scope.dashboard;
-
+            dashboard.productName = $stateParams.productName;
 			dashboard.$update(function() {
 				$location.path('dashboards/' + dashboard._id);
 			}, function(errorResponse) {
@@ -60,16 +60,18 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 		};
 
 		// Find a list of Dashboards
-		$scope.find = function(productId) {
+		$scope.find = function() {
 			$scope.dashboards = Dashboards.query({
-                productId: productId
+                dashboardName: $stateParams.dashboardName,
+                productName: $stateParams.productName
             });
 		};
 
 		// Find existing Dashboard
 		$scope.findOne = function() {
 			$scope.dashboard = Dashboards.get({ 
-				dashboardId: $stateParams.dashboardId
+				dashboardName: $stateParams.dashboardName,
+                productName: $stateParams.productName
 			});
 		};
 	}

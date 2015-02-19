@@ -12,14 +12,25 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 				name: this.name,
                 description: this.description
 			});
-
+    
 			// Redirect after save
 			product.$save(function(response) {
-				$location.path('products/' + response._id);
 
-				// Clear form fields
+                
+
+                $location.path('browse/' + response._id);
+
+
+                // Clear form fields
 				$scope.name = '';
                 $scope.description = '';
+
+                Products.query(function(products){
+                        $scope.products = products;
+                        $scope.$apply;
+                });
+
+
 
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
@@ -72,5 +83,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
             $location.path('/dashboards/create/' + product._id);
         };
 
-           }
+
+    }
 ]);

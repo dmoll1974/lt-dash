@@ -13,10 +13,10 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             product.description = this.description;
 
 
-            Products.create(product).success(function(response){
+            Products.create(product).success(function(product){
 
 
-                $location.path('products/' + response._id);
+                $location.path('browse/' + product.name);
 
                 Products.fetch().success(function(products){
                     $scope.products = Products.items;
@@ -70,9 +70,13 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
 		// Find existing Product
 		$scope.findOne = function() {
-			$scope.product = Products.get({ 
-				productId: $stateParams.productId
-			});
+
+            Products.get($stateParams.productName).success(function(product){
+
+                $scope.product = product;
+
+            });
+
 		};
 
         // Add dashboard to Product

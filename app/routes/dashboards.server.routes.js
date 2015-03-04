@@ -5,7 +5,7 @@ module.exports = function(app) {
 	var dashboards = require('../../app/controllers/dashboards.server.controller');
 
 	// Dashboards Routes
-	app.route('/dashboards')
+	app.route('/dashboards/:productName')
 		.get(dashboards.list)
 		.post(users.requiresLogin, dashboards.create);
 

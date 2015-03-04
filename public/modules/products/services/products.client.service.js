@@ -30,8 +30,8 @@ angular.module('products').factory('Products', ['$resource', '$http',
             });
         }
         
-        function getFn(options){
-            return $http.get('/products/' + options.productId);
+        function getFn(productName){
+            return $http.get('/products/' + productName);
         }
         
         function query (a1, a2, a3, a4){

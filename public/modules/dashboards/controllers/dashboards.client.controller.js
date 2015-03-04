@@ -1,8 +1,8 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards',
-	function($scope, $stateParams, $location, Authentication, Dashboards) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards', 'Products',
+	function($scope, $stateParams, $location, Authentication, Dashboards, Products) {
 
         $scope.productId = $stateParams.productId;
 
@@ -11,25 +11,28 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 		// Create new Dashboard
 		$scope.create = function() {
 			// Create new Dashboard object
-			var dashboard = new Dashboards ({
-				name: this.name,
-                description: this.description,
-                productId: this.productId
-			});
+            var dashboard = {};
+            dashboard.name = this.name;
+            dashboard.description = this.description;
 
-			// Redirect after save
-			dashboard.$save(function(response) {
-				$location.path('browse/' + response.productName + '/' + response.name);
+            Dashboards.create(dashboard, $stateParams.productName).success(function(dashboard){
 
-				// Clear form fields
-				$scope.name = '';
+
+                $location.path('browse/' + $stateParams.productName + '/' + dashboard.name);
+
+                Products.fetch().success(function(products){
+                    $scope.products = Products.items;
+
+                });
+
+                // Clear form fields
+                $scope.name = '';
                 $scope.description = '';
-                $scope.productId = '';
+                $scope.productName = '';
 
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+            });
+
+        };
 
 		// Remove existing Dashboard
 		$scope.remove = function(dashboard) {

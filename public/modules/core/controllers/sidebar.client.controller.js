@@ -10,8 +10,7 @@ angular.module('core').controller('SidebarController', ['$scope', '$stateParams'
             $scope.products = Products.items;
             
         });
-      //  $scope.products = Products.query();
-        
+
 
         $scope.$watch(function(scope) { return Products.items },
             function() {
@@ -24,9 +23,9 @@ angular.module('core').controller('SidebarController', ['$scope', '$stateParams'
             return $location.path().indexOf(productName)!== -1;
         };
 
-//        $scope.dashboardIsActive = function(dashboardName) {
-//            if ($location.path().indexOf(dashboardName)!== -1) return 'dashboard-selected';
-//        };
+        $scope.dashboardIsActive = function(dashboardName) {
+            if ($location.path().indexOf(dashboardName)!== -1) return 'dashboard-selected';
+        };
 
 
 

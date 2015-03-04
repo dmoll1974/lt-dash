@@ -10,7 +10,7 @@ angular.module('dashboards').config(['$stateProvider',
 			templateUrl: 'modules/dashboards/views/list-dashboards.client.view.html'
 		}).
 		state('createDashboard', {
-			url: '/dashboards/create/:productId',
+			url: '/add/dashboard/:productName',
 			templateUrl: 'modules/dashboards/views/create-dashboard.client.view.html'
 		}).
 		state('viewDashboard', {

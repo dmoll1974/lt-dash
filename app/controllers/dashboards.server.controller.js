@@ -26,21 +26,20 @@ function getProductName(productId, callback){
 exports.create = function(req, res) {
 	var dashboard = new Dashboard(req.body);
 	dashboard.user = req.user;
-    
-    getProductName(dashboard.productId, function(productName){
-        
-        dashboard.productName = productName;
-        
-        dashboard.save(function(err) {
-            if (err) {
-                return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-            } else {
-                res.jsonp(dashboard);
-            }
-        });
+
+
+    dashboard.productId = req.product._id;
+
+    dashboard.save(function(err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.jsonp(dashboard);
+        }
     });
+
 };
 
 

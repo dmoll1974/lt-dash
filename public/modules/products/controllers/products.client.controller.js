@@ -8,34 +8,31 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 		// Create new Product
 		$scope.create = function() {
 			// Create new Product object
-			var product = new Products ({
-				name: this.name,
-                description: this.description
-			});
-    
-			// Redirect after save
-			product.$save(function(response) {
+			var product = {};
+            product.name = this.name;
+            product.description = this.description;
 
 
+            Products.create(product).success(function(response){
 
-                $location.path('browse/' + response._id);
 
+                $location.path('products/' + response._id);
 
-                // Clear form fields
-				$scope.name = '';
-                $scope.description = '';
+                Products.fetch().success(function(products){
+                    $scope.products = Products.items;
 
-                Products.query(function(products){
-                        console.log('products', products);
-                        console.log($scope.products);
-                        $scope.products = products;
                 });
 
+                // Clear form fields
+                $scope.name = '';
+                $scope.description = '';
+
+            });
 
 
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
+//			}, function(errorResponse) {
+//				$scope.error = errorResponse.data.message;
+//			});
 		};
 
 		// Remove existing Product

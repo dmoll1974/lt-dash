@@ -9,10 +9,20 @@ angular.module('products').factory('Products', ['$resource', '$http',
             items : [],
             'get' : getFn,
             query : query,
-            fetch : fetch
+            fetch : fetch,
+            create: create
+
         };
         
         return Products;
+
+
+        function create(product){
+            return $http.post('/products', product).success(function(items){
+
+            });
+        }
+
         function fetch(){
             return $http.get('/products').success(function(items){
                 

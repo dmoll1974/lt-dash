@@ -26,5 +26,6 @@ var ProductSchema = new mongoose.Schema({
 ProductSchema.index({ name: 1}, { unique: true });
 
 
+ProductSchema.index({ name: 1}, { unique: true });
 
 mongoose.model('Product', ProductSchema);

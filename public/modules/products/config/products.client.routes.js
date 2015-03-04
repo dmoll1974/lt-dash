@@ -14,7 +14,7 @@ angular.module('products').config(['$stateProvider',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
 		state('viewProduct', {
-			url: '/browse/:productId',
+			url: '/products/:productId',
 			templateUrl: 'modules/products/views/view-product.client.view.html'
 		}).
 		state('editProduct', {

@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Products',
-	function($scope, $stateParams, $location, Authentication, Products) {
+angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$location', 'Authentication', 'Products',
+	function($scope, $rootScope, $stateParams, $location, Authentication, Products) {
 		$scope.authentication = Authentication;
 
 		// Create new Product
@@ -16,7 +16,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
 			// Redirect after save
 			product.$save(function(response) {
 
-                
+
 
                 $location.path('browse/' + response._id);
 
@@ -26,8 +26,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$statePa
                 $scope.description = '';
 
                 Products.query(function(products){
+                        console.log('products', products);
+                        console.log($scope.products);
                         $scope.products = products;
-                        $scope.$apply;
                 });
 
 

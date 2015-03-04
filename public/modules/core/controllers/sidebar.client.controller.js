@@ -5,9 +5,17 @@ angular.module('core').controller('SidebarController', ['$scope', '$stateParams'
 
         $scope.productId = $stateParams.productId;
 
-        $scope.products = Products.query();
-
+        Products.fetch().success(function(products){
+            $scope.products = Products.items;
+            
+        });
+      //  $scope.products = Products.query();
         
+
+//        $scope.$watch(function(scope) { return Products.query() },
+//            function() {}
+//        );
+//
         $scope.productIsActive = function(productName) {
             return $location.path().indexOf(productName)!== -1;
         };

@@ -6,7 +6,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
         var Dashboards = {
 //            items : [],
-//            'get' : getFn,
+            'get' : getFn,
 //            query : query,
 //            fetch : fetch,
             create: create
@@ -22,6 +22,9 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             });
         }
 
+        function getFn(productName, dashboardName){
+            return $http.get('/dashboards/' + productName + '/' + dashboardName);
+        }
 
 
 

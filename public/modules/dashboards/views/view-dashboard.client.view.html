@@ -1,6 +1,6 @@
 <section data-ng-controller="DashboardsController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="dashboard.name"></h1>
+		<h1>{{productName}}-{{dashboard.name}}</h1>
 	</div>
 	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == dashboard.user._id))">
 		<a class="btn btn-primary" href="/#!/dashboards/{{dashboard._id}}/edit">

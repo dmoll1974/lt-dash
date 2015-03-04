@@ -9,7 +9,7 @@ module.exports = function(app) {
 		.get(dashboards.list)
 		.post(users.requiresLogin, dashboards.create);
 
-	app.route('dashboards/:productName/:dashboardName')
+	app.route('/dashboards/:productName/:dashboardName')
 		.get(dashboards.read)
 		.put(users.requiresLogin, dashboards.hasAuthorization, dashboards.update)
 		.delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);

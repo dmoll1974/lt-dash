@@ -4,7 +4,7 @@
 angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards', 'Products',
 	function($scope, $stateParams, $location, Authentication, Dashboards, Products) {
 
-        $scope.productId = $stateParams.productId;
+        $scope.productName = $stateParams.productName;
 
 		$scope.authentication = Authentication;
 
@@ -70,12 +70,22 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
             });
 		};
 
+        // Find existing Product
+        $scope.findOne = function() {
+
+            Dashboards.get($stateParams.productName, $stateParams.dashboardName).success(function(dashboard){
+
+                $scope.dashboard = dashboard;
+
+            });
+
+        };
 		// Find existing Dashboard
-		$scope.findOne = function() {
-			$scope.dashboard = Dashboards.get({ 
-				dashboardName: $stateParams.dashboardName,
-                productName: $stateParams.productName
-			});
-		};
+//		$scope.findOne = function() {
+//			$scope.dashboard = Dashboards.get({
+//				dashboardName: $stateParams.dashboardName,
+//                productName: $stateParams.productName
+//			});
+//		};
 	}
 ]);

@@ -10,7 +10,7 @@ angular.module('metrics').config(['$stateProvider',
 			templateUrl: 'modules/metrics/views/list-metrics.client.view.html'
 		}).
 		state('createMetric', {
-			url: '/metrics/create/:dashboardId',
+			url: 'add/metric/:productName/:dashboardName',
 			templateUrl: 'modules/metrics/views/create-metric.client.view.html'
 		}).
 		state('viewMetric', {

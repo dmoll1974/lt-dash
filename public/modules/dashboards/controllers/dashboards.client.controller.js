@@ -4,6 +4,16 @@
 angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards', 'Products',
 	function($scope, $stateParams, $location, Authentication, Dashboards, Products) {
 
+        this.tab = 1;
+
+        this.setTab = function(newValue){
+            this.tab = newValue;
+        };
+
+        this.isSet = function(tabName){
+            return this.tab === tabName;
+        };
+        
         $scope.productName = $stateParams.productName;
 
 		$scope.authentication = Authentication;

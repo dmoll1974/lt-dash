@@ -1,20 +1,28 @@
-<section data-ng-controller="DashboardsController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1>{{productName}}-{{dashboard.name}}</h1>
-	</div>
-	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == dashboard.user._id))">
-		<a class="btn btn-primary" href="/#!/dashboards/{{dashboard._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
-    <table ng-table class="table">
-        <tr ng-repeat="metric in dashboard.metrics">
-            <td data-title="'Metric'">{{metric.alias}}</td>
-            <td data-title="'Tag'">{{metric.tag}}</td>
-        </tr>
-    </table>
-
+<section data-ng-controller="DashboardsController as tab" data-ng-init="findOne()">
+    <div class="page-header">
+        <h1>{{productName}}-{{dashboard.name}}</h1>
+    </div>
+    <ul class="nav nav-pills">
+    <li ng-class="{active: tab.isSet(1)}" >
+        <a href ng-click="tab.setTab(1)" >Test runs</a></li>
+    <li ng-class="{active: tab.isSet(2)}">
+        <a href  ng-click="tab.setTab(2)">Metrics configuration</a></li>
+    <li ng-class="{active: tab.isSet(3)}">
+        <a href  ng-click="tab.setTab(3)">Events</a></li>
+    </ul>
+    <div ng-show="tab.isSet(1)">
+        <h4>Test runs</h4>
+    </div>
+    <div ng-show="tab.isSet(2)">
+        <table ng-table class="table">
+            <tr ng-repeat="metric in dashboard.metrics">
+                <td data-title="'Metric'">{{metric.alias}}</td>
+                <td data-title="'Tag'">{{metric.tag}}</td>
+            </tr>
+        </table>
+        <a data-ng-href="#!/add/metric/{{productName}}/{{dashboard.name}}"><i class="glyphicon glyphicon-plus-sign"></i> Add metric</a>
+    </div>
+    <div ng-show="tab.isSet(3)">
+        <h4>Events</h4>
+    </div>
 </section>

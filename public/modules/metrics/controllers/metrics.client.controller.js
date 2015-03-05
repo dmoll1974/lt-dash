@@ -5,6 +5,11 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 	function($scope, $stateParams, $location, Authentication, Metrics) {
 		$scope.authentication = Authentication;
 
+        $scope.addTarget = function () {
+            $scope.targets.push({
+                 text: ""
+            });
+        };
 		// Create new Metric
 		$scope.create = function() {
 			// Create new Metric object

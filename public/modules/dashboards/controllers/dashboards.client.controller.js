@@ -1,8 +1,8 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Dashboards', 'Products',
-	function($scope, $stateParams, $location, Authentication, Dashboards, Products) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products',
+	function($scope, $stateParams, $state, $location, Authentication, Dashboards, Products) {
 
         this.tab = 1;
 
@@ -16,8 +16,17 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
         
         $scope.productName = $stateParams.productName;
 
+        $scope.dashboardName = $stateParams.dashboardName;
+
 		$scope.authentication = Authentication;
 
+        $scope.addMetric = function() {
+
+            console.log('add/metric/' + $stateParams.productName + '/' + $stateParams.dashboardName)
+
+            $state.go('createMetric',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+
+        };
 		// Create new Dashboard
 		$scope.create = function() {
 			// Create new Dashboard object

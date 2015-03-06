@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1>{{productName}}-{{dashboard.name}}</h1>
     </div>
-    <ul class="nav nav-pills">
+    <ul class="nav nav-tabs">
     <li ng-class="{active: tab.isSet(1)}" >
         <a href ng-click="tab.setTab(1)" >Test runs</a></li>
     <li ng-class="{active: tab.isSet(2)}">
@@ -14,13 +14,18 @@
         <h4>Test runs</h4>
     </div>
     <div ng-show="tab.isSet(2)">
-        <table ng-table class="table">
-            <tr ng-repeat="metric in dashboard.metrics">
-                <td data-title="'Metric'">{{metric.alias}}</td>
-                <td data-title="'Tag'">{{metric.tag}}</td>
-            </tr>
-        </table>
-        <a data-ng-href="#!/add/metric/{{productName}}/{{dashboard.name}}"><i class="glyphicon glyphicon-plus-sign"></i> Add metric</a>
+        <div>
+            <button data-ng-click="addMetric()">Add metric</button>
+        </div>
+               <div>
+            <table ng-table class="table">
+                <tr ng-repeat="metric in dashboard.metrics">
+                    <td data-title="'Metric'">{{metric.alias}}</td>
+                    <td data-title="'Tag'">{{metric.tag}}</td>
+                </tr>
+            </table>
+        </div>
+
     </div>
     <div ng-show="tab.isSet(3)">
         <h4>Events</h4>

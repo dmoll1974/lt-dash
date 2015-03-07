@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <label class="control-label" for="alias">Alias</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="alias" id="alias" class="form-control" placeholder="Alias" required>
+                        <input type="text" data-ng-model="metric.alias" id="alias" class="form-control" placeholder="Alias" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -20,12 +20,21 @@
                     <button ng-click="addTarget()">Add target</button>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="tag" >Tags</label>
-                    <div class="controls" ng-repeat="tag in tags">
-                        <input type="text" id="tag" data-ng-model="tag.text" placeholder="Select tag" required>
-                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTag($index)" data-ng-show="!$first"></i>
+                    <label class="control-label" for="requirementOperator">Should be</label>
+                    <div class="controls">
+                        <select id="requirementOperator" data-ng-model="metric.requirementOperator">
+                            <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator}}">{{requirementOperator.alias}}</option>
+                        </select>
+                        <input type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
                     </div>
-                    <button ng-click="addTag()">Add target</button>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="controls">
+                        <select id="type" data-ng-model="metric.type" placeholder="Select type" required>
+                            <option data-ng-repeat="type in metricTypes" value="{{type}}">{{type}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <button data-ng-click="create()">Submit</button>

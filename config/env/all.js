@@ -18,11 +18,9 @@ module.exports = {
                 'public/lib/font-awesome/css/font-awesome.css',
 
 				'public/lib/bootstrap/dist/css/bootstrap.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.css'
-//                'public/lib/ng-table/dist/ng-table.css',
-//                'public/lib/angular-tree-control/css/tree-control.css',
-//                'public/lib/angular-tree-control/css/tree-control-attribute.css',
-//                'public/lib/styles/main.scss'
+				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+                'public/lib/ng-table/dist/ng-table.css',
+                'public/lib/ng-tags-input/ng-tags-input.css'
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -31,7 +29,7 @@ module.exports = {
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/ng-table/dist/ng-table.js',
-                'public/lib/angular-tree-control/angular-tree-control.js'
+                'public/lib/ng-tags-input/ng-tags-input.js'
 			]
 		},
 		css: [

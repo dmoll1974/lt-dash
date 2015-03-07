@@ -1,11 +1,12 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics',
-	function($scope, $stateParams, $location, Authentication, Metrics) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics', 'Dashboards',
+	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards) {
 		$scope.authentication = Authentication;
 
-
+//        $scope.dashboard = Dashboards.selected().tags;
+        
         $scope.targets = [{text: ''}];
 
 
@@ -21,21 +22,13 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         };
 
-        $scope.tags = [{text: ''}];
+        $scope.tags = [];
 
-
-        $scope.addTag = function() {
-
-            $scope.tags.push( {text: ''});
-
+        $scope.loadTags = function(query) {
+            return Dashboards.selected().tags;
         };
 
-        $scope.removeTag = function(index) {
 
-            $scope.tags.splice(index, 1);
-
-        };
-dde
         // Create new Metric
 		$scope.create = function() {
 			// Create new Metric object

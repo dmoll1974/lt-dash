@@ -92,9 +92,10 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
         // Find existing Product
         $scope.findOne = function() {
 
+
             Dashboards.get($stateParams.productName, $stateParams.dashboardName).success(function(dashboard){
 
-                $scope.dashboard = dashboard;
+                $scope.dashboard = Dashboards.selected;
 
             });
 

@@ -5,18 +5,38 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 	function($scope, $stateParams, $location, Authentication, Metrics) {
 		$scope.authentication = Authentication;
 
-        $scope.targets = [{text: 'bla'}];
+
+        $scope.targets = [{text: ''}];
 
 
         $scope.addTarget = function() {
-            $scope.targets.push({text: ""});
+
+            $scope.targets.push( {text: ''});
+
         };
 
-        $scope.showChoiceLabel = function (choice) {
-            return choice.id === $scope.choices[0].id;
-        }
+        $scope.removeTarget = function(index) {
 
-		// Create new Metric
+            $scope.targets.splice(index, 1);
+
+        };
+
+        $scope.tags = [{text: ''}];
+
+
+        $scope.addTag = function() {
+
+            $scope.tags.push( {text: ''});
+
+        };
+
+        $scope.removeTag = function(index) {
+
+            $scope.tags.splice(index, 1);
+
+        };
+dde
+        // Create new Metric
 		$scope.create = function() {
 			// Create new Metric object
 			var metric = new Metrics ({

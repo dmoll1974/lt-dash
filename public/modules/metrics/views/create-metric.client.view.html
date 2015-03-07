@@ -3,7 +3,7 @@
         <h1>New Metric</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+        <form class="form-horizontal"  novalidate>
             <fieldset>
                 <div class="form-group">
                     <label class="control-label" for="alias">Alias</label>
@@ -11,15 +11,25 @@
                         <input type="text" data-ng-model="alias" id="alias" class="form-control" placeholder="Alias" required>
                     </div>
                 </div>
-                <div class="form-group" ng-repeat="target in targets">
-                    <label for="target" ng-show="$first">Targets</label>
-                    <button ng-show="$last" ng-click="addTarget()">Add target</button>
-                    <input type="text" ng-model="target.text" name="" placeholder="Enter target">
+                <div class="form-group">
+                    <label class="control-label" for="target" >Targets</label>
+                    <div class="controls" ng-repeat="target in targets">
+                        <input type="text" id="target" data-ng-model="target.text" placeholder="Enter target" required>
+                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="!$first"></i>
+                    </div>
+                    <button ng-click="addTarget()">Add target</button>
                 </div>
-
-                <!--<div class="form-group">-->
-                    <!--<input type="submit" class="btn btn-default">-->
-                <!--</div>-->
+                <div class="form-group">
+                    <label class="control-label" for="tag" >Tags</label>
+                    <div class="controls" ng-repeat="tag in tags">
+                        <input type="text" id="tag" data-ng-model="tag.text" placeholder="Select tag" required>
+                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTag($index)" data-ng-show="!$first"></i>
+                    </div>
+                    <button ng-click="addTag()">Add target</button>
+                </div>
+                <div class="form-group">
+                    <button data-ng-click="create()">Submit</button>
+                </div>
 				<div data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>
 				</div>

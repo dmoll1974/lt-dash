@@ -24,6 +24,21 @@
                     <tags-input data-ng-model="tags">
                         <auto-complete source="loadTags($query)"></auto-complete>
                     </tags-input>
+                    <label class="control-label" for="requirementOperator">Should be</label>
+                    <div class="controls">
+                        <select id="requirementOperator" data-ng-model="metric.requirementOperator">
+                            <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator}}">{{requirementOperator.alias}}</option>
+                        </select>
+                        <input type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="controls">
+                        <select id="type" data-ng-model="metric.type" placeholder="Select type" required>
+                            <option data-ng-repeat="type in metricTypes" value="{{type}}">{{type}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <button data-ng-click="create()">Submit</button>

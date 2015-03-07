@@ -1,14 +1,29 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics', 'Dashboards',
-	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics',
+	function($scope, $stateParams, $location, Authentication, Metrics) {
 		$scope.authentication = Authentication;
+        
+        /* values for form drop downs*/
+        $scope.metricTypes = ['Average', 'Maximum', 'Minimum', 'Last', 'Slope'];
 
-//        $scope.dashboard = Dashboards.selected().tags;
+        $scope.requirementOperatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}, {alias: '', value: ''}];
         
         $scope.targets = [{text: ''}];
 
+        $scope.thresholdValues = [ {alias: '', value: ''},
+            {alias: '5% higher than', value: '0.05'},
+            {alias: '10% higher than', value: '0.1'},
+            {alias: '25% higher than', value: '0.25'},
+            {alias: '50% higher than', value: '0.5'},
+            {alias: '75% higher than', value: '0.75'},
+            {alias: '5% less than', value: '-0.05'},
+            {alias: '10% less than', value: '-0.1'},
+            {alias: '25% less than', value: '-0.25'},
+            {alias: '50% less than', value: '-0.5'},
+            {alias: '75% less than', value: '-0.75'}
+        ];
 
         $scope.addTarget = function() {
 
@@ -22,12 +37,20 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         };
 
-        $scope.tags = [];
+        $scope.tags = [{text: ''}];
 
-        $scope.loadTags = function(query) {
-            return Dashboards.selected().tags;
+
+        $scope.addTag = function() {
+
+            $scope.tags.push( {text: ''});
+
         };
 
+        $scope.removeTag = function(index) {
+
+            $scope.tags.splice(index, 1);
+
+        };
 
         // Create new Metric
 		$scope.create = function() {

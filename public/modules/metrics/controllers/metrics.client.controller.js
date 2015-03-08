@@ -10,7 +10,11 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         $scope.requirementOperatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}, {alias: '', value: ''}];
         
-        $scope.targets = [{text: ''}];
+        $scope.targets = [''];
+
+        $scope.metric = {};
+
+        $scope.metric.targets = [''];
 
         $scope.thresholdValues = [ {alias: '', value: ''},
             {alias: '5% higher than', value: '0.05'},
@@ -27,30 +31,19 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         $scope.addTarget = function() {
 
-            $scope.targets.push( {text: ''});
+            $scope.metric.targets.push('');
 
         };
 
         $scope.removeTarget = function(index) {
 
-            $scope.targets.splice(index, 1);
+            $scope.metric.targets.splice(index, 1);
 
         };
 
-        $scope.tags = [{text: ''}];
+//        $scope.tags = [];
 
 
-        $scope.addTag = function() {
-
-            $scope.tags.push( {text: ''});
-
-        };
-
-        $scope.removeTag = function(index) {
-
-            $scope.tags.splice(index, 1);
-
-        };
 
         // Create new Metric
 		$scope.create = function() {

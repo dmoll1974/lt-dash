@@ -8,21 +8,21 @@
                 <div class="form-group">
                     <label class="control-label" for="alias">Alias</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="alias" id="alias" class="form-control" placeholder="Alias" required>
+                        <input type="text" data-ng-model="metric.alias" id="alias" class="form-control" placeholder="Alias" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="target" >Targets</label>
-                    <div class="controls" ng-repeat="target in targets">
-                        <input type="text" id="target" data-ng-model="target.text" placeholder="Enter target" required>
-                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="!$first"></i>
+                    <div class="controls" ng-repeat="target in metric.targets track by $index">
+                        <input type="text" id="target" data-ng-model="metric.target[$index]" placeholder="Enter target" required>
+                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="targets.length>1"></i>
                     </div>
                     <button ng-click="addTarget()">Add target</button>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="tag" >Tags</label>
+                    <label class="control-label">Tags</label>
                     <tags-input data-ng-model="tags">
-                        <auto-complete source="loadTags($query)"></auto-complete>
+                        <!--<auto-complete source="loadTags($query)"></auto-complete>-->
                     </tags-input>
                     <label class="control-label" for="requirementOperator">Should be</label>
                     <div class="controls">
@@ -43,6 +43,7 @@
                 <div class="form-group">
                     <button data-ng-click="create()">Submit</button>
                 </div>
+                <p>Metric: {{metric}}</p>
 				<div data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>
 				</div>

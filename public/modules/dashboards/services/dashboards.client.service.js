@@ -8,6 +8,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 //            items : [],
             'get' : getFn,
             selected: '',
+            tags: tags,
 //            query : query,
 //            fetch : fetch,
             create: create
@@ -16,6 +17,18 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
         return Dashboards;
 
+        function tags(){
+            
+            var arrayOfTagObjects = [];
+            
+            _.each(Dashboards.selected.tags, function(tag){
+
+                arrayOfTagObjects.push({text: tag})
+                
+            })
+            return arrayOfTagObjects
+
+        }
 
         function create(dashboard, productName){
             return $http.post('/dashboards/' + productName, dashboard).success(function(dashboard){

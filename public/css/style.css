@@ -36,10 +36,10 @@ audio:not([controls]) {
 [hidden],
 template {
 }
-a {
-    display: none;
-    background-color: transparent;
-}
+/*a {*/
+    /*display: none;*/
+    /*background-color: transparent;*/
+/*}*/
 a:active,
 a:hover {
     outline: 0;

@@ -29,7 +29,8 @@ module.exports = {
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/ng-table/dist/ng-table.js',
-                'public/lib/ng-tags-input/ng-tags-input.js'
+                'public/lib/ng-tags-input/ng-tags-input.js',
+                'public/lib/underscore/underscore.js'
 			]
 		},
 		css: [

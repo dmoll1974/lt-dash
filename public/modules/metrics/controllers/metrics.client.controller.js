@@ -1,8 +1,8 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics',
-	function($scope, $stateParams, $location, Authentication, Metrics) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics','Dashboards',
+	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards) {
 		$scope.authentication = Authentication;
         
         /* values for form drop downs*/
@@ -41,7 +41,11 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         };
 
-//        $scope.tags = [];
+        $scope.loadTags = function(query){
+            
+            return Dashboards.tags();
+            
+        }
 
 
 

@@ -21,8 +21,8 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Tags</label>
-                    <tags-input data-ng-model="tags">
-                        <!--<auto-complete source="loadTags($query)"></auto-complete>-->
+                    <tags-input data-ng-model="metric.tags" >
+                        <auto-complete source="loadTags($query)"></auto-complete>
                     </tags-input>
                     <label class="control-label" for="requirementOperator">Should be</label>
                     <div class="controls">

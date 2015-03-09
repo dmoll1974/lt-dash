@@ -98,9 +98,9 @@ exports.list = function(req, res) {
  * Show the current Dashboard
  */
 exports.read = function(req, res) {
-    Dashboard.findOne({productId: req.product._id, name: req.params.dashboardName}).exec(function(err, dashboard){
+    Dashboard.findOne({productId: req.product._id, name: req.params.dashboardName}).populate('metrics').exec(function(err, dashboard){
         if (err) return next(err);
-        if (! dashboard) return next(new Error('Failed to load Dashboard ' + id));
+        if (! dashboard) return next(new Error('Failed to load Dashboard ' + req.params.dashboardName));
         res.jsonp(dashboard);
     })
 

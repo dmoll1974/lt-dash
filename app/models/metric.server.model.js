@@ -17,7 +17,7 @@ var metricSchema = new mongoose.Schema({
     "benchmarkIssue": {type: Number, default: null},
     "requirementValue": {type: Number, default: null},
     "requirementOperator": {type: String, default: null},
-    "tag": {type: String, default: null},
+    "tags": [String],
     "type": {type: String, default: 'Average'}
 });
 

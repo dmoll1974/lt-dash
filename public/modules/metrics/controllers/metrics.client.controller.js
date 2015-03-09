@@ -4,19 +4,29 @@
 angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics','Dashboards',
 	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards) {
 		$scope.authentication = Authentication;
-        
+
+        $scope.productName = $stateParams.productName;
+
+        $scope.dashboardName = $stateParams.dashboardName;
+
         /* values for form drop downs*/
         $scope.metricTypes = ['Average', 'Maximum', 'Minimum', 'Last', 'Slope'];
 
-        $scope.requirementOperatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}, {alias: '', value: ''}];
-        
+        $scope.requirementOperatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}];
+                
         $scope.targets = [''];
 
         $scope.metric = {};
 
+        $scope.metric.dashboardId = Dashboards.selected._id;
+
         $scope.metric.targets = [''];
 
-        $scope.thresholdValues = [ {alias: '', value: ''},
+        $scope.enableBenchmarking = 'disabled';
+
+        $scope.enableRequirement ='disabled';
+        
+        $scope.thresholdValues = [
             {alias: '5% higher than', value: '0.05'},
             {alias: '10% higher than', value: '0.1'},
             {alias: '25% higher than', value: '0.25'},
@@ -51,22 +61,22 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
         // Create new Metric
 		$scope.create = function() {
-			// Create new Metric object
-			var metric = new Metrics ({
-				name: this.name
-			});
 
-			// Redirect after save
-			metric.$save(function(response) {
-				$location.path('metrics/' + response._id);
+            $scope.metric.tags = [];
+            
+            _.each($scope.tags, function(tag){
+                
+                $scope.metric.tags.push(tag.text);
+            });
+            
+            Metrics.create($scope.metric).success(function (metric) {
 
-				// Clear form fields
-				$scope.name = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+                console.log(metric);
+                $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
+            });
 
+        };
+        
 		// Remove existing Metric
 		$scope.remove = function(metric) {
 			if ( metric ) { 

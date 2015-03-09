@@ -3,21 +3,84 @@
         <h1>Edit Metric</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="update()" novalidate>
+        <form class="form-horizontal"  novalidate>
             <fieldset>
-                <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                <div class="form-group well well-sm">
+                    <label class="control-label" for="alias">Alias</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="metric.name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="metric.alias" id="alias" class="form-control" placeholder="Alias" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                <div class="form-group well well-sm">
+                    <label class="control-label" for="target" >Targets</label>
+                    <div class="controls" ng-repeat="target in metric.targets track by $index">
+                        <input type="text" id="target" data-ng-model="metric.targets[$index]" placeholder="Enter target" required>
+                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="metric.targets.length>1"></i>
+                    </div>
+                    <button ng-click="addTarget()">Add target</button>
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+                <div class="form-group well well-sm">
+                    <label class="control-label">Tags</label>
+                    <tags-input data-ng-model="tags" >
+                        <auto-complete source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                </div>
+                <div class="form-group well well-sm">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="controls">
+                        <select id="type" data-ng-model="metric.type" placeholder="Select type" required>
+                            <option data-ng-repeat="type in metricTypes" value="{{type}}">{{type}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group well well-sm">
+                    <div class="col-lg-3">
+                        <label>Requirement {{enableRequirement}}</label><br/>
+                        <label class="switch switch-success"><input type="checkbox" ng-model="enableRequirement"  ng-true-value="enabled" ng-false-value="disabled"><i></i></label>
+                        <hr>
+                    </div>
+                    <div class="col-lg-9">
+                        <label ng-disabled="enableRequirement==='disabled'" class="control-label" for="requirementOperator">Should be</label>
+                        <div class="controls">
+                            <select ng-disabled="enableRequirement==='disabled'" id="requirementOperator" data-ng-model="metric.requirementOperator">
+                                <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator.value}}">{{requirementOperator.alias}}</option>
+                            </select>
+                            <input ng-disabled="enableRequirement==='disabled'" type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group well well-sm">
+                    <div class="col-lg-3">
+                        <label>Benchmarking {{enableBenchmarking}}</label><br/>
+                        <label class="switch switch-success"><input type="checkbox" ng-model="enableBenchmarking"  ng-true-value="enabled" ng-false-value="disabled"><i></i></label>
+                        <hr>
+                    </div>
+                    <div class="col-lg-9">
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValueWarning">Raise a warning if benchmark value is </label>
+                        <div class="controls">
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValueWarning" data-ng-model="metric.benchmarkWarning">
+                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            </select>
+                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
+                        </div>
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValuesIssue">Raise a issue if benchmark value is </label>
+                        <div class="controls">
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValuesIssue" data-ng-model="metric.benchmarkIssue" >
+                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            </select>
+                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group well well-sm">
+                    <button data-ng-click="create()">Submit</button>
+                </div>
+                <p>Metric: {{metric}}</p>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
             </fieldset>
         </form>
     </div>
 </section>
+

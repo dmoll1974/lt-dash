@@ -14,14 +14,14 @@
                 <div class="form-group well well-sm">
                     <label class="control-label" for="target" >Targets</label>
                     <div class="controls" ng-repeat="target in metric.targets track by $index">
-                        <input type="text" id="target" data-ng-model="metric.target[$index]" placeholder="Enter target" required>
+                        <input type="text" id="target" data-ng-model="metric.targets[$index]" placeholder="Enter target" required>
                         <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="metric.targets.length>1"></i>
                     </div>
                     <button ng-click="addTarget()">Add target</button>
                 </div>
                 <div class="form-group well well-sm">
                     <label class="control-label">Tags</label>
-                    <tags-input data-ng-model="metric.tags" >
+                    <tags-input data-ng-model="tags" >
                         <auto-complete source="loadTags($query)"></auto-complete>
                     </tags-input>
                 </div>
@@ -34,12 +34,42 @@
                     </div>
                 </div>
                 <div class="form-group well well-sm">
-                    <label class="control-label" for="requirementOperator">Should be</label>
-                    <div class="controls">
-                        <select id="requirementOperator" data-ng-model="metric.requirementOperator">
-                            <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator}}">{{requirementOperator.alias}}</option>
-                        </select>
-                        <input type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
+                    <div class="col-lg-3">
+                        <label>Requirement {{enableRequirement}}</label><br/>
+                        <label class="switch switch-success"><input type="checkbox" ng-model="enableRequirement"  ng-true-value="enabled" ng-false-value="disabled"><i></i></label>
+                        <hr>
+                    </div>
+                    <div class="col-lg-9">
+                        <label ng-disabled="enableRequirement==='disabled'" class="control-label" for="requirementOperator">Should be</label>
+                        <div class="controls">
+                            <select ng-disabled="enableRequirement==='disabled'" id="requirementOperator" data-ng-model="metric.requirementOperator">
+                                <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator.value}}">{{requirementOperator.alias}}</option>
+                            </select>
+                            <input ng-disabled="enableRequirement==='disabled'" type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group well well-sm">
+                    <div class="col-lg-3">
+                        <label>Benchmarking {{enableBenchmarking}}</label><br/>
+                        <label class="switch switch-success"><input type="checkbox" ng-model="enableBenchmarking"  ng-true-value="enabled" ng-false-value="disabled"><i></i></label>
+                        <hr>
+                    </div>
+                    <div class="col-lg-9">
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValueWarning">Raise a warning if benchmark value is </label>
+                        <div class="controls">
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValueWarning" data-ng-model="metric.benchmarkWarning">
+                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            </select>
+                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
+                        </div>
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValuesIssue">Raise a issue if benchmark value is </label>
+                        <div class="controls">
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValuesIssue" data-ng-model="metric.benchmarkIssue" >
+                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            </select>
+                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
+                         </div>
                     </div>
                 </div>
                 <div class="form-group well well-sm">
@@ -54,12 +84,3 @@
     </div>
 </section>
 
-<!--"dashboardId": { type: Schema.Types.ObjectId, ref: "Dashboard"},-->
-<!--"alias": {type: String, default: null},-->
-<!--"target": [String],-->
-<!--"benchmarkWarning": {type: Number, default: null},-->
-<!--"benchmarkIssue": {type: Number, default: null},-->
-<!--"requirementValue": {type: Number, default: null},-->
-<!--"requirementOperator": {type: String, default: null},-->
-<!--"tag": {type: String, default: null},-->
-<!--"type": {type: String, default: 'Average'-->

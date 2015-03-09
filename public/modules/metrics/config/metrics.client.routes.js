@@ -13,12 +13,12 @@ angular.module('metrics').config(['$stateProvider',
 			url: 'add/metric/:productName/:dashboardName',
 			templateUrl: 'modules/metrics/views/create-metric.client.view.html'
 		}).
-		state('viewMetric', {
-			url: '/browse/:productId/:dashboardId/:metricId',
-			templateUrl: 'modules/metrics/views/view-metric.client.view.html'
-		}).
+//		state('viewMetric', {
+//			url: '/browse/:productName/:dashboardName/:metricId',
+//			templateUrl: 'modules/metrics/views/view-metric.client.view.html'
+//		}).
 		state('editMetric', {
-			url: '/configure/:productId/:dashboardId/:metricId',
+			url: '/edit/metric/:productName/:dashboardName/:metricId',
 			templateUrl: 'modules/metrics/views/edit-metric.client.view.html'
 		});
 	}

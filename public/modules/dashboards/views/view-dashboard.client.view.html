@@ -17,12 +17,22 @@
         <div>
             <button data-ng-click="addMetric()">Add metric</button>
         </div>
-               <div>
-            <table ng-table class="table">
-                <tr ng-repeat="metric in dashboard.metrics">
-                    <td data-title="'Metric'">{{metric.alias}}</td>
-                    <td data-title="'Tag'">{{metric.tag}}</td>
-                </tr>
+         <div>
+             <table class="table">
+                 <thead>
+                     <tr>
+                         <th>Metric</th>
+                         <th>Tag</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                    <tr ng-repeat="metric in dashboard.metrics">
+                        <td><a data-ng-href="#!/edit/metric/{{productName}}/{{dashboardName}}/{{metric._id}}">{{metric.alias}}</a></td>
+                        <td>
+                            <span ng-repeat="tag in metric.tags">{{tag}}<span data-ng-show="!$last">, </span></span>
+                        </td>
+                    </tr>
+                 </tbody>
             </table>
         </div>
 

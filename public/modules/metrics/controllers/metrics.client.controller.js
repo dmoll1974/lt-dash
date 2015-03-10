@@ -52,8 +52,16 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
         };
 
         $scope.loadTags = function(query){
-            
-            return Dashboards.tags();
+
+            var matchedTags = [];
+
+            _.each(Dashboards.tags(), function(tag){
+
+                if(tag.text.toLowerCase().match(query.toLowerCase()))
+                    matchedTags.push(tag);
+            });
+
+            return matchedTags;
             
         }
 
@@ -71,7 +79,7 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
             
             Metrics.create($scope.metric).success(function (metric) {
 
-                console.log(metric);
+//                console.log(metric);
                 $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
             });
 
@@ -96,13 +104,19 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
 		// Update existing Metric
 		$scope.update = function() {
-			var metric = $scope.metric;
 
-			metric.$update(function() {
-				$location.path('metrics/' + metric._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
+            $scope.metric.tags = [];
+
+            _.each($scope.tags, function(tag){
+
+                $scope.metric.tags.push(tag.text);
+            });
+
+            Metrics.update($scope.metric).success(function (metric) {
+
+//                console.log(metric);
+                $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
+            });
 		};
 
 		// Find a list of Metrics
@@ -112,9 +126,34 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
 		// Find existing Metric
 		$scope.findOne = function() {
-			$scope.metric = Metrics.get({ 
-				metricId: $stateParams.metricId
-			});
+
+            Metrics.get($stateParams.metricId).success(function(metric){
+
+                $scope.metric = metric;
+
+                /* convert tags into array of objects */
+
+                var inputTags = [];
+
+                _.each(metric.tags, function(tag){
+
+                    inputTags.push({text: tag});
+                });
+
+                $scope.tags = inputTags;
+
+                /* set benchmark and requirement toggles */
+
+                if($scope.metric.requirementValue)
+                    $scope.enableRequirement ='enabled';
+
+                if($scope.metric.benchmarkWarning)
+                    $scope.enableBenchmarking = 'enabled';
+
+
+
+
+            });
 		};
 	}
 ]);

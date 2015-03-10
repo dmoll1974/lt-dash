@@ -7,8 +7,8 @@ angular.module('metrics').factory('Metrics', ['$http',
 
         var Metrics = {
 //            items : [],
-//            'get' : getFn,
-//            query : query,
+            'get' : getFn,
+            update : update,
 //            fetch : fetch,
             create: create
 
@@ -16,6 +16,9 @@ angular.module('metrics').factory('Metrics', ['$http',
 
         return Metrics;
 
+        function getFn(metricId){
+            return $http.get('/metrics/' + metricId);
+        }
 
         function create(metric){
             return $http.post('/metrics', metric).success(function(metric){
@@ -23,5 +26,10 @@ angular.module('metrics').factory('Metrics', ['$http',
             });
         }
 
+        function update(metric){
+            return $http.put('/metrics/' + metric._id, metric).success(function(metric){
+
+            });
+        }
 	}
 ]);

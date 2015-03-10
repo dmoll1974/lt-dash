@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 var metricSchema = new mongoose.Schema({
     "dashboardId": { type: Schema.Types.ObjectId, ref: "Dashboard"},
     "alias": {type: String, default: null},
-    "target": [String],
+    "targets": [String],
     "benchmarkWarning": {type: Number, default: null},
     "benchmarkIssue": {type: Number, default: null},
     "requirementValue": {type: Number, default: null},

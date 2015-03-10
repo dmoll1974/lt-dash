@@ -11,7 +11,7 @@ module.exports = function(app) {
 
 	app.route('/metrics/:metricId')
 		.get(metrics.read)
-		.put(users.requiresLogin, metrics.hasAuthorization, metrics.update)
+		.put(   metrics.update) //users.requiresLogin, metrics.hasAuthorization,
 		.delete(users.requiresLogin, metrics.hasAuthorization, metrics.delete);
 
 	// Finish by binding the Metric middleware

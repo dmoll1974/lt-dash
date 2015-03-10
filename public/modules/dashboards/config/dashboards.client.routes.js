@@ -21,5 +21,6 @@ angular.module('dashboards').config(['$stateProvider',
 			url: '/configure/:productName/:dashboardName',
 			templateUrl: 'modules/dashboards/views/edit-dashboard.client.view.html'
 		});
+
 	}
 ]);

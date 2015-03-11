@@ -12,6 +12,7 @@
     "angular-ui-router": "~0.2.11",
     "bootstrap-sass-official": "~3.3.3",
     "ng-tags-input": "~2.2.0",
-    "underscore": "1.8.2"
+    "underscore": "1.8.2",
+    "angular-modal-service": "~0.6.3"
   }
 }

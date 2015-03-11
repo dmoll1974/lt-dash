@@ -12,7 +12,7 @@ module.exports = function(app) {
 	app.route('/metrics/:metricId')
 		.get(metrics.read)
 		.put(   metrics.update) //users.requiresLogin, metrics.hasAuthorization,
-		.delete(users.requiresLogin, metrics.hasAuthorization, metrics.delete);
+		.delete( metrics.delete); //users.requiresLogin, metrics.hasAuthorization,
 
 	// Finish by binding the Metric middleware
 	app.param('metricId', metrics.metricByID);

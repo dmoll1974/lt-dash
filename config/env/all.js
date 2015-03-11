@@ -30,7 +30,8 @@ module.exports = {
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/ng-table/dist/ng-table.js',
                 'public/lib/ng-tags-input/ng-tags-input.js',
-                'public/lib/underscore/underscore.js'
+                'public/lib/underscore/underscore.js',
+                'public/lib/angular-modal-service/dst/angular-modal-service.min.js'
 			]
 		},
 		css: [

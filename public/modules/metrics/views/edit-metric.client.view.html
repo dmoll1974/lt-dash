@@ -21,8 +21,8 @@
                 </div>
                 <div class="form-group well well-sm">
                     <label class="control-label">Tags</label>
-                    <tags-input data-ng-model="tags" >
-                        <auto-complete source="loadTags($query)"></auto-complete>
+                    <tags-input data-ng-model="metric.tags" >
+                        <auto-complete source="loadTags($query)" loadOnDownArrow="true"></auto-complete>
                     </tags-input>
                 </div>
                 <div class="form-group well well-sm">

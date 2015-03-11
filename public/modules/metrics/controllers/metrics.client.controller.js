@@ -1,8 +1,8 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics','Dashboards',
-	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics','Dashboards', 'angularModalService',
+	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards, angularModalService) {
 		$scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
@@ -55,27 +55,33 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
             var matchedTags = [];
 
-            _.each(Dashboards.tags(), function(tag){
+            _.each(Dashboards.selected.tags, function(tag){
 
                 if(tag.text.toLowerCase().match(query.toLowerCase()))
                     matchedTags.push(tag);
             });
 
-            return matchedTags;
-            
-        }
+                return matchedTags;
+
+        };
 
 
 
         // Create new Metric
 		$scope.create = function() {
 
-            $scope.metric.tags = [];
+            /* if new tags are added, update dashbboard */
+            var mergedTags = _.union($scope.metric.tags, Dashboards.selected.tags);
             
-            _.each($scope.tags, function(tag){
+            if (mergedTags.length > Dashboards.selected.tags.length ){
                 
-                $scope.metric.tags.push(tag.text);
-            });
+                Dashboards.selected.tags = mergedTags;
+                
+                Dashboards.update().success(function(dashboard){});
+                
+            }
+            
+            
             
             Metrics.create($scope.metric).success(function (metric) {
 
@@ -105,16 +111,9 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 		// Update existing Metric
 		$scope.update = function() {
 
-            $scope.metric.tags = [];
-
-            _.each($scope.tags, function(tag){
-
-                $scope.metric.tags.push(tag.text);
-            });
 
             Metrics.update($scope.metric).success(function (metric) {
 
-//                console.log(metric);
                 $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
             });
 		};
@@ -131,17 +130,6 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
                 $scope.metric = metric;
 
-                /* convert tags into array of objects */
-
-                var inputTags = [];
-
-                _.each(metric.tags, function(tag){
-
-                    inputTags.push({text: tag});
-                });
-
-                $scope.tags = inputTags;
-
                 /* set benchmark and requirement toggles */
 
                 if($scope.metric.requirementValue)
@@ -155,5 +143,7 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
 
             });
 		};
-	}
+
+
+    }
 ]);

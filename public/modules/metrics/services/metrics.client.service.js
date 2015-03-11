@@ -9,7 +9,7 @@ angular.module('metrics').factory('Metrics', ['$http',
 //            items : [],
             'get' : getFn,
             update : update,
-//            fetch : fetch,
+            delete : deleteFn,
             create: create
 
         };
@@ -20,6 +20,10 @@ angular.module('metrics').factory('Metrics', ['$http',
             return $http.get('/metrics/' + metricId);
         }
 
+        function deleteFn(metricId){
+            return $http.delete('/metrics/' + metricId);
+        }
+        
         function create(metric){
             return $http.post('/metrics', metric).success(function(metric){
 

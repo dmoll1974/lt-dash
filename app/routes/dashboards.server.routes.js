@@ -11,10 +11,12 @@ module.exports = function(app) {
 
 	app.route('/dashboards/:productName/:dashboardName')
 		.get(dashboards.read)
-		.put(users.requiresLogin, dashboards.hasAuthorization, dashboards.update)
-		.delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);
 
-	// Finish by binding the Dashboard middleware
+    app.route('/dashboards/:dashboardId')
+        .put(dashboards.update) // users.requiresLogin, dashboards.hasAuthorization,
+        .delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);
+
+    // Finish by binding the Dashboard middleware
 	app.param('dashboardId', dashboards.dashboardByID);
 //    app.param('dashboardName', dashboards.dashboardByName);
     app.param('productName', dashboards.dashboardByProductName);

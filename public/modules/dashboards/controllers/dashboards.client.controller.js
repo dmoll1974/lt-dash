@@ -1,8 +1,8 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products',
-	function($scope, $stateParams, $state, $location, Authentication, Dashboards, Products) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'ModalService',
+	function($scope, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, ModalService) {
 
         this.tab = 1;
 
@@ -22,12 +22,14 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 
         $scope.addMetric = function() {
 
-            console.log('add/metric/' + $stateParams.productName + '/' + $stateParams.dashboardName)
+//            console.log('add/metric/' + $stateParams.productName + '/' + $stateParams.dashboardName)
 
             $state.go('createMetric',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
 
         };
-		// Create new Dashboard
+
+
+        // Create new Dashboard
 		$scope.create = function() {
 			// Create new Dashboard object
             var dashboard = {};
@@ -107,5 +109,23 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 //                productName: $stateParams.productName
 //			});
 //		};
-	}
+
+
+        $scope.showDeleteConfirmation = function(metricId) {
+            ModalService.showModal({
+                templateUrl: 'modal.html',
+                controller: "ModalController"
+            }).then(function(modal) {
+                modal.element.modal();
+                modal.close.then(function(result) {
+                    if(result === 'Yes'){
+                        
+                        Metrics.remove(metricId)
+                        
+                    }
+                });
+            });
+        };
+
+    }
 ]);

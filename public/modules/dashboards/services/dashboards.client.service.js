@@ -9,7 +9,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             'get' : getFn,
             selected: '',
             update: update,
-//            query : query,
+            updateTags : updateTags,
 //            fetch : fetch,
             create: create
 
@@ -17,7 +17,30 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
         return Dashboards;
 
+        function updateTags (tags){
 
+            /* if new tags are added, update dashbboard */
+
+            var updatedTags = Dashboards.selected.tags;
+
+            _.each(tags, function(tag){
+
+                var tagExists = false;
+
+                _.each(Dashboards.selected.tags, function(existingTag){
+
+                    if (tag.text === existingTag.text) tagExists = true;
+
+                });
+
+                if (tagExists === false) updatedTags.push(tag);
+
+            });
+
+            Dashboards.selected.tags = updatedTags;
+
+        }
+        
         function update(){
             return $http.put('/dashboards/' + Dashboards.selected._id, Dashboards.selected).success(function(dashboard){
 

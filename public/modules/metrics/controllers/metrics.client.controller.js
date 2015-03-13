@@ -1,8 +1,8 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Metrics','Dashboards', 'ModalService',
-	function($scope, $rootScope, $stateParams, $state, $location, Authentication, Metrics, Dashboards, ModalService) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '$log', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Metrics','Dashboards',
+	function($scope, $modal, $log, $rootScope, $stateParams, $state, $location, Authentication, Metrics, Dashboards) {
 		$scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
@@ -65,27 +65,25 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$rootScope
 
         };
 
-
+        $scope.initCreateForm = function () {
+            
+           if (Metrics.clone.alias ) $scope.metric = Metrics.clone;
+        };
 
         // Create new Metric
 		$scope.create = function() {
 
-            /* if new tags are added, update dashbboard */
-            var mergedTags = _.union($scope.metric.tags, Dashboards.selected.tags);
-            
-            if (mergedTags.length > Dashboards.selected.tags.length ){
+
+
+            Dashboards.updateTags($scope.metric.tags);
                 
-                Dashboards.selected.tags = mergedTags;
+            Dashboards.update().success(function(dashboard){});
                 
-                Dashboards.update().success(function(dashboard){});
-                
-            }
-            
-            
-            
+
             Metrics.create($scope.metric).success(function (metric) {
 
-            /* Set correct */
+            /* reset cloned metric */
+                Metrics.clone = {};
                 
                 $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
             });
@@ -145,6 +143,15 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$rootScope
             });
 		};
 
+       $scope.clone = function() {
+           
+           $scope.metric._id = undefined;
+
+           Metrics.clone = $scope.metric;
+
+           $state.go('createMetric',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+           
+       } 
        $scope.cancel = function() {
            
           if ($rootScope.previousStateParams)
@@ -155,5 +162,50 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$rootScope
 
 
        }
+        $scope.openDeleteConfirmation = function (size, index) {
+
+            Metrics.selected = $scope.metric;
+
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: size
+            });
+
+            modalInstance.result.then(function (metricId) {
+
+                Metrics.delete(metricId).success(function(metric){
+
+                    /* refresh dashboard*/
+                    Dashboards.get($scope.productName, $scope.dashboardName).success(function(dashboard){
+
+                        $scope.dashboard = Dashboards.selected;
+                        
+                        /* return to previuos state*/
+                        $state.go($rootScope.previousState,$rootScope.previousStateParams);
+
+                    });
+
+                });
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
     }
+]).controller('ModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
+
+    $scope.selectedMetric = Metrics.selected;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.selectedMetric._id);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+}
 ]);

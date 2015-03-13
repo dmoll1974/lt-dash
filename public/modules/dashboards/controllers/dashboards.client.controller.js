@@ -5,7 +5,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
 	function($scope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
 
         
-        /* Tab contoller */
+        /* Tab controller */
 
         $scope.$watch(function(scope) { return DashboardTabs.tabNumber },
             function() {

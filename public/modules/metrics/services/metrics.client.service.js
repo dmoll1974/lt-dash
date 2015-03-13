@@ -11,7 +11,8 @@ angular.module('metrics').factory('Metrics', ['$http',
             update : update,
             delete : deleteFn,
             create: create,
-            selected: ''
+            selected: {},
+            clone: {}
 
         };
 

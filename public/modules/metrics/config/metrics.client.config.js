@@ -9,3 +9,4 @@ angular.module('metrics').run(['Menus',
 		Menus.addSubMenuItem('topbar', 'metrics', 'New Metric', 'metrics/create');
 	}
 ]);
+

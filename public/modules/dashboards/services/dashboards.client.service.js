@@ -37,13 +37,45 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             });
         }
 
+        
 
+    }
+]).factory('DashboardTabs', ['$http',
+    function($http) {
 
-//		return $resource('dashboards/:dashboardId', { dashboardId: '@_id'
-//		}, {
-//			update: {
-//				method: 'PUT'
-//			}
-//		});
-	}
+        var DashboardTabs = {
+            setTab : setTab,
+            tabNumber : 1,
+            isSet : isSet 
+        };
+
+        return DashboardTabs;
+
+        function isSet(tabNumber){
+            
+            return DashboardTabs.tabNumber === tabNumber;
+            
+        }
+
+        function setTab(tabName){
+
+            switch(tabName){
+
+                case 'Test runs':
+                    DashboardTabs.tabNumber = 1;
+                    break;
+                case 'Metrics':
+                    DashboardTabs.tabNumber = 2;
+                    break;
+                case 'Events':
+                    DashboardTabs.tabNumber = 3;
+                    break;
+                default:
+                    DashboardTabs.tabNumber = 1;
+                    break;
+            }
+
+        }
+
+    }
 ]);

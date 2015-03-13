@@ -1,8 +1,8 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Metrics','Dashboards', 'angularModalService',
-	function($scope, $stateParams, $location, Authentication, Metrics, Dashboards, angularModalService) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Metrics','Dashboards', 'ModalService',
+	function($scope, $rootScope, $stateParams, $state, $location, Authentication, Metrics, Dashboards, ModalService) {
 		$scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
@@ -85,7 +85,8 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
             
             Metrics.create($scope.metric).success(function (metric) {
 
-//                console.log(metric);
+            /* Set correct */
+                
                 $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
             });
 
@@ -144,6 +145,15 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$statePara
             });
 		};
 
+       $scope.cancel = function() {
+           
+          if ($rootScope.previousStateParams)
+              $state.go($rootScope.previousState,$rootScope.previousStateParams);
+          else
+              $state.go($rootScope.previousState);
 
+
+
+       }
     }
 ]);

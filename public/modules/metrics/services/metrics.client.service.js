@@ -10,7 +10,8 @@ angular.module('metrics').factory('Metrics', ['$http',
             'get' : getFn,
             update : update,
             delete : deleteFn,
-            create: create
+            create: create,
+            selected: ''
 
         };
 

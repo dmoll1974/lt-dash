@@ -4,11 +4,11 @@
     </div>
     <ul class="nav nav-tabs">
     <li ng-class="{active: tab.isSet(1)}" >
-        <a href ng-click="tab.setTab(1)" >Test runs</a></li>
+        <a href ng-click="tab.setTab('Test runs')" >Test runs</a></li>
     <li ng-class="{active: tab.isSet(2)}">
-        <a href  ng-click="tab.setTab(2)">Metrics configuration</a></li>
+        <a href  ng-click="tab.setTab('Metrics')">Metrics configuration</a></li>
     <li ng-class="{active: tab.isSet(3)}">
-        <a href  ng-click="tab.setTab(3)">Events</a></li>
+        <a href  ng-click="tab.setTab('Events')">Events</a></li>
     </ul>
     <div ng-show="tab.isSet(1)">
         <h4>Test runs</h4>

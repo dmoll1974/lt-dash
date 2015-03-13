@@ -1,18 +1,37 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'ModalService',
-	function($scope, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, ModalService) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$modal', '$log', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'DashboardTabs',
+	function($scope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
 
-        this.tab = 1;
+        
+        /* Tab contoller */
+
+        $scope.$watch(function(scope) { return DashboardTabs.tabNumber },
+            function() {
+
+                this.tab = DashboardTabs.tabNumber;
+            }
+        );
+//        this.tab = DashboardTabs.tabNumber;
 
         this.setTab = function(newValue){
-            this.tab = newValue;
-        };
+            DashboardTabs.setTab(newValue);
+        }
 
-        this.isSet = function(tabName){
-            return this.tab === tabName;
+        this.isSet = function(tabNumber){
+            return DashboardTabs.isSet(tabNumber);
         };
+        
+        /* Watch on dashboard */
+
+        $scope.$watch(function(scope) { return Dashboards.selected },
+            function() {
+
+                $scope.dashboard = Dashboards.selected;
+            }
+        );
+        
         
         $scope.productName = $stateParams.productName;
 
@@ -111,21 +130,47 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$sta
 //		};
 
 
-        $scope.showDeleteConfirmation = function(metricId) {
-            ModalService.showModal({
-                templateUrl: 'modal.html',
-                controller: "ModalController"
-            }).then(function(modal) {
-                modal.element.modal();
-                modal.close.then(function(result) {
-                    if(result === 'Yes'){
-                        
-                        Metrics.remove(metricId)
-                        
-                    }
+        $scope.open = function (size, index) {
+
+            Metrics.selected = $scope.dashboard.metrics[index];
+            
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: size//,
+            });
+
+            modalInstance.result.then(function (metricId) {
+
+                Metrics.delete(metricId).success(function(metric){
+
+                    /* refresh dashboard*/
+                    Dashboards.get($scope.productName, $scope.dashboardName).success(function(dashboard){
+
+                        $scope.dashboard = Dashboards.selected;
+
+                    });
+
                 });
+
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
             });
         };
 
+
     }
+]).controller('ModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
+
+    $scope.selectedMetric = Metrics.selected;
+    
+    $scope.ok = function () {
+        $modalInstance.close($scope.selectedMetric._id);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+}
 ]);

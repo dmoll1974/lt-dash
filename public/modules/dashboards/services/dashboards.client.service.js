@@ -22,6 +22,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             /* if new tags are added, update dashbboard */
 
             var updatedTags = Dashboards.selected.tags;
+            var updated = false;
 
             _.each(tags, function(tag){
 
@@ -33,11 +34,16 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
                 });
 
-                if (tagExists === false) updatedTags.push(tag);
+                if (tagExists === false){
+                    updatedTags.push({text: tag.text});
+                    updated = true;
+                }
 
             });
 
             Dashboards.selected.tags = updatedTags;
+            
+            return updated;
 
         }
         

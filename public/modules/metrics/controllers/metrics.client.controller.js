@@ -73,12 +73,9 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
         // Create new Metric
 		$scope.create = function() {
 
+            /* Update tags in Dashboard if any new are added */
 
-
-            Dashboards.updateTags($scope.metric.tags);
-                
-            Dashboards.update().success(function(dashboard){});
-                
+            if(Dashboards.updateTags($scope.metric.tags)) Dashboards.update().success(function(dashboard){});
 
             Metrics.create($scope.metric).success(function (metric) {
 
@@ -109,6 +106,10 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
 		// Update existing Metric
 		$scope.update = function() {
+
+            /* Update tags in Dashboard if any new are added */
+
+            if(Dashboards.updateTags($scope.metric.tags)) Dashboards.update().success(function(dashboard){});
 
 
             Metrics.update($scope.metric).success(function (metric) {

@@ -18,7 +18,7 @@ angular.module('dashboards').config(['$stateProvider',
 			templateUrl: 'modules/dashboards/views/view-dashboard.client.view.html'
 		}).
 		state('editDashboard', {
-			url: '/configure/:productName/:dashboardName',
+			url: '/edit/:productName/:dashboardName',
 			templateUrl: 'modules/dashboards/views/edit-dashboard.client.view.html'
 		});
 

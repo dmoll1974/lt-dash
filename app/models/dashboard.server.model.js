@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 var dashboardSchema = new mongoose.Schema({
     "productId": { type: Schema.Types.ObjectId, ref: "Product"},
-    "name": String,
+    "name": { type: String, uppercase: true },
     "description": String,
     "metrics": [
         { type: Schema.Types.ObjectId, ref: "Metric"}

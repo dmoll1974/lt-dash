@@ -16,6 +16,9 @@ module.exports = function(app) {
         .put(dashboards.update) // users.requiresLogin, dashboards.hasAuthorization,
         .delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);
 
+    app.route('/clone/dashboards/:dashboardId')
+        .get(dashboards.clone)
+    
     // Finish by binding the Dashboard middleware
 	app.param('dashboardId', dashboards.dashboardByID);
 //    app.param('dashboardName', dashboards.dashboardByName);

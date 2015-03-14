@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
  */
 
 var ProductSchema = new mongoose.Schema({
-    "name": String,
+    "name": { type: String, uppercase: true },
     "description": String,
     "dashboards": [
         { type: Schema.Types.ObjectId, ref: "Dashboard"}

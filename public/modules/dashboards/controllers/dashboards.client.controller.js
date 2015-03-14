@@ -5,6 +5,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
 	function($scope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
 
         
+        
         /* Tab controller */
 
         $scope.$watch(function(scope) { return DashboardTabs.tabNumber },
@@ -60,6 +61,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
 
                 $location.path('browse/' + $stateParams.productName + '/' + dashboard.name);
 
+                /* Refresh sidebar */
                 Products.fetch().success(function(products){
                     $scope.products = Products.items;
 
@@ -74,6 +76,32 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
 
         };
 
+        $scope.edit = function(){
+
+
+            $state.go('editDashboard',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+
+
+        };
+
+        $scope.clone = function(){
+
+            Dashboards.clone().success(function(dashboard){
+
+                /* Refresh sidebar */
+                Products.fetch().success(function(products){
+                    $scope.products = Products.items;
+
+                });
+
+                $state.go('editDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+                
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+        
 		// Remove existing Dashboard
 		$scope.remove = function(dashboard) {
 			if ( dashboard ) { 
@@ -92,15 +120,25 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
 		};
 
 		// Update existing Dashboard
-		$scope.update = function() {
-			var dashboard = $scope.dashboard;
-            dashboard.productName = $stateParams.productName;
-			dashboard.$update(function() {
-				$location.path('dashboards/' + dashboard._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+
+        $scope.update = function() {
+
+            Dashboards.update($scope.dashboard).success(function (dashboard) {
+
+                /* Refresh sidebar */
+                Products.fetch().success(function(products){
+                    $scope.products = Products.items;
+
+                });
+
+                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+        
 
 		// Find a list of Dashboards
 		$scope.find = function() {

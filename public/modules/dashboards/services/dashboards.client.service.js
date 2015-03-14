@@ -10,7 +10,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             selected: '',
             update: update,
             updateTags : updateTags,
-//            fetch : fetch,
+            clone : clone,
             create: create
 
         };
@@ -47,6 +47,14 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
         }
         
+        function clone() {
+
+            return $http.get('/clone/dashboards/' + Dashboards.selected._id).success(function (dashboard) {
+
+                Dashboards.selected = dashboard;
+            });
+        }
+            
         function update(){
             return $http.put('/dashboards/' + Dashboards.selected._id, Dashboards.selected).success(function(dashboard){
 

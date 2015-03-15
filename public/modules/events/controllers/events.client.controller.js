@@ -1,29 +1,47 @@
 'use strict';
 
 // Events controller
-angular.module('events').controller('EventsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Events',
-	function($scope, $stateParams, $location, Authentication, Events) {
+angular.module('events').controller('EventsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Events',
+	function($scope, $stateParams, $state, $location, Authentication, Events) {
 		$scope.authentication = Authentication;
 
-		// Create new Event
-		$scope.create = function() {
-			// Create new Event object
-			var event = new Events ({
-				name: this.name
-			});
+        $scope.productName = $stateParams.productName;
 
-			// Redirect after save
-			event.$save(function(response) {
-				$location.path('events/' + response._id);
+        $scope.dashboardName = $stateParams.dashboardName;
 
-				// Clear form fields
-				$scope.name = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+        $scope.event = Events.selected;
 
-		// Remove existing Event
+        $scope.cancel = function() {
+
+            if ($rootScope.previousStateParams)
+                $state.go($rootScope.previousState,$rootScope.previousStateParams);
+            else
+                $state.go($rootScope.previousState);
+
+        }
+
+        // Open create event form
+        $scope.addEventForDashboard = function(){
+            
+            $scope.event.eventTimestamp = new Date().getTime();
+            $state.go('createEvent');
+            
+        };
+        
+        // Create new Event
+        $scope.create = function() {
+
+            Events.create($scope.event).success(function (event) {
+
+                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+
+        // Remove existing Event
 		$scope.remove = function(event) {
 			if ( event ) { 
 				event.$remove();
@@ -51,6 +69,25 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
 			});
 		};
 
+        $scope.listEventsForDashboard = function() {
+            
+              Events.listEventsForDashboard($scope.productName, $scope.dashboardName).success(function (events){
+                  
+                  $scope.events = events;
+                  
+              }, function(errorResponse) {
+                  $scope.error = errorResponse.data.message;
+              });  
+            
+        };
+        
+        $scope.editEvent = function(index){
+            
+            Events.selected = $scope.events[index];
+
+            $state.go('editEvent',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "eventId" : $scope.event._id });
+
+        };
 		// Find a list of Events
 		$scope.find = function() {
 			$scope.events = Events.query();

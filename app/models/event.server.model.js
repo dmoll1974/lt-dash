@@ -10,10 +10,11 @@ var mongoose = require('mongoose'),
  * Event Schema
  */
 var eventSchema = new mongoose.Schema({
-    "dashboardName": String,
+    "productName": { type: String, uppercase: true },
+    "dashboardName": { type: String, uppercase: true },
     "testRunId": String,
     "eventDescription": String,
-    "timestamp" : { type: Date, default: Date.now },
+    "eventTimestamp" : { type: Date, default: Date.now },
     "baseline": {type: String, default: 'none'},
     "buildResultKey": {type: String, default: 'MANUAL_TEST'}
 });

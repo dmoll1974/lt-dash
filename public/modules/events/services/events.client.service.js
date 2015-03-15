@@ -1,13 +1,30 @@
 'use strict';
 
 //Events service used to communicate Events REST endpoints
-angular.module('events').factory('Events', ['$resource',
-	function($resource) {
-		return $resource('events/:eventId', { eventId: '@_id'
-		}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
+angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
+	function($http, Products, Dashboards) {
+
+        var Events = {
+//            'get' : getFn,
+            selected: {},
+            listEventsForDashboard: listEventsForDashboard,
+//            updateTags : updateTags,
+//            clone : clone,
+            create: create
+
+        };
+
+        return Events;
+
+        function listEventsForDashboard(productName, dashboardName){
+
+            return $http.get('/events-dashboard/' + productName + '/' + dashboardName);
+        
+        };
+
+        function create(event){
+            return $http.post('/events', event);
+        }
+
+    }
 ]);

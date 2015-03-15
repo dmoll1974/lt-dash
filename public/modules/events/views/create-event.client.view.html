@@ -1,22 +1,59 @@
 <section data-ng-controller="EventsController">
     <div class="page-header">
-        <h1>New Event</h1>
+        <h1>Edit Event</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+        <form name="eventForm" class="form-horizontal"  novalidate>
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                    <label class="control-label" for="eventTimestamp">Timestamp</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="event.eventTimestamp" id="eventTimestamp" class="form-control" placeholder="Timestamp, required" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-default">
+                    <label class="control-label" for="productName">Product</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.productName" id="productName" class="form-control" placeholder="Product, required" required>
+                    </div>
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+                <div class="form-group">
+                    <label class="control-label" for="dashboardName">Dashboard</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.dashboardName" id="dashboardName" class="form-control" placeholder="Dashboard, required" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="testRunId">Test run ID</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.testRunId" id="testRunId" class="form-control" placeholder="Test run ID, required" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="eventDescription">Description</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.eventDescription" id="eventDescription" class="form-control" placeholder="Description, required" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="baseline">Baseline</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.baseline" id="baseline" class="form-control" placeholder="Baseline">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="buildResultKey">CI Build result URL</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="event.buildResultKey" id="buildResultKey" class="form-control" placeholder="CI Build result URL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn-primary" data-ng-click="create()" ng-disabled="eventForm.$invalid">Submit</button>
+                    <button class="btn-primary" data-ng-click="cancel()">Cancel</button>
+                </div>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
             </fieldset>
         </form>
     </div>

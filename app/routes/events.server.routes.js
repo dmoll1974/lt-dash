@@ -7,8 +7,14 @@ module.exports = function(app) {
 	// Events Routes
 	app.route('/events')
 		.get(events.list)
-		.post(users.requiresLogin, events.create);
+		.post( events.create); //users.requiresLogin,
 
+//    app.route('/events-product/:productName')
+//        .get(events.eventsForProduct)
+
+    app.route('/events-dashboard/:productName/:dashboardName')
+        .get(events.eventsForDashboard)
+    
 	app.route('/events/:eventId')
 		.get(events.read)
 		.put(users.requiresLogin, events.hasAuthorization, events.update)

@@ -12,7 +12,7 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
         /* values for form drop downs*/
         $scope.metricTypes = ['Average', 'Maximum', 'Minimum', 'Last', 'Slope'];
 
-        $scope.requirementOperatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}];
+        $scope.operatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}];
                 
         $scope.targets = [''];
 
@@ -26,17 +26,15 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
         $scope.enableRequirement ='disabled';
         
-        $scope.thresholdValues = [
-            {alias: '5% higher than', value: '0.05'},
-            {alias: '10% higher than', value: '0.1'},
-            {alias: '25% higher than', value: '0.25'},
-            {alias: '50% higher than', value: '0.5'},
-            {alias: '75% higher than', value: '0.75'},
-            {alias: '5% less than', value: '-0.05'},
-            {alias: '10% less than', value: '-0.1'},
-            {alias: '25% less than', value: '-0.25'},
-            {alias: '50% less than', value: '-0.5'},
-            {alias: '75% less than', value: '-0.75'}
+        $scope.percentageOptions = [
+            {alias: '10%', value: '0.1'},
+            {alias: '25%', value: '0.25'},
+            {alias: '50%', value: '0.5'},
+            {alias: '100%', value: '1.00'},
+            {alias: '200%', value: '2.00'},
+            {alias: '300%', value: '3.00'},
+            {alias: '400%', value: '4.00'},
+            {alias: '500%', value: '5.00'},
         ];
 
         $scope.addTarget = function() {

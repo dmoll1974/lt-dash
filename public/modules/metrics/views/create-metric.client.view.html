@@ -3,7 +3,7 @@
         <h1>New Metric</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal"  novalidate>
+        <form name="metricForm" class="form-horizontal"  novalidate>
             <fieldset>
                 <div class="form-group well well-sm">
                     <label class="control-label" for="alias">Alias</label>
@@ -43,37 +43,36 @@
                         <label ng-disabled="enableRequirement==='disabled'" class="control-label" for="requirementOperator">Should be</label>
                         <div class="controls">
                             <select ng-disabled="enableRequirement==='disabled'" id="requirementOperator" data-ng-model="metric.requirementOperator">
-                                <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator.value}}">{{requirementOperator.alias}}</option>
+                                <option data-ng-repeat="operator in operatorOptions" value="{{operator.value}}">{{operator.alias}}</option>
                             </select>
                             <input ng-disabled="enableRequirement==='disabled'" type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
                         </div>
                     </div>
                 </div>
-                <div class="form-group well well-sm">
+                <div class="form-group form-horizontal well well-sm">
                     <div class="col-lg-3">
                         <label>Benchmarking {{enableBenchmarking}}</label><br/>
                         <label class="switch switch-success"><input type="checkbox" ng-model="enableBenchmarking"  ng-true-value="'enabled'" ng-false-value="'disabled'"><i></i></label>
                         <hr>
                     </div>
                     <div class="col-lg-9">
-                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValueWarning">Raise a warning if benchmark value is </label>
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="benchmarkOperator">Raise a warning if benchmark value is </label>
                         <div class="controls">
-                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValueWarning" data-ng-model="metric.benchmarkWarning">
-                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="benchmarkValue" data-ng-model="metric.benchmarkValue" data-ng-init="options[0]">
+                                <option data-ng-repeat="percentage in percentageOptions" value="{{percentage.value}}">{{percentage.alias}}</option>
                             </select>
-                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
                         </div>
-                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="thresholdValuesIssue">Raise a issue if benchmark value is </label>
                         <div class="controls">
-                            <select ng-disabled="enableBenchmarking==='disabled'" id="thresholdValuesIssue" data-ng-model="metric.benchmarkIssue" >
-                                <option data-ng-repeat="thresholdValue in thresholdValues" value="{{thresholdValue.value}}">{{thresholdValue.alias}}</option>
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="benchmarkOperator" data-ng-model="metric.benchmarkOperator">
+                                <option data-ng-repeat="operator in operatorOptions" value="{{operator.value}}">{{operator.alias}}</option>
                             </select>
-                            <label ng-disabled="enableBenchmarking==='disabled'"> baseline value</label>
-                         </div>
+                            <label ng-disabled="enableBenchmarking==='disabled'">than baseline value</label>
+                        </div>
                     </div>
-                </div>
+                </div>    
                 <div class="form-group well well-sm">
-                    <button data-ng-click="create()">Submit</button>
+                    <button class="btn-primary" data-ng-click="create()" ng-disabled="metricForm.$invalid">Submit</button>
+                    <button class="btn-primary" data-ng-click="cancel()">Cancel</button>
                 </div>
                 <p>Metric: {{metric}}</p>
 				<div data-ng-show="error" class="text-danger">

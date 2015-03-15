@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+	Schema = mongoose.Schema,
+    FormatDate = mongoose.Schema.Types.FormatDate = require('./formatdate');
 
 /**
  * Event Schema
@@ -14,7 +15,7 @@ var eventSchema = new mongoose.Schema({
     "dashboardName": { type: String, uppercase: true },
     "testRunId": String,
     "eventDescription": String,
-    "eventTimestamp" : { type: Date, default: Date.now },
+    "eventTimestamp" : {type: FormatDate, format: 'YYYY-MM-DD HH:mm:ss', default: Date.now},
     "baseline": {type: String, default: 'none'},
     "buildResultKey": {type: String, default: 'MANUAL_TEST'}
 });

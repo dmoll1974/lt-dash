@@ -23,7 +23,10 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
         // Open create event form
         $scope.addEventForDashboard = function(){
             
-            $scope.event.eventTimestamp = new Date().getTime();
+            $scope.event.eventTimestamp = new Date();
+            $scope.event.productName = $scope.productName;
+            $scope.event.dashboardName = $scope.dashboardName;
+            
             $state.go('createEvent');
             
         };

@@ -16,7 +16,7 @@
         <a href  ng-click="tab.setTab('Events')">Events</a></li>
     </ul>
     <div ng-show="tab.isSet(1)">
-        <h4>Test runs</h4>
+        <div data-ng-include="'modules/testruns/views/testruns.client.view.html'"></div>
     </div>
     <div ng-show="tab.isSet(2)">
         <div data-ng-include="'modules/dashboards/views/view-dashboard-metrics.client.view.html'"></div>

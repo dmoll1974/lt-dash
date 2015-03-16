@@ -88,7 +88,7 @@ exports.list = function(req, res) {
  * List events for dashboard
 */
 exports.eventsForDashboard = function(req, res) {
-    Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-timestamp').exec(function(err, events) {
+    Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-eventTimestamp').exec(function(err, events) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)

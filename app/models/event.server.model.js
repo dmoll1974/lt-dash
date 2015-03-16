@@ -16,7 +16,7 @@ var eventSchema = new mongoose.Schema({
     "eventDescription": String,
     "eventTimestamp" : {type: Date,  default: Date.now},
     "baseline": {type: String, default: 'none'},
-    "buildResultKey": {type: String, default: 'MANUAL_TEST'}
+    "buildResultKey": {type: String}
 });
 
 eventSchema.index({ productName: 1, dashboardName: 1, testRunId: 1, eventDescription: 1}, { unique: true });

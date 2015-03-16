@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'lt-dash';
-	var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularModalService', 'ngTagsInput'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularModalService', 'ngTagsInput', 'highcharts-ng'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

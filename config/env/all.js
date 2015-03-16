@@ -31,7 +31,11 @@ module.exports = {
                 'public/lib/ng-table/dist/ng-table.js',
                 'public/lib/ng-tags-input/ng-tags-input.js',
                 'public/lib/underscore/underscore.js',
-                'public/lib/angular-modal-service/dst/angular-modal-service.min.js'
+                'public/lib/angular-modal-service/dst/angular-modal-service.min.js',
+                'public/lib/jquery/dist/jquery.js',
+                'public/lib/highcharts-ng/dist/highcharts-ng.js'
+
+
 			]
 		},
 		css: [

@@ -23,5 +23,10 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
             });
 
         };
+
+        $scope.testRunDetails = function(index){
+
+            $state.go('viewGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId })
+        }
 	}
 ]);

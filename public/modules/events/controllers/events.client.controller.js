@@ -23,7 +23,7 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
         // Open create event form
         $scope.addEventForDashboard = function(){
             
-            $scope.event.eventTimestamp = new Date();
+            $scope.event.eventTimestamp = new Date().toUTCString();
             $scope.event.productName = $scope.productName;
             $scope.event.dashboardName = $scope.dashboardName;
             
@@ -37,6 +37,19 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
             Events.create($scope.event).success(function (event) {
 
                 $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
+
+        // Create new Event
+        $scope.update = function() {
+
+            Events.update($scope.event).success(function (event) {
+
+                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName": $stateParams.dashboardName});
 
             }, function(errorResponse) {
                 $scope.error = errorResponse.data.message;
@@ -61,16 +74,6 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
 			}
 		};
 
-		// Update existing Event
-		$scope.update = function() {
-			var event = $scope.event;
-
-			event.$update(function() {
-				$location.path('events/' + event._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
 
         $scope.listEventsForDashboard = function() {
             

@@ -17,7 +17,7 @@ module.exports = function(app) {
     
 	app.route('/events/:eventId')
 		.get(events.read)
-		.put(users.requiresLogin, events.hasAuthorization, events.update)
+		.put(events.update) //users.requiresLogin, events.hasAuthorization,
 		.delete(users.requiresLogin, events.hasAuthorization, events.delete);
 
 	// Finish by binding the Event middleware

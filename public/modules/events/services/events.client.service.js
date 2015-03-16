@@ -9,7 +9,7 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
             selected: {},
             listEventsForDashboard: listEventsForDashboard,
 //            updateTags : updateTags,
-//            clone : clone,
+            update : update,
             create: create
 
         };
@@ -24,6 +24,10 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
 
         function create(event){
             return $http.post('/events', event);
+        }
+
+        function update(event){
+            return $http.put('/events/' + event._id, event);
         }
 
     }

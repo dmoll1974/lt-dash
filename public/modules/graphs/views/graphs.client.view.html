@@ -1,10 +1,13 @@
 <div ng-controller="GraphsController">
-    <accordion>
-        <accordion-group heading="Graph">
-        <div class="row">
-            <highchart id="chart1" config="chartConfig" class="span10"></highchart>
-        </div>
-    </accordion-group>
+    <!--<accordion close-others="false">-->
+        <!--<accordion-group heading="{{metric.alias}}" data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" data-ng-init="initConfig(chart, metric)">-->
+            <!--<highchart id="chart1" config="config"></highchart>-->
+        <!--</accordion-group>-->
+    <!--</accordion>-->
+    <ul>
+        <li data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" data-ng-init="initConfig(chart, metric)">
+            <highchart id="chart1" config="config"></highchart>
+        </li>
+    </ul>
 
-    </accordion>
 </div>

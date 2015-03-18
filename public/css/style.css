@@ -8091,7 +8091,8 @@ fieldset[disabled] .btn-dark.active {
 }
 /*==========  animations  ==========*/
 html {
-    overflow: hidden;
+   /* overflow: hidden; */
+    overflow-y: scroll;
 }
 lesshat-selector {
     -lh-property: 0; }

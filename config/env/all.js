@@ -6,6 +6,7 @@ module.exports = {
 		description: 'Performance test dashboard',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
+    graphiteHost : 'http://localhost:8090',
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
@@ -33,6 +34,7 @@ module.exports = {
                 'public/lib/underscore/underscore.js',
                 'public/lib/angular-modal-service/dst/angular-modal-service.min.js',
                 'public/lib/jquery/dist/jquery.js',
+                'public/lib/highstock-release/highstock.js',
                 'public/lib/highcharts-ng/dist/highcharts-ng.js'
 
 

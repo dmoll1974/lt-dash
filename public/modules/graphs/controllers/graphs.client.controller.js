@@ -20,9 +20,16 @@ angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards',
                 }*/
 
             },
-            series: [{
-                data: [10]
-            }],
+            series: [
+                {
+                data: [],
+                name: 'test'
+                },
+                {
+                    data: [],
+                    name: 'test2'
+                }
+            ],
             title: {
                 text: 'Hello'
             },

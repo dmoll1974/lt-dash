@@ -29,6 +29,7 @@ exports.getData = function(req, res) {
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
+            res.set('Content-Type', 'application/javascript');
             res.jsonp(body);
         }
 

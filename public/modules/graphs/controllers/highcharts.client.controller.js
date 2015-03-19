@@ -1,13 +1,20 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsController', ['$scope','Graphite', 'TestRuns', '$q','$http',
-	function($scope, Graphite, TestRuns, $q, $http) {
+angular.module('graphs').controller('HighchartsController', ['$scope','Graphite', 'TestRuns', '$q','$http', '$log',
+	function($scope, Graphite, TestRuns, $q, $http, $log) {
 
 
-        $scope.$watch('series', function(newSeries) {
-            $scope.config.series = newSeries;
-            $scope.apply();
-        })
+        //$scope.$watch('series', function(newSeries) {
+        //
+        //    _.each(newSeries, function(serie, i){
+        //
+        //        $scope.config.series[i].data = serie.data;
+        //
+        //    })
+        //
+        //
+        //    $scope.config.series = newSeries;
+        //})
 
         function createChartSeries (graphiteData){
 
@@ -34,6 +41,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
             }
             return series;
         }
+
+
+
             function getData(from, until, targets, maxDataPoints) {
 
                 var urlEncodedTargetUrl = '';
@@ -48,11 +58,12 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 });
 
                 var deferred = $q.defer();
+                var promise = deferred.promise;
 
-                $http.get('/graphite?' + urlEncodedTargetUrl + '&from=' + fromSeconds + '&until=' + untilSeconds + '&maxDataPoints=' + maxDataPoints)
+                $http.jsonp('/graphite?' + urlEncodedTargetUrl + '&from=' + fromSeconds + '&until=' + untilSeconds + '&maxDataPoints=' + maxDataPoints + '&callback=JSON_CALLBACK')
                     .success(function(graphiteData) {
                         deferred.resolve(
-                            $scope.series = createChartSeries(graphiteData)
+                            createChartSeries(graphiteData)
                         )
 
                     }).error(function(msg, code) {
@@ -60,7 +71,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         $log.error(msg, code);
                     });
 
-                return deferred.promise;
+                return promise;
             }
 
 
@@ -70,13 +81,17 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-            getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900);
+            getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900).then(function (series) {
 
-            //});
+                _.each(series, function(serie, i){
 
-            //$scope.config=angular.copy(config);
-            //$scope.config.title.text = metric.alias;
-            //
+                    //$scope.config.series.push({name: serie.name, data: serie.data});
+                    $scope.config.series[i].data = serie.data;
+                    $scope.config.series[i].name = serie.name;
+
+                })
+            });
+
 
         }
 

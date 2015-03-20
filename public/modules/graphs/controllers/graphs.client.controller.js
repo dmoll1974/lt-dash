@@ -1,9 +1,48 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards','Graphite','TestRuns',
-	function($scope, Dashboards, Graphite, TestRuns) {
+angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards','Graphite','TestRuns','$log',
+	function($scope, Dashboards, Graphite, TestRuns, $log) {
 
         $scope.metrics = Dashboards.selected.metrics;
+
+        $scope.tabs = [];
+
+        $scope.setTags = function(){
+
+            var tags = [];
+
+            _.each($scope.metrics, function(metric){
+
+                _.each(metric.tags, function(tag){
+
+                    if(_.indexOf(tags, tag.text) === -1) tags.push(tag.text);
+
+                })
+
+            })
+
+            $scope.tags = tags;
+        };
+
+
+        /* Tab controller */
+
+        //$scope.$watch(function(scope) { return DashboardTabs.tabNumber },
+        //    function() {
+        //
+        //        this.tab = DashboardTabs.tabNumber;
+        //    }
+        //);
+//        this.tab = DashboardTabs.tabNumber;
+
+        $scope.setTab = function(index){
+            this.tabNumber = index;
+            $scope.value = $scope.tags[index];
+        }
+
+        $scope.isSet = function(tabNumber){
+            return this.tabNumber === tabNumber;
+        };
 
         $scope.dashboard = Dashboards.selected;
 

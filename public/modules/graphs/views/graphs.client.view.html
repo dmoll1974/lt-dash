@@ -1,18 +1,19 @@
-<div ng-controller="GraphsController">
-    <select  data-ng-model="value">
-        <option data-ng-repeat="tag in dashboard.tags" value="{{tag.text}}">{{tag.text}}</option>
-    </select>
+<div ng-controller="GraphsController" data-ng-init="setTags()">
+    <ul class="nav nav-tabs">
+        <li ng-repeat="tag in tags" ng-class="{active: isSet($index)}" >
+            <a href ng-click="setTab($index)">{{tag}}</a>
+        </li>
+    </ul>
+    <!--<select  data-ng-model="value">-->
+        <!--<option data-ng-repeat="tag in tabs" value="{{tag}}">{{tag}}</option>-->
+    <!--</select>-->
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController"  >
             <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >
-                <highchart id="chart1" config="config" data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen"></highchart>
+                <div data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen">
+                    <highchart id="chart1" config="config"></highchart>
+                </div>
             </accordion-group>
         </div>
     </accordion>
-    <!--<ul>-->
-        <!--<li data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" data-ng-init="initConfig(chart, metric)">-->
-            <!--<highchart id="chart1" config="config"></highchart>-->
-        <!--</li>-->
-    <!--</ul>-->
-
 </div>

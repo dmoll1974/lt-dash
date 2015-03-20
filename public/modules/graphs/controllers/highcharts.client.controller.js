@@ -85,9 +85,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                 _.each(series, function(serie, i){
 
-                    //$scope.config.series.push({name: serie.name, data: serie.data});
-                    $scope.config.series[i].data = serie.data;
-                    $scope.config.series[i].name = serie.name;
+                    $scope.config.series.push({name: serie.name, data: serie.data});
+                    //$scope.config.series[i].data = serie.data;
+                    //$scope.config.series[i].name = serie.name;
 
                 })
             });

@@ -35,10 +35,10 @@ module.exports = {
                 'public/lib/angular-modal-service/dst/angular-modal-service.min.js',
                 //'public/lib/jquery/dist/jquery.js',
                 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js',
-                //'public/lib/highstock-release/highstock.js',
-                'http://code.highcharts.com/stock/highstock.js',
-                //'public/lib/highcharts-ng/dist/highcharts-ng.js'
-                'https://rawgit.com/pablojim/highcharts-ng/master/src/highcharts-ng.js'
+                'public/lib/highstock-release/highstock.js',
+                //'http://code.highcharts.com/stock/highstock.js',
+                'public/lib/highcharts-ng/dist/highcharts-ng.js',
+                //'https://rawgit.com/pablojim/highcharts-ng/master/src/highcharts-ng.js'
 
 			]
 		},

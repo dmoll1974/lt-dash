@@ -1,25 +1,67 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/lt-dash',
-	assets: {
-		lib: {
-			css: [
-				'public/lib/bootstrap/dist/css/bootstrap.min.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
-			],
-			js: [
-				'public/lib/angular/angular.min.js',
-				'public/lib/angular-resource/angular-resource.js', 
-				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
-				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
-			]
-		},
-		css: 'public/dist/application.min.css',
-		js: 'public/dist/application.min.js'
-	},
-	facebook: {
+	//db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/lt-dash',
+	//assets: {
+	//	lib: {
+	//		css: [
+	//			'public/lib/bootstrap/dist/css/bootstrap.min.css',
+	//			'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+	//		],
+	//		js: [
+	//			'public/lib/angular/angular.min.js',
+	//			'public/lib/angular-resource/angular-resource.js',
+	//			'public/lib/angular-ui-router/release/angular-ui-router.min.js',
+	//			'public/lib/angular-ui-utils/ui-utils.min.js',
+	//			'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+	//		]
+	//	},
+	//	css: 'public/dist/application.min.css',
+	//	js: 'public/dist/application.min.js'
+	//},
+    db: 'mongodb://localhost/lt-dash-dev',
+    assets: {
+        lib: {
+            css: [
+                'public/css/bootstrap.css',
+                'public/css/style.css',
+                'public/lib/font-awesome/css/font-awesome.css',
+
+                'public/lib/bootstrap/dist/css/bootstrap.css',
+                'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+                'public/lib/ng-table/dist/ng-table.css',
+                'public/lib/ng-tags-input/ng-tags-input.css'
+            ],
+            js: [
+                'public/lib/angular/angular.js',
+                'public/lib/angular-resource/angular-resource.js',
+                'public/lib/angular-ui-router/release/angular-ui-router.js',
+                'public/lib/angular-ui-utils/ui-utils.js',
+                'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+                'public/lib/ng-table/dist/ng-table.js',
+                'public/lib/ng-tags-input/ng-tags-input.js',
+                'public/lib/underscore/underscore.js',
+                'public/lib/angular-modal-service/dst/angular-modal-service.min.js',
+                //'public/lib/jquery/dist/jquery.js',
+                'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js',
+                'public/lib/highstock-release/highstock.js',
+                //'http://code.highcharts.com/stock/highstock.js',
+                'public/lib/highcharts-ng/dist/highcharts-ng.js',
+                //'https://rawgit.com/pablojim/highcharts-ng/master/src/highcharts-ng.js'
+
+            ]
+        },
+        css: [
+            'public/modules/**/css/*.css'
+        ],
+        js: [
+            'public/config.js',
+            'public/application.js',
+            'public/modules/*/*.js',
+            'public/modules/*/*[!tests]*/*.js'
+        ]
+    },
+        facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
 		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
 		callbackURL: '/auth/facebook/callback'

@@ -5,6 +5,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards',
 
         $scope.metrics = Dashboards.selected.metrics;
 
+
         //
 
         $scope.chart = {

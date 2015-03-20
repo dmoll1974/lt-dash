@@ -1,8 +1,8 @@
 <div ng-controller="GraphsController">
     <accordion close-others="false">
-        <div data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" data-ng-init="initConfig(chart, metric)">
-            <accordion-group heading="{{metric.alias}}" >
-                <highchart id="chart1" config="config"></highchart>
+        <div data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" >
+            <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >
+                <highchart id="chart1" config="config" data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen"></highchart>
             </accordion-group>
         </div>
     </accordion>

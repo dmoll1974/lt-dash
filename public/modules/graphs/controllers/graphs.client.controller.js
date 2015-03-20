@@ -5,7 +5,9 @@ angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards',
 
         $scope.metrics = Dashboards.selected.metrics;
 
+        $scope.dashboard = Dashboards.selected;
 
+        $scope.value = 'CPU';
         //
 
         $scope.chart = {

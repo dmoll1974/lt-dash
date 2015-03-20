@@ -1,6 +1,9 @@
 <div ng-controller="GraphsController">
+    <select  data-ng-model="value">
+        <option data-ng-repeat="tag in dashboard.tags" value="{{tag.text}}">{{tag.text}}</option>
+    </select>
     <accordion close-others="false">
-        <div data-ng-repeat="metric in metrics" data-ng-controller="HighchartsController" >
+        <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController"  >
             <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >
                 <highchart id="chart1" config="config" data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen"></highchart>
             </accordion-group>

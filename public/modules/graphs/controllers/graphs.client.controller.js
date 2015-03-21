@@ -1,28 +1,14 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards','Graphite','TestRuns','$log',
-	function($scope, Dashboards, Graphite, TestRuns, $log) {
+angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
+	function($scope, Dashboards, Graphite, TestRuns, $log, Tags) {
 
         $scope.metrics = Dashboards.selected.metrics;
 
+        $scope.tags = Tags.setTags($scope.metrics);
+
         $scope.tabs = [];
 
-        $scope.setTags = function(){
-
-            var tags = [];
-
-            _.each($scope.metrics, function(metric){
-
-                _.each(metric.tags, function(tag){
-
-                    if(_.indexOf(tags, tag.text) === -1) tags.push(tag.text);
-
-                })
-
-            })
-
-            $scope.tags = tags;
-        };
 
 
         /* Tab controller */
@@ -49,27 +35,6 @@ angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards',
         $scope.value = 'CPU';
         //
 
-        $scope.chart = {
-            options: {
-                chart: {
-                    type: 'line',
-                    zoomType: 'x'
-                }
-                ,
-                rangeSelector: {
-                    enabled: false
-                }
-
-            },
-            series: [
-            ],
-            title: {
-                text: 'Hello'
-            },
-            //xAxis: {currentMin: 0, currentMax: 10, minRange: 1},
-            loading: false,
-            useHighStocks: true
-        }
 
 
 

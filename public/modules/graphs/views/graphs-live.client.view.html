@@ -5,7 +5,7 @@
         </li>
     </ul>
     <accordion close-others="false">
-        <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController"  >
+        <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsLiveController"  >
             <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >
                 <div data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen">
                     <highchart id="chart1" config="config"></highchart>

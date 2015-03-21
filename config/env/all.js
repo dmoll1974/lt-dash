@@ -6,7 +6,7 @@ module.exports = {
 		description: 'Performance test dashboard',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
-    graphiteHost : 'http://localhost:8090',
+    graphiteHost : 'http://graphite.klm.com',
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',

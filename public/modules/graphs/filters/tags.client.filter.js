@@ -22,7 +22,7 @@ angular.module('graphs').filter('tagsFilter', [
 
                 _.each(array, function(item){
 
-                    console.log('array item:' + item);
+                    //console.log('array item:' + item);
 
 
                 });

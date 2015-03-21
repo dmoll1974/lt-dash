@@ -1,8 +1,8 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$modal', '$log', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'DashboardTabs',
-	function($scope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$rootScope', '$modal', '$log', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'DashboardTabs',
+	function($scope, $rootScope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
 
         
         
@@ -101,8 +101,16 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
             });
 
         };
-        
-		// Remove existing Dashboard
+
+        $scope.viewLiveGraphs = function(){
+
+
+            $state.go('viewLiveGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+
+
+        };
+
+        // Remove existing Dashboard
 		$scope.remove = function(dashboard) {
 			if ( dashboard ) { 
 				dashboard.$remove();
@@ -148,6 +156,16 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$mod
             });
 		};
 
+        $scope.cancel = function() {
+
+            if ($rootScope.previousStateParams)
+                $state.go($rootScope.previousState,$rootScope.previousStateParams);
+            else
+                $state.go($rootScope.previousState);
+
+
+
+        }
         // Find existing Product
         $scope.findOne = function() {
 

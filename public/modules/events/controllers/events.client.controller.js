@@ -1,13 +1,13 @@
 'use strict';
 
 // Events controller
-angular.module('events').controller('EventsController', ['$scope', '$stateParams', '$state', '$location', 'Authentication', 'Events',
-	function($scope, $stateParams, $state, $location, Authentication, Events) {
-		$scope.authentication = Authentication;
+angular.module('events').controller('EventsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Events', 'Dashboards',
+	function($scope, $rootScope, $stateParams, $state, $location, Authentication, Events, Dashboards) {
+
+        $scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
 
-        $scope.dashboardName = $stateParams.dashboardName;
 
         $scope.event = Events.selected;
 
@@ -36,7 +36,7 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
 
             Events.create($scope.event).success(function (event) {
 
-                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+                $state.go('viewDashboard',{"productName":$scope.event.productName, "dashboardName":  $scope.event.dashboardName});
 
             }, function(errorResponse) {
                 $scope.error = errorResponse.data.message;
@@ -57,6 +57,16 @@ angular.module('events').controller('EventsController', ['$scope', '$stateParams
 
         };
 
+        $scope.cancel = function() {
+
+            if ($rootScope.previousStateParams)
+                $state.go($rootScope.previousState,$rootScope.previousStateParams);
+            else
+                $state.go($rootScope.previousState);
+
+
+
+        }
         // Remove existing Event
 		$scope.remove = function(event) {
 			if ( event ) { 

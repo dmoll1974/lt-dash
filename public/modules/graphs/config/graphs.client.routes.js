@@ -8,6 +8,10 @@ angular.module('graphs').config(['$stateProvider',
 		state('viewGraphs', {
 			url: '/graphs/:productName/:dashboardName/:testRunId',
 			templateUrl: 'modules/graphs/views/graphs.client.view.html'
-		});
+		}).
+        state('viewLiveGraphs', {
+            url: '/graphs-live/:productName/:dashboardName',
+            templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
+        });
 	}
 ]);

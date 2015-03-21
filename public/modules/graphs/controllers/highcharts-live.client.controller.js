@@ -22,7 +22,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                             Interval.clearIntervalForMetric($scope.metric._id);
 
                             var intervalId = setInterval(function () {
-
+                                //TODO  check of isOpen = true
                                 Graphite.getData('-10min', 'now', $scope.metric.targets, 900).then(function (series) {
 
                                     /* update series */

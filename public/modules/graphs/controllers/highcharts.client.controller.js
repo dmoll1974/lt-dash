@@ -22,8 +22,30 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
             title: {
                 text: 'Hello'
             },
-            //xAxis: {currentMin: 0, currentMax: 10, minRange: 1},
-            loading: false,
+            xAxis: {
+                minRange: 10000,
+                events: {
+                    setExtremes: function(e) {
+
+                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.start : Math.round(e.min);
+                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.end : Math.round(e.max);
+
+                        $scope.config.loading = true;
+
+                        Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
+
+                            //_.each(series, function(serie, i){
+
+                                //$scope.config.series.push({name: serie.name, data: serie.data});
+
+                            //})
+                            $scope.config.series = series;
+                            $scope.config.loading = false;
+                        });
+                    }
+                }
+            },
+            loading: true,
             useHighStocks: true
         }
 
@@ -39,6 +61,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 _.each(series, function(serie, i){
 
                     $scope.config.series.push({name: serie.name, data: serie.data});
+                    $scope.config.loading = false;
 
                 })
             });

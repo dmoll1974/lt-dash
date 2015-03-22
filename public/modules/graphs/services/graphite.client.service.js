@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').factory('Graphite', ['$http','$q',
-	function($http, $q) {
+angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
+	function($http, $q, $log) {
 
         var Graphite = {
             getData: getData//,

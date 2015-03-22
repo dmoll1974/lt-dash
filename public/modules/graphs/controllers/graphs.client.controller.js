@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
-	function($scope, Dashboards, Graphite, TestRuns, $log, Tags) {
+angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
+	function($scope, $rootScope, $state, Dashboards, Graphite, TestRuns, $log, Tags) {
 
         $scope.metrics = Dashboards.selected.metrics;
 
@@ -11,6 +11,9 @@ angular.module('graphs').controller('GraphsController', ['$scope', 'Dashboards',
 
 
         $scope.zoomRange = '-10min';
+
+
+
         /* Tab controller */
 
         //$scope.$watch(function(scope) { return DashboardTabs.tabNumber },

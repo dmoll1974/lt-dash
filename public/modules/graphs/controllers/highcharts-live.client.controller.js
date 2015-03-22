@@ -4,17 +4,43 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
     function($scope, Interval, Graphite, TestRuns, $q, $http, $log) {
 
 
+        /* stop data polling when accordion is closed */
+
         $scope.$watch('group.isOpen', function (newVal, oldVal) {
 
             if (newVal === false) Interval.clearIntervalForMetric($scope.metric._id);
 
         });
 
+        /* stop data polling when element is destroyed by ng-if */
+
         $scope.$on("$destroy", function() {
 
             Interval.clearIntervalForMetric($scope.metric._id);
 
         });
+
+
+        /* reinitialise graph when zoomRange is changed */
+
+        $scope.$watch('zoomRange', function (newVal, oldVal) {
+
+            if (newVal !== oldVal) {
+
+                Interval.clearIntervalForMetric($scope.metric._id);
+
+                var seriesArray = $scope.config.series;
+                var seriesArraySize = seriesArray.length;
+
+                for (var i = 0; i < seriesArraySize; i++) {
+
+                    seriesArray.splice(0, 1);
+                }
+
+                $scope.initConfig($scope.chart, $scope.metric);
+            }
+        });
+
 
         $scope.chart = {
             options: {
@@ -28,7 +54,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                             Interval.clearIntervalForMetric($scope.metric._id);
 
                             var intervalId = setInterval(function () {
-                                //TODO  check of isOpen = true
+
                                 Graphite.getData($scope.zoomRange, 'now', $scope.metric.targets, 900).then(function (series) {
 
                                     /* update series */
@@ -70,6 +96,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
 
                                 });
 
+
                                 console.log('intervalIds:' + Interval.active)
                             }, 10000);
 
@@ -101,7 +128,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             $scope.metric = metric;
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-            Graphite.getData('-10min', 'now', metric.targets, 900).then(function (series) {
+            Graphite.getData($scope.zoomRange, 'now', metric.targets, 900).then(function (series) {
 
                 _.each(series, function(serie, i){
 

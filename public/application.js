@@ -16,6 +16,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
             $rootScope.previousState = from.name;
             $rootScope.previousStateParams = fromParams;
             $rootScope.currentState = to.name;
+            $rootScope.currentStateParams = toParams;
 
                 /* clear all running Intervals when leaving the live graphs state*/
 

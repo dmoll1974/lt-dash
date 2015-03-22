@@ -10,6 +10,12 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
 
         });
 
+        $scope.$on("$destroy", function() {
+
+            Interval.clearIntervalForMetric($scope.metric._id);
+
+        });
+
         $scope.chart = {
             options: {
                 chart: {
@@ -23,7 +29,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
 
                             var intervalId = setInterval(function () {
                                 //TODO  check of isOpen = true
-                                Graphite.getData('-10min', 'now', $scope.metric.targets, 900).then(function (series) {
+                                Graphite.getData($scope.zoomRange, 'now', $scope.metric.targets, 900).then(function (series) {
 
                                     /* update series */
                                     _.each(series, function (serie) {
@@ -73,25 +79,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                     }
                 },
                 rangeSelector: {
-                    buttons: [{
-                        count: 10,
-                        type: 'minute',
-                        text: '10M'
-                    }, {
-                        count: 30,
-                        type: 'minute',
-                        text: '30M'
-                    }, {
-                        count: 1,
-                        type: 'hour',
-                        text: '1H'
-                    },
-                        {
-                            type: 'all',
-                            text: 'All'
-                        }],
-                    inputEnabled: false,
-                    selected: 3
+                    enabled: false
                 }
 
             },

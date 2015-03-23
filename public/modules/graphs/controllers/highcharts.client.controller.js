@@ -7,9 +7,10 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         $scope.group = {isOpen : false};
 
-        $scope.$watch('from', function (newVal, oldVal) {
+        /* If zoom lock is checked, update all graphs when zoom is applied in one */
+        $scope.$watch(function(scope) { return TestRuns.zoomFrom},
+            function() {
 
-            if(newVal !== oldVal) {
                 $scope.config.loading = true;
                 Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900).then(function (series) {
 
@@ -17,8 +18,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     $scope.config.loading = false;
                 });
             }
+        );
 
-        });
 
 
         $scope.$watch('value', function (newVal, oldVal) {
@@ -52,6 +53,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.start : Math.round(e.min);
                         var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.end : Math.round(e.max);
 
+                        /* If zoom lock is checked, set zoom timestamps in TestRuns service */
                         if ($scope.zoomLock){
 
                             TestRuns.zoomFrom = from;

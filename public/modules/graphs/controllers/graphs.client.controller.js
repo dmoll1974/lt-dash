@@ -3,6 +3,25 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
 	function($scope, $rootScope, $state, Dashboards, Graphite, TestRuns, $log, Tags) {
 
+        $scope.zoomLock = true;
+
+        if ($scope.zoomLock){
+
+            $scope.from = TestRuns.zoomFrom;
+            $scope.until = TestRuns.zoomUntil;
+        }
+
+        $scope.$watch(function(scope) { return TestRuns.zoomFrom},
+            function() {
+
+                //if(newVal !== oldVal) {
+
+                    $scope.from = TestRuns.zoomFrom;
+                    $scope.until = TestRuns.zoomUntil;
+                //}
+            }
+        );
+
         $scope.metrics = Dashboards.selected.metrics;
 
         $scope.tags = Tags.setTags($scope.metrics);

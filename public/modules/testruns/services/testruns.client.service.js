@@ -7,7 +7,9 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
         var TestRuns = {
 //            'get' : getFn,
             selected: {},
-            listTestRunsForDashboard: listTestRunsForDashboard
+            listTestRunsForDashboard: listTestRunsForDashboard,
+            zoomFrom: '',
+            zoomUntil: ''
 
         };
 

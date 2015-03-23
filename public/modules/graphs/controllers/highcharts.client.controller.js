@@ -7,6 +7,20 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         $scope.group = {isOpen : false};
 
+        $scope.$watch('from', function (newVal, oldVal) {
+
+            if(newVal !== oldVal) {
+                $scope.config.loading = true;
+                Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900).then(function (series) {
+
+                    $scope.config.series = series;
+                    $scope.config.loading = false;
+                });
+            }
+
+        });
+
+
         $scope.$watch('value', function (newVal, oldVal) {
 
             if (newVal !== 'All') $scope.group.isOpen = true;
@@ -38,18 +52,22 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.start : Math.round(e.min);
                         var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.end : Math.round(e.max);
 
-                        $scope.config.loading = true;
+                        if ($scope.zoomLock){
 
-                        Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
+                            TestRuns.zoomFrom = from;
+                            TestRuns.zoomUntil = until;
+                            $scope.$apply();
 
-                            //_.each(series, function(serie, i){
+                        }else {
 
-                                //$scope.config.series.push({name: serie.name, data: serie.data});
+                            $scope.config.loading = true;
 
-                            //})
-                            $scope.config.series = series;
-                            $scope.config.loading = false;
-                        });
+                            Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
+
+                                $scope.config.series = series;
+                                $scope.config.loading = false;
+                            });
+                        }
                     }
                 }
             },

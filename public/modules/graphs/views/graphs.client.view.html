@@ -3,11 +3,6 @@
         <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
         Zoom lock
     </label>
-    <!--<ul class="nav nav-tabs">-->
-        <!--<li ng-repeat="tag in tags" ng-class="{active: isSet($index)}" >-->
-            <!--<a href ng-click="setTab($index)">{{tag}}</a>-->
-        <!--</li>-->
-    <!--</ul>-->
     <tabset>
         <tab data-ng-repeat="tag in tags" heading="{{tag}}" data-ng-model="value" active="tag.active" disabled="tag.disabled" select="setTag(tag)">
         </tab>

@@ -1,4 +1,4 @@
-<div ng-controller="GraphsController" data-ng-init="setTags()">
+<div ng-controller="GraphsController">
     <div class="btn-group">
         <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-10min'" uncheckable>10min</label>
         <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-30min'" uncheckable>30min</label>
@@ -9,11 +9,10 @@
         <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-1d'" uncheckable>1d</label>
         <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-2d'" uncheckable>2d</label>
     </div>
-    <ul class="nav nav-tabs">
-        <li ng-repeat="tag in tags" ng-class="{active: isSet($index)}" >
-            <a href ng-click="setTab($index)">{{tag}}</a>
-        </li>
-    </ul>
+    <tabset>
+        <tab data-ng-repeat="tag in tags" heading="{{tag}}" data-ng-model="value" active="tag.active" disabled="tag.disabled" select="setTag(tag)">
+        </tab>
+    </tabset>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsLiveController"  >
             <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >

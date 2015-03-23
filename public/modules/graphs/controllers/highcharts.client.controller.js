@@ -7,6 +7,12 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         $scope.group = {isOpen : false};
 
+        $scope.$watch('value', function (newVal, oldVal) {
+
+            if (newVal !== 'All') $scope.group.isOpen = true;
+
+        });
+
         /* If zoom lock is checked, update all graphs when zoom is applied in one */
         $scope.$watch(function(scope) { return TestRuns.zoomFrom},
             function() {
@@ -21,12 +27,6 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
         );
 
 
-
-        $scope.$watch('value', function (newVal, oldVal) {
-
-            if (newVal !== 'All') $scope.group.isOpen = true;
-
-        });
 
         $scope.chart = {
             options: {

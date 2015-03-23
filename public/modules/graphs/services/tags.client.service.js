@@ -15,6 +15,8 @@ angular.module('graphs').factory('Tags', [
 
             var tags = [];
 
+            tags.push("All");
+
             _.each(metrics, function(metric){
 
                 _.each(metric.tags, function(tag){

@@ -3,12 +3,19 @@
 angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Interval', 'Graphite', 'TestRuns', '$q','$http', '$log',
     function($scope, Interval, Graphite, TestRuns, $q, $http, $log) {
 
+        $scope.group = {isOpen : false};
+
+        $scope.$watch('value', function (newVal, oldVal) {
+
+            if (newVal !== 'All') $scope.isOpen = true;
+
+        });
 
         /* stop data polling when accordion is closed */
 
         $scope.$watch('group.isOpen', function (newVal, oldVal) {
 
-            if (newVal === false) Interval.clearIntervalForMetric($scope.metric._id);
+            if (newVal !== oldVal && newVal === false) Interval.clearIntervalForMetric($scope.metric._id);
 
         });
 

@@ -20,24 +20,22 @@ angular.module('graphs').filter('tagsFilter', [
             return function (array, propertyString, target) {
                 var properties = parseString(propertyString);
 
-                _.each(array, function(item){
+                /* if target is 'All', filter none */
+                if (target === 'All'){
+                    return array;
+                } else {
+                    return _.filter(array, function (item) {
 
-                    //console.log('array item:' + item);
+                        var matchResult = false;
 
+                        _.each(getValue(item, properties), function (arrayItem) {
 
-                });
+                            if (target === arrayItem.text) matchResult = true;
 
-                return _.filter(array, function (item) {
-
-                    var matchResult = false;
-
-                    _.each(getValue(item, properties), function(arrayItem){
-
-                        if(target === arrayItem.text) matchResult = true;
-
-                    })
-                    return matchResult;
-                });
+                        })
+                        return matchResult;
+                    });
+                }
             }
         }
 

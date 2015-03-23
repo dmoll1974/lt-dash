@@ -14,6 +14,8 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
 
 
+
+
         /* Tab controller */
 
         //$scope.$watch(function(scope) { return DashboardTabs.tabNumber },
@@ -26,8 +28,8 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
         $scope.setTab = function(index){
             this.tabNumber = index;
-            $scope.value = $scope.tags[index];
-        }
+                $scope.value = $scope.tags[index];
+            }
 
         $scope.isSet = function(tabNumber){
             return this.tabNumber === tabNumber;
@@ -35,7 +37,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
         $scope.dashboard = Dashboards.selected;
 
-        $scope.value = 'CPU';
+        $scope.value = 'All';
 
 
 

@@ -3,7 +3,13 @@
 angular.module('graphs').controller('HighchartsController', ['$scope','Graphite', 'TestRuns', '$q','$http', '$log',
 	function($scope, Graphite, TestRuns, $q, $http, $log) {
 
+        $scope.group = {isOpen : false};
 
+        $scope.$watch('value', function (newVal, oldVal) {
+
+            if (newVal !== 'All') $scope.group.isOpen = true;
+
+        });
 
         $scope.chart = {
             options: {

@@ -4,12 +4,13 @@
         Zoom lock
     </label>
     <tabset>
-        <tab data-ng-repeat="tag in tags" heading="{{tag}}" data-ng-model="value" active="tag.active" disabled="tag.disabled" select="setTag(tag)">
+        <tab data-ng-repeat="tag in tags" heading="{{tag}}" data-ng-model="value"  disabled="tag.disabled" select="setTag(tag)">
         </tab>
     </tabset>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController"  >
-            <accordion-group heading="{{metric.alias}}"  is-open="group.isOpen" >
+            <accordion-group is-open="group.isOpen" >
+                <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen">
                     <highchart id="chart1" config="config"></highchart>
                 </div>

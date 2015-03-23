@@ -15,14 +15,16 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         /* If zoom lock is checked, update all graphs when zoom is applied in one */
         $scope.$watch(function(scope) { return TestRuns.zoomFrom},
-            function() {
+            function(newVal, oldVal) {
 
-                $scope.config.loading = true;
-                Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900).then(function (series) {
+                if(newVal !== oldVal) {
+                    $scope.config.loading = true;
+                    Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900).then(function (series) {
 
-                    $scope.config.series = series;
-                    $scope.config.loading = false;
-                });
+                        $scope.config.series = series;
+                        $scope.config.loading = false;
+                    });
+                }
             }
         );
 

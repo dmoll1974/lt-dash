@@ -3,6 +3,7 @@
 angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Interval', 'Graphite', 'TestRuns', '$q','$http', '$log',
     function($scope, Interval, Graphite, TestRuns, $q, $http, $log) {
 
+        /* Open accordion by default, except for the "All" tab */
         $scope.group = {isOpen : false};
 
         $scope.$watch('value', function (newVal, oldVal) {

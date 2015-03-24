@@ -7,7 +7,7 @@ module.exports = function(app) {
 	// Dashboards Routes
 	app.route('/dashboards/:productName')
 		.get(dashboards.list)
-		.post(users.requiresLogin, dashboards.create);
+		.post(dashboards.create);//users.requiresLogin,
 
 	app.route('/dashboards/:productName/:dashboardName')
 		.get(dashboards.read)

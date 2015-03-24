@@ -1,8 +1,8 @@
 'use strict';
 
 // Events controller
-angular.module('events').controller('EventsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Events', 'Dashboards',
-	function($scope, $rootScope, $stateParams, $state, $location, Authentication, Events, Dashboards) {
+angular.module('events').controller('EventsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Authentication', 'Events', 'Dashboards',
+	function($scope, $rootScope, $stateParams, $state, $location, $modal, Authentication, Events, Dashboards) {
 
         $scope.authentication = Authentication;
 
@@ -13,102 +13,139 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
 
         // Open create event form
-        $scope.addEventForDashboard = function(){
-            
+        $scope.addEventForDashboard = function () {
+
             $scope.event.eventTimestamp = new Date().toUTCString();
             $scope.event.productName = $scope.productName;
             $scope.event.dashboardName = $scope.dashboardName;
-            
+
             $state.go('createEvent');
-            
+
         };
-        
+
         // Create new Event
-        $scope.create = function() {
+        $scope.create = function () {
 
             Events.create($scope.event).success(function (event) {
                 Events.selected = {};
-                $state.go('viewDashboard',{"productName":$scope.event.productName, "dashboardName":  $scope.event.dashboardName});
+                $state.go('viewDashboard', {
+                    "productName": $scope.event.productName,
+                    "dashboardName": $scope.event.dashboardName
+                });
 
-            }, function(errorResponse) {
+            }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
 
         };
 
         // Create new Event
-        $scope.update = function() {
+        $scope.update = function () {
 
             Events.update($scope.event).success(function (event) {
 
                 Events.selected = {};
-                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName": $stateParams.dashboardName});
+                $state.go('viewDashboard', {
+                    "productName": $stateParams.productName,
+                    "dashboardName": $stateParams.dashboardName
+                });
 
-            }, function(errorResponse) {
+            }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
 
         };
 
-        $scope.cancel = function() {
+        $scope.cancel = function () {
 
             Events.selected = {};
 
             if ($rootScope.previousStateParams)
-                $state.go($rootScope.previousState,$rootScope.previousStateParams);
+                $state.go($rootScope.previousState, $rootScope.previousStateParams);
             else
                 $state.go($rootScope.previousState);
 
 
-
         }
-        // Remove existing Event
-		$scope.remove = function(event) {
-			if ( event ) { 
-				event.$remove();
-
-				for (var i in $scope.events) {
-					if ($scope.events [i] === event) {
-						$scope.events.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.event.$remove(function() {
-					$location.path('events');
-				});
-			}
-		};
 
 
-        $scope.listEventsForDashboard = function() {
-            
-              Events.listEventsForDashboard($scope.productName, $scope.dashboardName).success(function (events){
-                  
-                  $scope.events = events;
-                  
-              }, function(errorResponse) {
-                  $scope.error = errorResponse.data.message;
-              });  
-            
+        $scope.listEventsForDashboard = function () {
+
+            Events.listEventsForDashboard($scope.productName, $scope.dashboardName).success(function (events) {
+
+                $scope.events = events;
+
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
         };
-        
-        $scope.editEvent = function(index){
-            
+
+        $scope.editEvent = function (index) {
+
             Events.selected = $scope.events[index];
 
-            $state.go('editEvent',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "eventId" : $scope.event._id });
+            $state.go('editEvent', {
+                "productName": $stateParams.productName,
+                "dashboardName": $stateParams.dashboardName,
+                "eventId": $scope.event._id
+            });
 
         };
-		// Find a list of Events
-		$scope.find = function() {
-			$scope.events = Events.query();
-		};
+        // Find a list of Events
+        $scope.find = function () {
+            $scope.events = Events.query();
+        };
 
-		// Find existing Event
-		$scope.findOne = function() {
-			$scope.event = Events.get({ 
-				eventId: $stateParams.eventId
-			});
-		};
-	}
+        // Find existing Event
+        $scope.findOne = function () {
+            $scope.event = Events.get({
+                eventId: $stateParams.eventId
+            });
+        };
+
+
+        $scope.open = function (size, index) {
+
+            Events.selected = $scope.events[index];
+
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'EventModalInstanceCtrl',
+                size: size,
+            });
+
+            modalInstance.result.then(function (eventId) {
+
+                Events.delete(eventId).success(function (event) {
+
+                    ///* refresh events*/
+                    Events.listEventsForDashboard($scope.productName, $scope.dashboardName).success(function (events) {
+
+                        $scope.events = events;
+
+                    }, function (errorResponse) {
+                        $scope.error = errorResponse.data.message;
+                    });
+                });
+
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+    }
+]).controller('EventModalInstanceCtrl',['$scope','$modalInstance', 'Events', function($scope, $modalInstance, Events) {
+
+    $scope.selectedEvent = Events.selected;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.selectedEvent._id);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+}
 ]);

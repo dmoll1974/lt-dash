@@ -11,11 +11,13 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             update: update,
             updateTags : updateTags,
             clone : clone,
-            create: create
+            create: create,
+            delete: deleteFn
 
         };
 
         return Dashboards;
+
 
         function updateTags (tags){
 
@@ -74,7 +76,11 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             });
         }
 
-        
+        function deleteFn(dashboardId){
+            return $http.delete('/dashboards/' + dashboardId);
+        }
+
+
 
     }
 ]).factory('DashboardTabs', ['$http',

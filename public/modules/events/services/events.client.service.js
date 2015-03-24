@@ -5,16 +5,19 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
 	function($http, Products, Dashboards) {
 
         var Events = {
-//            'get' : getFn,
             selected: {},
             listEventsForDashboard: listEventsForDashboard,
-//            updateTags : updateTags,
             update : update,
-            create: create
+            create: create,
+            delete: deleteFn
 
         };
 
         return Events;
+
+        function deleteFn(metricId){
+            return $http.delete('/events/' + metricId);
+        }
 
         function listEventsForDashboard(productName, dashboardName){
 

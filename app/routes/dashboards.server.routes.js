@@ -14,7 +14,7 @@ module.exports = function(app) {
 
     app.route('/dashboards/:dashboardId')
         .put(dashboards.update) // users.requiresLogin, dashboards.hasAuthorization,
-        .delete(users.requiresLogin, dashboards.hasAuthorization, dashboards.delete);
+        .delete(dashboards.delete); //users.requiresLogin, dashboards.hasAuthorization,
 
     app.route('/clone/dashboards/:dashboardId')
         .get(dashboards.clone)

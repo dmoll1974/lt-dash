@@ -177,22 +177,14 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             });
 
         };
-		// Find existing Dashboard
-//		$scope.findOne = function() {
-//			$scope.dashboard = Dashboards.get({
-//				dashboardName: $stateParams.dashboardName,
-//                productName: $stateParams.productName
-//			});
-//		};
 
-
-        $scope.open = function (size, index) {
+        $scope.openDeleteMetricModal = function (size, index) {
 
             Metrics.selected = $scope.dashboard.metrics[index];
             
             var modalInstance = $modal.open({
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl',
+                templateUrl: 'deleteMetric.html',
+                controller: 'DeleteMetricModalInstanceCtrl',
                 size: size//,
             });
 
@@ -214,14 +206,55 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             });
         };
 
+        $scope.openDeleteDashboardModal = function (size, index) {
+
+
+
+            var modalInstance = $modal.open({
+                templateUrl: 'deleteDashboard.html',
+                controller: 'DeleteDashboardModalInstanceCtrl',
+                size: size//,
+            });
+
+            modalInstance.result.then(function (dashboardId) {
+
+                Dashboards.delete(dashboardId).success(function(dashboard){
+
+                    /* Refresh sidebar */
+                    Products.fetch().success(function(products){
+                        $scope.products = Products.items;
+
+                    });
+
+                    $state.go('viewProduct',{"productName":$stateParams.productName});
+
+                });
+
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
 
     }
-]).controller('ModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
+]).controller('DeleteMetricModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
 
     $scope.selectedMetric = Metrics.selected;
     
     $scope.ok = function () {
         $modalInstance.close($scope.selectedMetric._id);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+}
+]).controller('DeleteDashboardModalInstanceCtrl',['$scope','$modalInstance', 'Dashboards', function($scope, $modalInstance, Dashboards) {
+
+    $scope.selectedDashboard = Dashboards.selected;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.selectedDashboard._id);
     };
 
     $scope.cancel = function () {

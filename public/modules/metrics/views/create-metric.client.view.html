@@ -15,7 +15,7 @@
                     <label class="control-label" for="target" >Targets</label>
                     <div class="controls" ng-repeat="target in metric.targets track by $index">
                         <input type="text" id="target" data-ng-model="metric.targets[$index]" placeholder="Enter target" required>
-                        <i class="glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="metric.targets.length>1"></i>
+                        <i class="pull-right glyphicon glyphicon-trash" data-ng-click="removeTarget($index)" data-ng-show="metric.targets.length>1"></i>
                     </div>
                     <button ng-click="addTarget()">Add target</button>
                 </div>

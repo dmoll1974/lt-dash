@@ -11,14 +11,6 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
         $scope.event = Events.selected;
 
-        $scope.cancel = function() {
-
-            if ($rootScope.previousStateParams)
-                $state.go($rootScope.previousState,$rootScope.previousStateParams);
-            else
-                $state.go($rootScope.previousState);
-
-        }
 
         // Open create event form
         $scope.addEventForDashboard = function(){
@@ -35,7 +27,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
         $scope.create = function() {
 
             Events.create($scope.event).success(function (event) {
-
+                Events.selected = {};
                 $state.go('viewDashboard',{"productName":$scope.event.productName, "dashboardName":  $scope.event.dashboardName});
 
             }, function(errorResponse) {
@@ -49,6 +41,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
             Events.update($scope.event).success(function (event) {
 
+                Events.selected = {};
                 $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName": $stateParams.dashboardName});
 
             }, function(errorResponse) {
@@ -58,6 +51,8 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
         };
 
         $scope.cancel = function() {
+
+            Events.selected = {};
 
             if ($rootScope.previousStateParams)
                 $state.go($rootScope.previousState,$rootScope.previousStateParams);

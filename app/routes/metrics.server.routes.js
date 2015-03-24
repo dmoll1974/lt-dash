@@ -7,7 +7,7 @@ module.exports = function(app) {
 	// Metrics Routes
 	app.route('/metrics')
 		.get(metrics.list)
-		.post(users.requiresLogin, metrics.create);
+		.post(metrics.create); //users.requiresLogin,
 
 	app.route('/metrics/:metricId')
 		.get(metrics.read)

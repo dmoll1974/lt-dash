@@ -75,6 +75,9 @@ module.exports = function(db) {
 		app.locals.cache = 'memory';
 	}
 
+	// allow big file to be imported
+	app.use(bodyParser({limit: '50mb'}));
+
 	// Request body parsing middleware should be above methodOverride
 	app.use(bodyParser.urlencoded({
 		extended: true
@@ -109,6 +112,7 @@ module.exports = function(db) {
 	app.use(helmet.nosniff());
 	app.use(helmet.ienoopen());
 	app.disable('x-powered-by');
+
 
 	// Setting the app router and static folder
 	app.use(express.static(path.resolve('./public')));

@@ -96,6 +96,14 @@ exports.productByName = function(req, res, next, name) {
 	});
 };
 
+exports.productById = function(req, res, next, id) {
+    Product.findById(id).exec(function(err, product) {
+        if (err) return next(err);
+        if (! product) return next(new Error('Failed to load Product ' + id));
+        req.product = product ;
+        next();
+    });
+};
 /**
  * Product authorization middleware
  */

@@ -10,7 +10,10 @@ angular.module('products').factory('Products', ['$resource', '$http',
             'get' : getFn,
             query : query,
             fetch : fetch,
-            create: create
+            create: create,
+            delete: deleteFn,
+            update: update,
+            selected: {}
 
         };
         
@@ -23,6 +26,14 @@ angular.module('products').factory('Products', ['$resource', '$http',
             });
         }
 
+        function update(product){
+            return $http.put('/product-by-id/' + product._id, product);
+        }
+
+        function deleteFn(productId){
+            return $http.delete('/product-by-id/' + productId);
+        }
+
         function fetch(){
             return $http.get('/products').success(function(items){
                 
@@ -31,7 +42,10 @@ angular.module('products').factory('Products', ['$resource', '$http',
         }
         
         function getFn(productName){
-            return $http.get('/products/' + productName);
+            return $http.get('/products/' + productName).success(function (product){
+
+                Products.selected = product;
+            });
         }
         
         function query (a1, a2, a3, a4){

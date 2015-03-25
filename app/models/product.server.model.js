@@ -15,11 +15,7 @@ var ProductSchema = new mongoose.Schema({
     "description": String,
     "dashboards": [
         { type: Schema.Types.ObjectId, ref: "Dashboard"}
-    ],
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User'
-    }
+    ]
 
 });
 

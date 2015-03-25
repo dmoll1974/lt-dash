@@ -1,16 +1,17 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$location', 'Authentication', 'Products',
-	function($scope, $rootScope, $stateParams, $location, Authentication, Products) {
-		$scope.authentication = Authentication;
+angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Products',
+	function($scope, $rootScope, $stateParams, $state, $location, $modal, Products) {
 
-		// Create new Product
+        $scope.product = Products.selected;
+
+        // Create new Product
 		$scope.create = function() {
 			// Create new Product object
 			var product = {};
-            product.name = this.name;
-            product.description = this.description;
+            product.name = $scope.product.name;
+            product.description = $scope.product.description;
 
 
             Products.create(product).success(function(product){
@@ -24,8 +25,8 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
                 });
 
                 // Clear form fields
-                $scope.name = '';
-                $scope.description = '';
+                //$scope.product.name = '';
+                //$scope.product.description = '';
 
             });
 
@@ -35,33 +36,30 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 //			});
 		};
 
-		// Remove existing Product
-		$scope.remove = function(product) {
-			if ( product ) { 
-				product.$remove();
 
-				for (var i in $scope.products) {
-					if ($scope.products [i] === product) {
-						$scope.products.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.product.$remove(function() {
-					$location.path('products');
-				});
-			}
-		};
+		// Edit Product
+		$scope.edit = function(productName) {
 
-		// Update existing Product
-		$scope.update = function() {
-			var product = $scope.product;
+            $state.go('editProduct', {productName: productName})
+        };
 
-			product.$update(function() {
-				$location.path('products/' + product._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+        $scope.update = function() {
+
+            Products.update($scope.product).success(function (product) {
+
+                /* Refresh sidebar */
+                Products.fetch().success(function(product){
+                    $scope.products = Products.items;
+
+                });
+
+                $state.go('viewProduct',{"productName":product.name});
+
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+
+        };
 
 		// Find a list of Products
 		$scope.find = function() {
@@ -73,7 +71,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             Products.get($stateParams.productName).success(function(product){
 
-                $scope.product = product;
+                $scope.product = Products.selected;
 
             });
 
@@ -86,5 +84,52 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         };
 
 
-    }
+
+        $scope.openDeleteProductModal = function (size) {
+
+
+
+        var modalInstance = $modal.open({
+            templateUrl: 'deleteProduct.html',
+            controller: 'DeleteProductModalInstanceCtrl',
+            size: size//,
+        });
+
+        modalInstance.result.then(function (productName) {
+
+            Products.delete(productName).success(function(product){
+
+                /* reset slected Product*/
+
+                Products.selected = {};
+
+                /* Refresh sidebar */
+                Products.fetch().success(function(products){
+                    $scope.products = Products.items;
+
+                });
+
+                $state.go('home');
+
+            });
+
+        }, function () {
+            //$log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+}
+]).controller('DeleteProductModalInstanceCtrl',['$scope','$modalInstance', 'Products', function($scope, $modalInstance, Products) {
+
+    $scope.selectedProduct = Products.selected;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.selectedProduct._id);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+}
 ]);

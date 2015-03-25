@@ -10,10 +10,14 @@ module.exports = function(app) {
 		.post( products.create);//users.requiresLogin,
 
 	app.route('/products/:productName')
-		.get(products.read)
-		.put(users.requiresLogin, products.hasAuthorization, products.update)
-		.delete(users.requiresLogin, products.hasAuthorization, products.delete);
+        .get(products.read);
 
-	// Finish by binding the Product middleware
+
+    app.route('/product-by-id/:productId')
+        .delete(products.delete) //users.requiresLogin, products.hasAuthorization,
+        .put(products.update); //users.requiresLogin, products.hasAuthorization,
+
+    // Finish by binding the Product middleware
 	app.param('productName', products.productByName);
+    app.param('productId', products.productById);
 };

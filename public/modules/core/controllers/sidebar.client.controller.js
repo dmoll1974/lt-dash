@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('SidebarController', ['$scope', '$stateParams', '$location', 'Products',
-    function($scope, $stateParams, $location, Products) {
+angular.module('core').controller('SidebarController', ['$scope', '$stateParams', '$state', '$location', 'Products',
+    function($scope, $stateParams, $state, $location, Products) {
 
         $scope.productId = $stateParams.productId;
 
@@ -27,7 +27,11 @@ angular.module('core').controller('SidebarController', ['$scope', '$stateParams'
             if ($location.path().indexOf(dashboardName)!== -1) return 'dashboard-selected';
         };
 
+        $scope.viewProduct = function(index, productName){
 
+            Products.selected = $scope.products[index];
+            $state.go('viewProduct', {productName: productName});
+        }
 
     }
 ]);

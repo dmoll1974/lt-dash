@@ -1,17 +1,31 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
-	function($scope, $rootScope, $state, Dashboards, Graphite, TestRuns, $log, Tags) {
+angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
+	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, $log, Tags) {
 
         /* Zoom lock enabled by default */
         $scope.zoomLock = true;
 
-        $scope.dashboard = Dashboards.selected;
+        $scope.init = function(){
 
-        $scope.metrics = Dashboards.selected.metrics;
+                Dashboards.get($stateParams.productName, $stateParams.dashboardName).then(function (dashboard){
 
-        /* Get tags used in metrics */
-        $scope.tags = Tags.setTags($scope.metrics);
+                        $scope.dashboard = Dashboards.selected;
+
+                        $scope.metrics = Dashboards.selected.metrics;
+
+                        /* Get tags used in metrics */
+                        $scope.tags = Tags.setTags($scope.metrics);
+
+                })
+
+                /* Get test run based on $stateParams*/
+                if($stateParams.testRunId) {
+                        if (JSON.stringify(TestRuns.selected) === '{}') TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+                }
+
+
+        };
 
         /* default zoom range for live graphs */
         $scope.zoomRange = '-10min';
@@ -21,6 +35,8 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
             $scope.value = tag;
         };
+
+
 
 
 

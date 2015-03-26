@@ -1,4 +1,4 @@
-<div ng-controller="GraphsController">
+<div ng-controller="GraphsController" data-ng-init="init()">
     <label class="checkbox">
         <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
         Zoom lock
@@ -8,7 +8,7 @@
         </tab>
     </tabset>
     <accordion close-others="false">
-        <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController"  >
+        <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController">
             <accordion-group is-open="group.isOpen" >
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen">

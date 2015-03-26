@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsController', ['$scope','Graphite', 'TestRuns', '$q','$http', '$log',
-	function($scope, Graphite, TestRuns, $q, $http, $log) {
+angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', 'TestRuns', '$q','$http', '$log',
+	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
+
 
         /* Open accordion by default, except for the "All" tab */
 

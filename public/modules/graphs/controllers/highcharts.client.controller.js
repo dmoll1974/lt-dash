@@ -34,11 +34,23 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
             options: {
                 chart: {
                     type: 'line',
-                    zoomType: 'x'
-                }
-                ,
+                    zoomType: 'x',
+                    height: 600
+                },
                 rangeSelector: {
                     enabled: false
+                },
+                legend: {
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    maxHeight: 150
+                    //layout: 'vertical'
+                },
+                tooltip:{
+                    enabled:true,
+                    shared: false
+
                 }
 
             },

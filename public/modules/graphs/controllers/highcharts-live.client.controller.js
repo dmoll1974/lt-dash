@@ -56,6 +56,7 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                 chart: {
                     type: 'line',
                     zoomType: 'x',
+                    height: 500,
                     events: {
                         load: function () {
 
@@ -116,6 +117,18 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                 },
                 rangeSelector: {
                     enabled: false
+                },
+                legend: {
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    maxHeight: 100
+                    //layout: 'vertical'
+                },
+                tooltip:{
+                    enabled:true,
+                    shared: false
+
                 }
 
             },

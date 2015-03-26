@@ -35,7 +35,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 chart: {
                     type: 'line',
                     zoomType: 'x',
-                    height: 600
+                    height: 500
                 },
                 rangeSelector: {
                     enabled: false
@@ -44,7 +44,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     enabled: true,
                     align: 'center',
                     verticalAlign: 'bottom',
-                    maxHeight: 150
+                    maxHeight: 100
                     //layout: 'vertical'
                 },
                 tooltip:{

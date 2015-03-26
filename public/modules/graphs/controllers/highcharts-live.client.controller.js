@@ -127,7 +127,8 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                 },
                 tooltip:{
                     enabled:true,
-                    shared: false
+                    shared: false,
+                    decimals: 0
 
                 }
 

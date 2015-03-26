@@ -49,7 +49,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 },
                 tooltip:{
                     enabled:true,
-                    shared: false
+                    shared: false,
+                    decimals: 0
 
                 }
 

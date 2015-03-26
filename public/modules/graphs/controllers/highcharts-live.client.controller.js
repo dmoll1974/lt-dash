@@ -36,7 +36,6 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
 
             if (newVal !== oldVal) {
 
-                Interval.clearIntervalForMetric($scope.metric._id);
 
                 var seriesArray = $scope.config.series;
                 var seriesArraySize = seriesArray.length;

@@ -11,7 +11,7 @@ angular.module('graphs').factory('Tags', [
 
         return Tags;
 
-        function setTags (metrics, productName, dashBoardName){
+        function setTags (metrics, productName, dashBoardName, testRunId){
 
             var tags = [];
 
@@ -21,7 +21,7 @@ angular.module('graphs').factory('Tags', [
 
                 _.each(metric.tags, function(tag){
 
-                    if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text}});
+                    if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text, testRunId: testRunId}});
 
                 })
 

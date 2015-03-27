@@ -17,7 +17,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                         $scope.metrics = addAccordionState(Dashboards.selected.metrics);
 
                         /* Get tags used in metrics */
-                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName);
+                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
 
                 })
 

@@ -9,16 +9,27 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         $scope.$watch('value', function (newVal, oldVal) {
 
-            if (newVal !== 'All'){
+            if($stateParams.metricId){
 
-                _.each($scope.metrics, function (metric, i){
+                _.each($scope.metrics, function (metric, i) {
 
-                    $scope.metrics[i].isOpen = true;
+                    if(metric._id === $stateParams.metricId )
+                        $scope.metrics[i].isOpen = true;
 
                 })
 
-            }
+            }else {
 
+                if (newVal !== 'All') {
+
+                    _.each($scope.metrics, function (metric, i) {
+
+                        $scope.metrics[i].isOpen = true;
+
+                    })
+
+                }
+            }
         });
 
         /* If zoom lock is checked, update all graphs when zoom is applied in one */

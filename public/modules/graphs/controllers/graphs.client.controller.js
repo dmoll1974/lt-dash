@@ -45,6 +45,5 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
 
 
-
 	}
 ]);

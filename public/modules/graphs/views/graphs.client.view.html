@@ -12,6 +12,8 @@
             <accordion-group is-open="metric.isOpen" >
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
+                    <button ng-click="setMetricShareUrl(metric._id)">Share graph URL</button>
+                    <div><input ng-model="metricShareUrl" ng-if="showUrl" autofocus/></div>
                     <highchart id="chart1" config="config"></highchart>
                 </div>
             </accordion-group>

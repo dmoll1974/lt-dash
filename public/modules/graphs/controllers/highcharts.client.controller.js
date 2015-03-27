@@ -4,6 +4,12 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
 
 
+        $scope.setMetricShareUrl = function(metricId){
+
+            $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId;
+            $scope.showUrl = true;
+        }
+
         /* Open accordion by default, except for the "All" tab */
 
 

@@ -11,23 +11,35 @@ angular.module('graphs').factory('Tags', [
 
         return Tags;
 
-        function setTags (metrics){
+        function setTags (metrics, productName, dashBoardName){
 
             var tags = [];
 
-            tags.push("All");
+            tags.push({text: 'All', route: {productName: productName, dashboardName: dashBoardName, tag: 'All'}});
 
             _.each(metrics, function(metric){
 
                 _.each(metric.tags, function(tag){
 
-                    if(_.indexOf(tags, tag.text) === -1) tags.push(tag.text);
+                    if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text}});
 
                 })
 
             })
 
             return tags;
+        }
+
+        function tagExists(existingTags, newTag){
+
+            var isNew = true;
+
+            _.each(existingTags, function(existingTag){
+
+                if(existingTag.text === newTag.text) isNew = false;
+            })
+
+            return isNew;
         }
 	}
 ]);

@@ -3,6 +3,8 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
 	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, $log, Tags) {
 
+        $scope.value = $stateParams.tag;
+
         /* Zoom lock enabled by default */
         $scope.zoomLock = true;
 
@@ -15,7 +17,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                         $scope.metrics = Dashboards.selected.metrics;
 
                         /* Get tags used in metrics */
-                        $scope.tags = Tags.setTags($scope.metrics);
+                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName);
 
                 })
 
@@ -30,10 +32,10 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
         /* default zoom range for live graphs */
         $scope.zoomRange = '-10min';
 
-        /* Set tag based on tabs*/
-        $scope.setTag = function (tag){
+        /* Set active tab */
+        $scope.isActive = function (tag){
 
-            $scope.value = tag;
+           return  $scope.value === tag;
         };
 
 

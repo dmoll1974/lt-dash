@@ -4,7 +4,7 @@
         Zoom lock
     </label>
     <tabset>
-        <tab data-ng-repeat="tag in tags" heading="{{tag}}" data-ng-model="value"  disabled="tag.disabled" select="setTag(tag)">
+        <tab data-ng-repeat="tag in tags" heading="{{tag.text}}" data-ng-model="value"  disabled="tag.disabled" active="isActive(tag.text)" ui-sref="viewGraphs(tag.route)" >
         </tab>
     </tabset>
     <accordion close-others="false">

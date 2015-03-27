@@ -6,11 +6,19 @@ angular.module('graphs').config(['$stateProvider',
 		// Graphs state routing
 		$stateProvider.
 		state('viewGraphs', {
-			url: '/graphs/:productName/:dashboardName/:testRunId',
+			url: '/graphs/:productName/:dashboardName/:testRunId/:tag',
 			templateUrl: 'modules/graphs/views/graphs.client.view.html'
 		}).
-        state('viewLiveGraphs', {
-            url: '/graphs-live/:productName/:dashboardName',
+		state('deepLinkGraph', {
+			url: '/graphs/:productName/:dashboardName/:testRunId/:tag/:metricId',
+			templateUrl: 'modules/graphs/views/graphs.client.view.html'
+		}).
+		state('viewLiveGraphs', {
+			url: '/graphs-live/:productName/:dashboardName/:tag',
+			templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
+		}).
+        state('deepLinkLiveGraph', {
+            url: '/graphs-live/:productName/:dashboardName/:tag/:metricId',
             templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
         });
 	}

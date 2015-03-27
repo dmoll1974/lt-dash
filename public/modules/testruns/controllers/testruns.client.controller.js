@@ -27,7 +27,7 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
         $scope.testRunDetails = function(index){
 
             TestRuns.selected = $scope.testRuns[index];
-            $state.go('viewGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId })
+            $state.go('viewGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId, tag: 'All' })
         }
 	}
 ]);

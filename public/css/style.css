@@ -11302,3 +11302,13 @@ button.toast-close-button {
     background-color: white;
     z-index: 10;
 }
+
+.metric-targets{
+
+    width: 98%;
+    margin-bottom: 8px;
+    padding-left: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-right: 10px;
+}

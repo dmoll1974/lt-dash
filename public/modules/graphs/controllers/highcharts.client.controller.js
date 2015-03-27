@@ -100,16 +100,23 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-            Graphite.getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900).then(function (series) {
 
-                _.each(series, function(serie, i){
+            /* Set the TestRuns.selected based on $stateParams*/
 
-                    $scope.config.series.push({name: serie.name, data: serie.data});
-                    $scope.config.loading = false;
+            TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function(testRun){
 
-                })
-            });
+                TestRuns.selected = testRun[0];
 
+                Graphite.getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900).then(function (series) {
+
+                    _.each(series, function(serie, i){
+
+                        $scope.config.series.push({name: serie.name, data: serie.data});
+                        $scope.config.loading = false;
+
+                    })
+                });
+            })
 
         }
 

@@ -18,11 +18,11 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
 
         function getTestRunById(productName, dashboardName, testRunId){
 
-            return $http.get('/testrun/' + productName + '/' + dashboardName + '/' + testRunId).success(function(testRun){
-
-                TestRuns.selected = testRun[0];
-
-            });
+            return $http.get('/testrun/' + productName + '/' + dashboardName + '/' + testRunId);//.success(function(testRun){
+            //
+            //    TestRuns.selected = testRun[0];
+            //
+            //});
 
         }
 

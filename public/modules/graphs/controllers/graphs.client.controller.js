@@ -21,10 +21,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
                 })
 
-                /* Get test run based on $stateParams*/
-                if($stateParams.testRunId) {
-                        if (JSON.stringify(TestRuns.selected) === '{}') TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
-                }
+
 
 
         };

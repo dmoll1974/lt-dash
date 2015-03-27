@@ -14,18 +14,24 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
                         $scope.dashboard = Dashboards.selected;
 
-                        $scope.metrics = Dashboards.selected.metrics;
+                        $scope.metrics = addAccordionState(Dashboards.selected.metrics);
 
                         /* Get tags used in metrics */
                         $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName);
 
                 })
 
-
-
-
         };
 
+        function addAccordionState(metrics){
+
+                _.each(metrics, function(metric){
+
+                        metric.isOpen = false;
+                })
+
+                return metrics;
+        }
         /* default zoom range for live graphs */
         $scope.zoomRange = '-10min';
 

@@ -9,9 +9,9 @@
     </tabset>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController">
-            <accordion-group is-open="group.isOpen" >
+            <accordion-group is-open="metric.isOpen" >
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
-                <div data-ng-init="initConfig(chart, metric)" ng-if="group.isOpen">
+                <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
                     <highchart id="chart1" config="config"></highchart>
                 </div>
             </accordion-group>

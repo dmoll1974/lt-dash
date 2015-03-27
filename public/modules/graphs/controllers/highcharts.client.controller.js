@@ -6,11 +6,18 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         /* Open accordion by default, except for the "All" tab */
 
-        $scope.group = {isOpen : false};
 
         $scope.$watch('value', function (newVal, oldVal) {
 
-            if (newVal !== 'All') $scope.group.isOpen = true;
+            if (newVal !== 'All'){
+
+                _.each($scope.metrics, function (metric, i){
+
+                    $scope.metrics[i].isOpen = true;
+
+                })
+
+            }
 
         });
 

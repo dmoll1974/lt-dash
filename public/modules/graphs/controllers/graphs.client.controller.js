@@ -3,6 +3,7 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
 	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, $log, Tags) {
 
+
         $scope.value = $stateParams.tag;
 
         /* Zoom lock enabled by default */
@@ -42,7 +43,10 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
         };
 
 
+        $scope.editMetric = function(metricId){
 
+                $state.go('editMetric', {productName: $stateParams.productName, dashboardName: $stateParams.dashboardName, metricId: metricId});
+        }
 
 
 	}

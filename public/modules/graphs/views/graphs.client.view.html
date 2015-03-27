@@ -1,19 +1,27 @@
 <div ng-controller="GraphsController" data-ng-init="init()">
-    <label class="checkbox">
-        <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
-        Zoom lock
-    </label>
-    <tabset>
-        <tab data-ng-repeat="tag in tags" heading="{{tag.text}}" data-ng-model="value"  disabled="tag.disabled" active="isActive(tag.text)" ui-sref="viewGraphs(tag.route)" >
-        </tab>
-    </tabset>
+    <div fix-to-top="fix-to-top">
+        <label class="checkbox">
+            <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
+            Zoom lock
+        </label>
+        <tabset>
+            <tab data-ng-repeat="tag in tags" heading="{{tag.text}}" data-ng-model="value"  disabled="tag.disabled" active="isActive(tag.text)" ui-sref="viewGraphs(tag.route)" >
+            </tab>
+        </tabset>
+    </div>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController">
             <accordion-group is-open="metric.isOpen" >
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
-                    <span><button ng-click="setMetricShareUrl(metric._id)">Share graph URL</button></span>
+                    <span>
+                    <div class="btn-group">
+                        <label class="btn btn-lg" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
+                        <label class="btn btn-lg" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
+                    </div>
+                    </span>
                     <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>
+
                     <highchart id="chart1" config="config"></highchart>
                 </div>
             </accordion-group>

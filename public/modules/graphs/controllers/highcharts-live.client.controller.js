@@ -1,21 +1,62 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Interval', 'Graphite', 'TestRuns', '$q','$http', '$log',
-    function($scope, Interval, Graphite, TestRuns, $q, $http, $log) {
+angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Interval', '$stateParams', 'Graphite', 'TestRuns', '$q','$http', '$log',
+    function($scope, Interval,$stateParams, Graphite, TestRuns, $q, $http, $log) {
+
+        /* generate deeplink to share metric graph */
+
+        $scope.setMetricShareUrl = function(metricId){
+
+            $scope.metricShareUrl = location.host + '/#!/graphs-live/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.tag + '/' + metricId;
+
+            if($scope.showUrl){
+
+                switch($scope.showUrl){
+
+                    case true:
+                        $scope.showUrl = false;
+                        break;
+                    case false:
+                        $scope.showUrl = true;
+                        break;
+                }
+
+            }else{
+
+                $scope.showUrl = true;
+            }
+        }
 
         /* Open accordion by default, except for the "All" tab */
 
-        $scope.group = {isOpen : false};
-
         $scope.$watch('value', function (newVal, oldVal) {
 
-            if (newVal !== 'All') $scope.group.isOpen = true;
+            if($stateParams.metricId){
 
+                _.each($scope.metrics, function (metric, i) {
+
+                    if(metric._id === $stateParams.metricId )
+                        $scope.metrics[i].isOpen = true;
+
+                })
+
+            }else {
+
+                if (newVal !== 'All') {
+
+                    _.each($scope.metrics, function (metric, i) {
+
+                        $scope.metrics[i].isOpen = true;
+
+                    })
+
+                }
+            }
         });
 
         /* stop data polling when accordion is closed */
 
-        $scope.$watch('group.isOpen', function (newVal, oldVal) {
+        $scope.$watch('metric.isOpen', function (newVal, oldVal) {
 
             if (newVal !== oldVal && newVal === false) Interval.clearIntervalForMetric($scope.metric._id);
 

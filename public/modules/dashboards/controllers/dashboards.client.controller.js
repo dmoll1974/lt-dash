@@ -105,7 +105,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
         $scope.viewLiveGraphs = function(){
 
 
-            $state.go('viewLiveGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+            $state.go('viewLiveGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, tag: 'All'});
 
 
         };

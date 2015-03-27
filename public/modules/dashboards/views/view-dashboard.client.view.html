@@ -3,10 +3,12 @@
     <div class="page-header">
         <h1>{{productName}}-{{dashboard.name}}</h1>
         <h3>Description:    {{dashboard.description}}</h3>
-        <i title="Edit dashboard" class="glyphicon glyphicon-pencil" data-ng-click="edit()">  </i>
-        <i title="Clone dashboard" class="glyphicon glyphicon-duplicate" data-ng-click="clone()">  </i>
-        <i title="Delete dashboard" class="glyphicon glyphicon-trash" data-ng-click="openDeleteDashboardModal('', $index)">  </i>
-        <i title="Live dashboard" class="glyphicon glyphicon-stats" data-ng-click="viewLiveGraphs()">  </i>
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <button title="Edit dashboard" class="btn-lg btn-default btn-primary" data-ng-click="edit()"><span class="glyphicon glyphicon-pencil"></span>  Edit</button>
+            <button title="Clone dashboard" class="btn-lg btn-default btn-warning" data-ng-click="clone()"><span class="glyphicon glyphicon-duplicate"></span>  Clone</button>
+            <button title="Delete dashboard" class="btn-lg btn-default btn-alert" data-ng-click="openDeleteDashboardModal('', $index)"><span class="glyphicon glyphicon-trash"></span>  Delete</button>
+            <button title="Live dashboard" class="btn-lg btn-default btn-success" data-ng-click="viewLiveGraphs()"><span class="glyphicon glyphicon-stats"></span>  Live data</button>
+        </div>
     </div>
     
     <ul class="nav nav-tabs">

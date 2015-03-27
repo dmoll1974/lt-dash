@@ -11295,3 +11295,10 @@ button.toast-close-button {
     display: block;
 }
 
+/* fix zoom ranges and tabs*/
+.fix-to-top {
+    position: fixed;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+}

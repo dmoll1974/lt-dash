@@ -3,11 +3,29 @@
 angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', 'TestRuns', '$q','$http', '$log',
 	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
 
-
+        /* generate deeplink to share metric graph */
         $scope.setMetricShareUrl = function(metricId){
 
+
             $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId;
-            $scope.showUrl = true;
+
+            if($scope.showUrl){
+
+                switch($scope.showUrl){
+
+                    case true:
+                        $scope.showUrl = false;
+                        break;
+                    case false:
+                        $scope.showUrl = true;
+                        break;
+                }
+
+            }else{
+
+               $scope.showUrl = true;
+            }
+
 
         }
 

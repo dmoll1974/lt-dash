@@ -10,7 +10,7 @@ angular.module('events').config(['$stateProvider',
 			templateUrl: 'modules/events/views/list-events-dashboard.client.view.html'
 		}).
 		state('createEvent', {
-			url: '/events/create',
+			url: '/create/event/:productName/:dashboardName',
 			templateUrl: 'modules/events/views/create-event.client.view.html'
 		}).
 		state('viewEvent', {

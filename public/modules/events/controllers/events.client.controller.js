@@ -13,18 +13,24 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
         $scope.initEventForm = function (){
 
+
             $scope.testRunIds = Events.getTestRunId(Events.list);
             $scope.descriptions = Events.getDescriptions(Events.list);
+
+            $scope.dateOptions = {
+                startingDay: 1,
+                showWeeks: false
+            };
         };
 
         // Open create event form
         $scope.addEventForDashboard = function () {
 
-            $scope.event.eventTimestamp = new Date().toUTCString();
-            $scope.event.productName = $scope.productName;
-            $scope.event.dashboardName = $scope.dashboardName;
 
-            $state.go('createEvent');
+            $scope.event.eventTimestamp = new Date();
+            $scope.event.productName = $stateParams.productName;
+            $scope.event.dashboardName = $stateParams.dashboardName;
+            $state.go('createEvent',{productName: $stateParams.productName, dashboardName: $stateParams.dashboardName});
 
         };
 
@@ -103,12 +109,12 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
         };
 
-        // Find existing Event
-        $scope.findOne = function () {
-            $scope.event = Events.get({
-                eventId: $stateParams.eventId
-            });
-        };
+        //// Find existing Event
+        //$scope.findOne = function () {
+        //    $scope.event = Events.get({
+        //        eventId: $stateParams.eventId
+        //    });
+        //};
 
 
         $scope.open = function (size, index) {

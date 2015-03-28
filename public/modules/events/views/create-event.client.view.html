@@ -6,10 +6,8 @@
         <form name="eventForm" class="form-horizontal"  novalidate>
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="eventTimestamp">Timestamp</label>
-                    <div class="controls">
-                        <input type="text" data-ng-model="event.eventTimestamp" id="eventTimestamp" class="form-control" placeholder="Timestamp, required" required>
-                    </div>
+                    <span><label class="timestamp-label">Timestamp<br/></label></span>
+                    <span><datetimepicker hour-step="1" minute-step="1" ng-model="event.eventTimestamp" show-meridian="false" date-format="dd-MMM-yyyy" date-options="dateOptions" date-disabled="disabled(date, mode)" readonly-time="false"></datetimepicker></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="productName">Product</label>

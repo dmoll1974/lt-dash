@@ -11312,3 +11312,7 @@ button.toast-close-button {
     padding-bottom: 7px;
     padding-right: 10px;
 }
+
+.timestamp-label {
+    margin-right: 20px;
+}

@@ -26,19 +26,19 @@
                 <div class="form-group">
                     <label class="control-label" for="testRunId">Test run ID</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="event.testRunId" id="testRunId" class="form-control" placeholder="Test run ID, required" required>
+                        <input type="text" ng-model="event.testRunId" typeahead="testRunId for testRunId in testRunIds | filter:$viewValue | limitTo:8" class="form-control" placeholder="Test run ID, required" id="testRunId" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="eventDescription">Description</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="event.eventDescription" id="eventDescription" class="form-control" placeholder="Description, required" required>
+                        <input type="text" ng-model="event.eventDescription" typeahead="description for description in descriptions | filter:$viewValue | limitTo:8" class="form-control" placeholder="Description, required" id="eventDescription" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="baseline">Baseline</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="event.baseline" id="baseline" class="form-control" placeholder="Baseline">
+                        <input type="text" ng-model="event.baseline" typeahead="testRunId for testRunId in testRunIds | filter:$viewValue | limitTo:8" class="form-control" placeholder="Baseline" id="baseline">
                     </div>
                 </div>
                 <div class="form-group">

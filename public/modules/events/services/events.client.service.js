@@ -6,8 +6,11 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
 
         var Events = {
             selected: {},
+            getTestRunId: getTestRunId,
+            getDescriptions: getDescriptions,
             listEventsForDashboard: listEventsForDashboard,
-            update : update,
+            list: [],
+            update: update,
             create: create,
             delete: deleteFn
 
@@ -24,6 +27,35 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
             return $http.get('/events-dashboard/' + productName + '/' + dashboardName);
         
         };
+
+        function getTestRunId(events){
+
+            var listOfTestRunIds= [];
+
+            _.each(events, function (event){
+
+                listOfTestRunIds.push(event.testRunId);
+
+            })
+
+            return _.uniq(listOfTestRunIds);
+
+
+        };
+
+        function getDescriptions(events){
+
+            var descriptions = ['start', 'end'];
+
+            _.each(events, function (event){
+
+                descriptions.push(event.eventDescription);
+
+            })
+
+            return _.uniq(descriptions);
+
+        }
 
         function create(event){
             return $http.post('/events', event);

@@ -4,13 +4,18 @@
 angular.module('events').controller('EventsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Authentication', 'Events', 'Dashboards',
 	function($scope, $rootScope, $stateParams, $state, $location, $modal, Authentication, Events, Dashboards) {
 
-        $scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
 
 
         $scope.event = Events.selected;
 
+
+        $scope.initEventForm = function (){
+
+            $scope.testRunIds = Events.getTestRunId(Events.list);
+            $scope.descriptions = Events.getDescriptions(Events.list);
+        };
 
         // Open create event form
         $scope.addEventForDashboard = function () {
@@ -60,6 +65,10 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
             Events.selected = {};
 
+            /* reset form*/
+            $scope.eventForm.$setPristine();
+
+
             if ($rootScope.previousStateParams)
                 $state.go($rootScope.previousState, $rootScope.previousStateParams);
             else
@@ -73,6 +82,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
             Events.listEventsForDashboard($scope.productName, $scope.dashboardName).success(function (events) {
 
+                Events.list = events;
                 $scope.events = events;
 
             }, function (errorResponse) {
@@ -91,10 +101,6 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
                 "eventId": $scope.event._id
             });
 
-        };
-        // Find a list of Events
-        $scope.find = function () {
-            $scope.events = Events.query();
         };
 
         // Find existing Event

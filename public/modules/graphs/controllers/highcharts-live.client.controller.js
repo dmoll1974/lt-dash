@@ -78,6 +78,8 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             if (newVal !== oldVal) {
 
 
+                TestRuns.zoomRange = $scope.zoomRange;
+
                 var seriesArray = $scope.config.series;
                 var seriesArraySize = seriesArray.length;
 
@@ -179,6 +181,9 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                 text: 'Hello'
             },
             xAxis: {minRange: 10000, type: 'datetime' },
+            yAxis: {
+                min: 0 // this sets minimum values of y to 0
+            },
             loading: false,
             useHighStocks: true
 

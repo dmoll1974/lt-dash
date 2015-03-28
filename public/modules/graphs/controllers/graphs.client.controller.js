@@ -33,8 +33,8 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
                 return metrics;
         }
-        /* default zoom range for live graphs */
-        $scope.zoomRange = '-10min';
+        /* default zoom range for live graphs is -10m */
+        $scope.zoomRange = (TestRuns.zoomRange !== '')? TestRuns.zoomRange : '-10min';
 
         /* Set active tab */
         $scope.isActive = function (tag){

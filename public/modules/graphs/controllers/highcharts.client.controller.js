@@ -132,6 +132,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     }
                 }
             },
+            yAxis: {
+                min: 0 // this sets minimum values of y to 0
+            },
             loading: true,
             useHighStocks: true
         }

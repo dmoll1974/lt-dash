@@ -10,6 +10,7 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
             listTestRunsForDashboard: listTestRunsForDashboard,
             zoomFrom: '',
             zoomUntil: '',
+            zoomRange: '',
             getTestRunById: getTestRunById
 
         };

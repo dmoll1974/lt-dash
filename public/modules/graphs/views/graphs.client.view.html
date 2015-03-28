@@ -16,8 +16,8 @@
                 <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
                     <span>
                     <div class="btn-group">
-                        <label class="btn btn-lg" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
-                        <label class="btn btn-lg" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
+                        <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
+                        <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
                     </div>
                     </span>
                     <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>

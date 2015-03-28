@@ -112,7 +112,10 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
             Metrics.update($scope.metric).success(function (metric) {
 
-                $location.path('browse/' + $stateParams.productName + '/' + $stateParams.dashboardName);
+                if ($rootScope.previousStateParams)
+                    $state.go($rootScope.previousState,$rootScope.previousStateParams);
+                else
+                    $state.go($rootScope.previousState);
             });
 		};
 

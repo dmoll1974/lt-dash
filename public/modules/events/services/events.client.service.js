@@ -9,6 +9,7 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
             getTestRunId: getTestRunId,
             getDescriptions: getDescriptions,
             listEventsForDashboard: listEventsForDashboard,
+            listEventsForTestRun: listEventsForTestRun,
             list: [],
             update: update,
             create: create,
@@ -26,6 +27,12 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
 
             return $http.get('/events-dashboard/' + productName + '/' + dashboardName);
         
+        };
+
+        function listEventsForTestRun(productName, dashboardName, from, until){
+
+            return $http.get('/events-testrun/' + productName + '/' + dashboardName + '/' + from + '/' + until);
+
         };
 
         function getTestRunId(events){

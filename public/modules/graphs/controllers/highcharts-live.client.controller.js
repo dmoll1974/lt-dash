@@ -107,45 +107,47 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
 
                             var intervalId = setInterval(function () {
 
-                                Graphite.getData($scope.zoomRange, 'now', $scope.metric.targets, 900).then(function (series) {
+                                Graphite.getData($scope.zoomRange, 'now', $scope.metric.targets, 900, $stateParams.productName, $stateParams.dashboardName).then(function (graphiteSeries) {
 
-                                    /* update series */
-                                    _.each(series, function (serie) {
+                                    Graphite.addEvents(graphiteSeries, $scope.zoomRange, 'now', $stateParams.productName, $stateParams.dashboardName).then(function (series) {
 
-                                        _.each($scope.config.series, function (existingSerie, i) {
+                                            /* update series */
+                                        _.each(series, function (serie) {
+
+                                            _.each($scope.config.series, function (existingSerie, i) {
 
 
-                                            if (serie.name === existingSerie.name) {
+                                                if (serie.name === existingSerie.name) {
 
-                                                var newDatapoints = _.filter(serie.data, function (newDataPoint) {
+                                                    var newDatapoints = _.filter(serie.data, function (newDataPoint) {
 
-                                                    var isNew = true;
-                                                    _.each(existingSerie.data, function (existingDataPoint) {
+                                                        var isNew = true;
+                                                        _.each(existingSerie.data, function (existingDataPoint) {
 
-                                                        if (newDataPoint[0] === existingDataPoint[0]) isNew = false;
+                                                            if (newDataPoint[0] === existingDataPoint[0]) isNew = false;
+
+                                                        })
+
+                                                        return isNew;
 
                                                     })
 
-                                                    return isNew;
+                                                    if (newDatapoints.length > 0) {
 
-                                                })
+                                                        _.each(newDatapoints, function (datapoint) {
 
-                                                if (newDatapoints.length > 0) {
+                                                            $scope.config.series[i].data.push([datapoint[0], datapoint[1]]);
+                                                        })
 
-                                                    _.each(newDatapoints, function (datapoint) {
+                                                    }
 
-                                                        $scope.config.series[i].data.push([datapoint[0], datapoint[1]]);
-                                                    })
-
+                                                    return;
                                                 }
+                                            })
 
-                                                return;
-                                            }
+
                                         })
-
-
-                                    })
-
+                                    });
                                 });
 
 
@@ -196,13 +198,15 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             $scope.metric = metric;
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-            Graphite.getData($scope.zoomRange, 'now', metric.targets, 900).then(function (series) {
+            Graphite.getData($scope.zoomRange, 'now', metric.targets, 900, $stateParams.productName, $stateParams.dashboardName).then(function (series) {
 
-                _.each(series, function(serie, i){
+                Graphite.addEvents(series, $scope.zoomRange, 'now', $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
-                    $scope.config.series.push({name: serie.name, data: serie.data});
 
-                })
+                    $scope.config.series = seriesEvents;
+                    $scope.config.loading = false;
+
+                });
             });
 
 

@@ -98,6 +98,24 @@ exports.eventsForDashboard = function(req, res) {
         }
     });
 };
+
+/*
+ * List events for testrun
+ */
+exports.eventsForTestRun = function(req, res) {
+	Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ], eventTimestamp: {$lte: req.params.until, $gte: req.params.from} } ).sort('-eventTimestamp').exec(function(err, events) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(events);
+		}
+	});
+};
+
+
+
 /*
  * Event middleware
  */

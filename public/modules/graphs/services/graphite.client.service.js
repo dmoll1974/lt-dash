@@ -1,15 +1,65 @@
 'use strict';
 
-angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
-	function($http, $q, $log) {
+angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
+	function($http, $q, $log, Events) {
 
         var Graphite = {
-            getData: getData//,
+            getData: getData,
+            addEvents: addEvents//,
             //createHighstockSeries: createHighstockSeries
 
         };
 
         return Graphite;
+
+        function addFlagData (series, events){
+
+            var flags  = {
+                "type": "flags",
+                "onSeries": series[0],
+                showInLegend: false,
+                "shape": "circlepin"
+            };
+
+            var flagsData = [];
+
+            _.each(events, function(event){
+                if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
+                    var epochTimestamp = new Date(event.eventTimestamp).getTime();
+                    flagsData.push({x: epochTimestamp, title: 'Event', text: event.eventDescription});
+                }
+            })
+
+            flags.data = flagsData;
+
+            series.push(flags);
+
+            return series;
+
+        }
+
+        function addEvents(series, from, until, productName, dashboardName){
+
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+            var convertedFrom = convertTime(from);
+            var convertedUntil = convertTime(until);
+
+            Events.listEventsForTestRun(productName, dashboardName, convertedFrom, convertedUntil)
+                .success(function(events){
+                    deferred.resolve(
+                        addFlagData (series, events)
+                    )
+                }).error(function(msg, code) {
+                    deferred.reject(msg);
+                    $log.error(msg, code);
+                });
+
+
+            return promise;
+
+        }
 
         function createChartSeries (graphiteData){
 
@@ -22,19 +72,21 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
 
                     if (graphiteData[j].datapoints[i][0] !== null)
                         data.push([graphiteData[j].datapoints[i][1] * 1000, graphiteData[j].datapoints[i][0]]);
-                    //else
-                    //    data.push([graphiteData[j].datapoints[i][1] * 1000, 0]);
+
                 }
 
                 series.push({
                     name: graphiteData[j].target,
                     data: data,
                     tooltip: {
-                        valueDecimals: 2
+                        yDecimals: 0
                     }
                 });
             }
+
             return series;
+
+
         }
 
 
@@ -54,6 +106,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
 
             var deferred = $q.defer();
             var promise = deferred.promise;
+
 
             $http.jsonp('/graphite?' + urlEncodedTargetUrl + '&from=' + queryFrom + '&until=' + queryUntil + '&maxDataPoints=' + maxDataPoints + '&callback=JSON_CALLBACK')
                 .success(function(graphiteData) {
@@ -75,8 +128,8 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
 
         var outputTime;
         var inputTimePattern = new RegExp(/-([0-9]+)(h|d|w|mon|min|y|2)/);
-        var numberOf = (inputTime.match(inputTimePattern)) ? inputTime.match(inputTimePattern)[1] : "";
-        var timeUnit = (inputTime.match(inputTimePattern)) ? inputTime.match(inputTimePattern)[2] : "";
+        var numberOf = (inputTimePattern.test(inputTime)) ? inputTime.match(inputTimePattern)[1] : "";
+        var timeUnit = (inputTimePattern.test(inputTime)) ? inputTime.match(inputTimePattern)[2] : "";
         if (inputTime == "now"){
 
             outputTime = new Date().getTime();
@@ -118,14 +171,14 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log',
 
                 default:
 
-                    outputTime = Math.round(inputTime / 1000);
+                    outputTime = inputTime;//Math.round(inputTime / 1000);
                     break;
             }
         }
 
         return outputTime;
 
-         }
+    }
 
     }
 ]);

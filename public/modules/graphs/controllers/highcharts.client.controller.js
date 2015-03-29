@@ -4,14 +4,14 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
 
         /* generate deeplink to share metric graph */
-        $scope.setMetricShareUrl = function(metricId){
+        $scope.setMetricShareUrl = function (metricId) {
 
 
             $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId;
 
-            if($scope.showUrl){
+            if ($scope.showUrl) {
 
-                switch($scope.showUrl){
+                switch ($scope.showUrl) {
 
                     case true:
                         $scope.showUrl = false;
@@ -21,9 +21,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         break;
                 }
 
-            }else{
+            } else {
 
-               $scope.showUrl = true;
+                $scope.showUrl = true;
             }
 
 
@@ -34,16 +34,16 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
         $scope.$watch('value', function (newVal, oldVal) {
 
-            if($stateParams.metricId){
+            if ($stateParams.metricId) {
 
                 _.each($scope.metrics, function (metric, i) {
 
-                    if(metric._id === $stateParams.metricId )
+                    if (metric._id === $stateParams.metricId)
                         $scope.metrics[i].isOpen = true;
 
                 })
 
-            }else {
+            } else {
 
                 if (newVal !== 'All') {
 
@@ -58,20 +58,25 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
         });
 
         /* If zoom lock is checked, update all graphs when zoom is applied in one */
-        $scope.$watch(function(scope) { return TestRuns.zoomFrom},
-            function(newVal, oldVal) {
+        $scope.$watch(function (scope) {
+                return TestRuns.zoomFrom
+            },
+            function (newVal, oldVal) {
 
-                if(newVal !== oldVal) {
+                if (newVal !== oldVal) {
                     $scope.config.loading = true;
-                    Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900).then(function (series) {
+                    Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900, $stateParams.productName, $stateParams.dashboardName).then(function (series) {
 
-                        $scope.config.series = series;
-                        $scope.config.loading = false;
+                        Graphite.addEvents(series, TestRuns.zoomFrom, TestRuns.zoomUntil, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+
+                            $scope.config.series = seriesEvents;
+                            $scope.config.loading = false;
+
+                        });
                     });
                 }
             }
         );
-
 
 
         $scope.chart = {
@@ -91,42 +96,45 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     maxHeight: 100
                     //layout: 'vertical'
                 },
-                tooltip:{
-                    enabled:true,
+                tooltip: {
+                    enabled: true,
                     shared: false,
                     decimals: 0
 
                 }
 
             },
-            series: [
-            ],
+            series: [],
             title: {
                 text: 'Hello'
             },
             xAxis: {
                 minRange: 10000,
                 events: {
-                    setExtremes: function(e) {
+                    setExtremes: function (e) {
 
-                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.start : Math.round(e.min);
-                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined')? TestRuns.selected.end : Math.round(e.max);
+                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.start : Math.round(e.min);
+                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.end : Math.round(e.max);
 
                         /* If zoom lock is checked, set zoom timestamps in TestRuns service */
-                        if ($scope.zoomLock){
+                        if ($scope.zoomLock) {
 
                             TestRuns.zoomFrom = from;
                             TestRuns.zoomUntil = until;
                             $scope.$apply();
 
-                        }else {
+                        } else {
 
                             $scope.config.loading = true;
 
                             Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
 
-                                $scope.config.series = series;
-                                $scope.config.loading = false;
+                                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+
+                                    $scope.config.series = seriesEvents;
+                                    $scope.config.loading = false;
+
+                                });
                             });
                         }
                     }
@@ -140,7 +148,6 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
         }
 
 
-
         $scope.initConfig = function (config, metric) {
             //debugger;
 
@@ -149,23 +156,24 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             /* Set the TestRuns.selected based on $stateParams*/
 
-            TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function(testRun){
+            TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
                 TestRuns.selected = testRun[0];
 
                 Graphite.getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900).then(function (series) {
 
-                    _.each(series, function(serie, i){
+                    Graphite.addEvents(series, TestRuns.selected.start, TestRuns.selected.end, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
-                        $scope.config.series.push({name: serie.name, data: serie.data});
+
+                        $scope.config.series = seriesEvents;
                         $scope.config.loading = false;
 
-                    })
+                    });
                 });
-            })
+
+            });
 
         }
 
     }
-
 ]);

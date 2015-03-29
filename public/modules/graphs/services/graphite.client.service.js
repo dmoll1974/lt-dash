@@ -27,7 +27,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
             _.each(events, function(event){
                 if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
-                    flagsData.push({x: epochTimestamp, title: '  ^  ', text: event.eventDescription});
+                    flagsData.push({x: epochTimestamp, title: '?', text: event.eventDescription});
                 }
             })
 

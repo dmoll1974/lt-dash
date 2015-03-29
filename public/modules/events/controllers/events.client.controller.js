@@ -37,7 +37,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
         // Create new Event
         $scope.create = function () {
 
-            Events.create($scope.event).success(function (event) {
+            Events.create($scope.event).then(function (event) {
                 Events.selected = {};
                 $state.go('viewDashboard', {
                     "productName": $scope.event.productName,
@@ -53,7 +53,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
         // Create new Event
         $scope.update = function () {
 
-            Events.update($scope.event).success(function (event) {
+            Events.update($scope.event).then(function (event) {
 
                 Events.selected = {};
                 $state.go('viewDashboard', {

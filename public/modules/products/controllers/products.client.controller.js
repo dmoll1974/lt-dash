@@ -4,6 +4,12 @@
 angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Products',
 	function($scope, $rootScope, $stateParams, $state, $location, $modal, Products) {
 
+
+        $scope.initCreateForm = function(){
+
+            /* reset form */
+            $scope.product = {};
+        }
         $scope.product = Products.selected;
 
         // Create new Product
@@ -14,7 +20,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             product.description = $scope.product.description;
 
 
-            Products.create(product).success(function(product){
+            Products.create(product).then(function(product){
 
 
                 $location.path('browse/' + product.name);
@@ -24,16 +30,9 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
                 });
 
-                // Clear form fields
-                //$scope.product.name = '';
-                //$scope.product.description = '';
-
-            });
-
-
-//			}, function(errorResponse) {
-//				$scope.error = errorResponse.data.message;
-//			});
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
 		};
 
 
@@ -45,7 +44,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
         $scope.update = function() {
 
-            Products.update($scope.product).success(function (product) {
+            Products.update($scope.product).then(function (product) {
 
                 /* Refresh sidebar */
                 Products.fetch().success(function(product){
@@ -53,7 +52,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
                 });
 
-                $state.go('viewProduct',{"productName":product.name});
+                $state.go('viewProduct',{"productName":$scope.product.name});
 
             }, function(errorResponse) {
                 $scope.error = errorResponse.data.message;
@@ -71,6 +70,7 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 
             Products.get($stateParams.productName).success(function(product){
 
+                Products.selected = product;
                 $scope.product = Products.selected;
 
             });
@@ -83,6 +83,21 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
             $location.path('/dashboards/create/' + product._id);
         };
 
+        $scope.cancel = function () {
+
+            Products.selected = {};
+
+            /* reset form*/
+            $scope.productForm.$setPristine();
+
+
+            if ($rootScope.previousStateParams)
+                $state.go($rootScope.previousState, $rootScope.previousStateParams);
+            else
+                $state.go($rootScope.previousState);
+
+
+        }
 
 
         $scope.openDeleteProductModal = function (size) {

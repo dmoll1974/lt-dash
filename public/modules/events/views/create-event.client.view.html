@@ -49,8 +49,9 @@
                     <button class="btn-primary" data-ng-click="create()" ng-disabled="eventForm.$invalid">Submit</button>
                     <button class="btn-primary" data-ng-click="cancel()">Cancel</button>
                 </div>
-                <div data-ng-show="error" class="text-danger">
-                    <strong data-ng-bind="error"></strong>
+                <div data-ng-show="error" class="alert alert-danger alert-error">
+                    <a href="#" class="close" data-dismiss="alert"></a>
+                    <p><strong data-ng-bind="error"></strong></p>
                 </div>
             </fieldset>
         </form>

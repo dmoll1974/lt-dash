@@ -58,15 +58,11 @@ angular.module('dashboards').factory('Dashboards', ['$http',
         }
             
         function update(){
-            return $http.put('/dashboards/' + Dashboards.selected._id, Dashboards.selected).success(function(dashboard){
-
-            });
+            return $http.put('/dashboards/' + Dashboards.selected._id, Dashboards.selected);
         }
 
         function create(dashboard, productName){
-            return $http.post('/dashboards/' + productName, dashboard).success(function(dashboard){
-
-            });
+            return $http.post('/dashboards/' + productName, dashboard);
         }
 
         function getFn(productName, dashboardName){

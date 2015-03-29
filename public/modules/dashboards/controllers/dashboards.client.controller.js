@@ -56,7 +56,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             dashboard.name = this.name;
             dashboard.description = this.description;
 
-            Dashboards.create(dashboard, $stateParams.productName).success(function(dashboard){
+            Dashboards.create(dashboard, $stateParams.productName).then(function(dashboard){
 
 
                 $location.path('browse/' + $stateParams.productName + '/' + dashboard.name);
@@ -72,7 +72,10 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
                 $scope.description = '';
                 $scope.productName = '';
 
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
             });
+
 
         };
 
@@ -131,7 +134,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
 
         $scope.update = function() {
 
-            Dashboards.update($scope.dashboard).success(function (dashboard) {
+            Dashboards.update($scope.dashboard).then(function (dashboard) {
 
                 /* Refresh sidebar */
                 Products.fetch().success(function(products){
@@ -139,24 +142,24 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
 
                 });
 
-                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":dashboard.name});
+                $state.go('viewDashboard',{"productName":$stateParams.productName, "dashboardName":$scope.dashboard.name});
 
             }, function(errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
 
         };
-        
 
-		// Find a list of Dashboards
-		$scope.find = function() {
-			$scope.dashboards = Dashboards.query({
-                dashboardName: $stateParams.dashboardName,
-                productName: $stateParams.productName
-            });
-		};
+
+
+
 
         $scope.cancel = function() {
+
+
+
+            /* reset form*/
+            $scope.dashboardForm.$setPristine();
 
             if ($rootScope.previousStateParams)
                 $state.go($rootScope.previousState,$rootScope.previousStateParams);

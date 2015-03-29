@@ -132,6 +132,48 @@ function upload (req, res) {
         });
 
     });
+
+    /* clean db */
+
+
+
+    Dashboard.find().exec(function(err, dashboards){
+
+        var activeDashboards = [];
+
+        _.each(dashboards, function(dashboard){
+
+            activeDashboards.push(dashboard._id.toString());
+        })
+
+        Product.find().exec(function(err, products){
+
+                var productId;
+
+                _.each(products, function(product){
+
+                    productId = product.toObject()._id.toString();
+                    var updatedDashboards = [];
+
+                    _.each(product.dashboards, function(dashboardId){
+
+                        if(_.indexOf(activeDashboards, dashboardId.toString()) !== -1)updatedDashboards.push(dashboardId)
+                    })
+
+                    Product.findOne({ _id: productId}, function (err, updateProduct) {
+
+                        updateProduct.dashboards = updatedDashboards;
+                        updateProduct.save(function(err, updateProduct){
+
+                        });
+                    })
+
+
+
+                })
+        });
+
+    })
     res.redirect('/');
 
 

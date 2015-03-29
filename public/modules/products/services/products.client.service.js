@@ -21,9 +21,7 @@ angular.module('products').factory('Products', ['$resource', '$http',
 
 
         function create(product){
-            return $http.post('/products', product).success(function(items){
-
-            });
+            return $http.post('/products', product);
         }
 
         function update(product){
@@ -42,10 +40,7 @@ angular.module('products').factory('Products', ['$resource', '$http',
         }
         
         function getFn(productName){
-            return $http.get('/products/' + productName).success(function (product){
-
-                Products.selected = product;
-            });
+            return $http.get('/products/' + productName);
         }
         
         function query (a1, a2, a3, a4){

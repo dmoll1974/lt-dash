@@ -18,9 +18,11 @@
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" ng-disabled="productForm.$invalid">
+                    <button class="btn btn-primary" data-ng-click="cancel()">Cancel</button>
                 </div>
-                <div data-ng-show="error" class="text-danger">
-                    <strong data-ng-bind="error"></strong>
+                <div data-ng-show="error" class="alert alert-danger alert-error">
+                    <a href="#" class="close" data-dismiss="alert"></a>
+                    <p><strong data-ng-bind="error"></strong></p>
                 </div>
             </fieldset>
         </form>

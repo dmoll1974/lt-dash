@@ -16,9 +16,10 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
 
             var flags  = {
                 "type": "flags",
-                "onSeries": series[0],
+                //"onSeries": series[0],
                 showInLegend: false,
-                "shape": "circlepin"
+                "shape": "squarepin"
+
             };
 
             var flagsData = [];
@@ -26,7 +27,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
             _.each(events, function(event){
                 if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
-                    flagsData.push({x: epochTimestamp, title: 'Event', text: event.eventDescription});
+                    flagsData.push({x: epochTimestamp, title: '  ^  ', text: event.eventDescription});
                 }
             })
 

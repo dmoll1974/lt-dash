@@ -138,11 +138,12 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                             });
                         }
                     }
-                }
+                },
+                plotLines: []
             },
             yAxis: {
                 min: 0, // this sets minimum values of y to 0
-                 plotLines: [{
+                plotLines: [{
                 value: $scope.metric.requirementValue,
                 width: 2,
                 color: 'green',
@@ -165,8 +166,10 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
+
             /* if no requirement valaue is set, remove plotline*/
             if(!$scope.metric.requirementValue) $scope.config.yAxis.plotLines=[];
+
             /* Set the TestRuns.selected based on $stateParams*/
 
             TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
@@ -179,7 +182,25 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
 
                         $scope.config.series = seriesEvents;
+
+                        /* draw xAxis plotlines for events*/
+                        if(seriesEvents[seriesEvents.length-1].type){
+
+                            _.each(seriesEvents[seriesEvents.length-1].data, function(flag){
+
+                                $scope.config.xAxis.plotLines.push(
+                                    {
+                                        value: flag.x,
+                                        width: 2,
+                                        color: 'blue',
+                                        dashStyle: 'dash'
+                                    }
+                                );
+                            })
+                        }
                         $scope.config.loading = false;
+
+
 
                     });
                 });

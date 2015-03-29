@@ -141,7 +141,19 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 }
             },
             yAxis: {
-                min: 0 // this sets minimum values of y to 0
+                min: 0, // this sets minimum values of y to 0
+                 plotLines: [{
+                value: $scope.metric.requirementValue,
+                width: 2,
+                color: 'green',
+                dashStyle: 'dash',
+                label: {
+                  text: 'Requirement',
+                  align: 'left',
+                  y: -10,
+                  x: 0
+                }
+              }]
             },
             loading: true,
             useHighStocks: true
@@ -153,7 +165,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-
+            /* if no requirement valaue is set, remove plotline*/
+            if(!$scope.metric.requirementValue) $scope.config.yAxis.plotLines=[];
             /* Set the TestRuns.selected based on $stateParams*/
 
             TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {

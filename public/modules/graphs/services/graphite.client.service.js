@@ -23,15 +23,16 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
             };
 
             var flagsData = [];
+            var sortedEvents = events.sort(Utils.dynamicSort('eventTimestamp'));
 
-            _.each(events, function(event){
+            _.each(sortedEvents, function(event, i){
                 if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
-                    flagsData.push({x: epochTimestamp, title: '?', text: event.eventDescription});
+                    flagsData.push({x: epochTimestamp, title: i, text: event.eventDescription});
                 }
             })
 
-            flags.data = flagsData.sort(Utils.dynamicSort('-x'));
+            flags.data = flagsData;
 
             series.push(flags);
 

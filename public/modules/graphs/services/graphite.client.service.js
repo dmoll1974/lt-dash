@@ -24,11 +24,20 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
             var flagsData = [];
             var sortedEvents = events.sort(Utils.dynamicSort('eventTimestamp'));
+            var eventDescriptionPattern = new RegExp(/([0-9]+) .*/);
+            var eventIndex = 1;
+
 
             _.each(sortedEvents, function(event, i){
                 if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
+
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
-                    flagsData.push({x: epochTimestamp, title: i, text: event.eventDescription});
+
+                    var eventTitle = (eventDescriptionPattern.test(event.eventDescription)) ? event.eventDescription.match(eventDescriptionPattern)[1] : eventIndex;
+
+
+                    flagsData.push({x: epochTimestamp, title: eventTitle, text: event.eventDescription});
+                    eventIndex++;
                 }
             })
 

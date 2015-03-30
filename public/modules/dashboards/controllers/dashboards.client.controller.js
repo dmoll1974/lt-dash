@@ -59,17 +59,18 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             Dashboards.create(dashboard, $stateParams.productName).then(function(response){
 
 
-
-
                 /* Refresh sidebar */
                 Products.fetch().success(function(products){
 
                     $scope.products = Products.items;
                     $state.go('viewDashboard',{productName: $stateParams.productName, dashboardName: response.data.name});
-                    // Clear form fields
-                    $scope.name = '';
-                    $scope.description = '';
-                    $scope.productName = '';
+                    $scope.productForm.$setPristine();
+
+                    //
+                    //// Clear form fields
+                    //$scope.name = '';
+                    //$scope.description = '';
+                    //$scope.productName = '';
 
                 });
 

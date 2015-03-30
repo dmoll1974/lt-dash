@@ -16,17 +16,17 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
 		$scope.create = function() {
 			// Create new Product object
 			var product = {};
-            product.name = $scope.product.name;
-            product.description = $scope.product.description;
+            product.name = this.product.name;
+            product.description = this.product.description;
 
 
-            Products.create(product).then(function(product){
-
-
-                $location.path('browse/' + product.name);
+            Products.create(product).then(function(response){
 
                 Products.fetch().success(function(products){
+
                     $scope.products = Products.items;
+                    $state.go('viewProduct', {productName: response.data.name});
+                    $scope.productForm.$setPristine();
 
                 });
 

@@ -191,7 +191,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                                 $scope.config.xAxis.plotLines.push(
                                     {
                                         value: flag.x,
-                                        width: 2,
+                                        width: 1,
                                         color: 'blue',
                                         dashStyle: 'dash'
                                     }

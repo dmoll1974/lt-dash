@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
-	function($http, $q, $log, Events) {
+angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'Utils',
+	function($http, $q, $log, Events, Utils) {
 
         var Graphite = {
             getData: getData,
@@ -31,7 +31,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events',
                 }
             })
 
-            flags.data = flagsData;
+            flags.data = flagsData.sort(Utils.dynamicSort('-x'));
 
             series.push(flags);
 

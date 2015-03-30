@@ -6,6 +6,15 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
         $scope.value = $stateParams.tag;
 
+        /* reset zoom*/
+        $scope.resetZoom = function(){
+
+                TestRuns.zoomFrom = TestRuns.selected.start;
+                TestRuns.zoomUntil = TestRuns.selected.end;
+                $state.go($state.current, {}, {reload: true});
+                //$state.go('viewGraphs',{productName: $stateParams.productName, dashboardName: $stateParams.dashboardName, testRunId: $stateParams.testRunId, tag: $stateParams.tag});
+        }
+
         /* Zoom lock enabled by default */
         $scope.zoomLock = true;
 

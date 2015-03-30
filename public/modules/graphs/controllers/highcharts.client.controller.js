@@ -3,6 +3,7 @@
 angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', 'TestRuns', '$q','$http', '$log',
 	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
 
+
         /* generate deeplink to share metric graph */
         $scope.setMetricShareUrl = function (metricId) {
 
@@ -69,7 +70,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                         Graphite.addEvents(series, TestRuns.zoomFrom, TestRuns.zoomUntil, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
+
                             $scope.config.series = seriesEvents;
+
                             $scope.config.loading = false;
 
                         });
@@ -132,6 +135,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                                 Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
                                     $scope.config.series = seriesEvents;
+
+
                                     $scope.config.loading = false;
 
                                 });
@@ -167,6 +172,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
 
+
+
             /* if no requirement valaue is set, remove plotline*/
             if(!$scope.metric.requirementValue) $scope.config.yAxis.plotLines=[];
 
@@ -176,9 +183,14 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                 TestRuns.selected = testRun[0];
 
-                Graphite.getData(TestRuns.selected.start, TestRuns.selected.end, metric.targets, 900).then(function (series) {
+                /* If zoom range is set, use these to init the graph*/
 
-                    Graphite.addEvents(series, TestRuns.selected.start, TestRuns.selected.end, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+                var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
+                var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
+
+                Graphite.getData(from, until, metric.targets, 900).then(function (series) {
+
+                    Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
 
                         $scope.config.series = seriesEvents;

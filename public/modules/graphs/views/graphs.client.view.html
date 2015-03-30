@@ -1,9 +1,14 @@
 <div ng-controller="GraphsController" data-ng-init="init()">
     <div fix-to-top="fix-to-top">
-        <label class="checkbox">
+        <span>
+            <label class="checkbox">
             <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
             Zoom lock
-        </label>
+            </label>
+        </span>
+        <span>
+            <button class="btn default" data-ng-click="resetZoom()">Reset zoom</button>
+        </span>
         <tabset>
             <tab data-ng-repeat="tag in tags" heading="{{tag.text}}" data-ng-model="value"  disabled="tag.disabled" active="isActive(tag.text)" ui-sref="viewGraphs(tag.route)" >
             </tab>
@@ -15,10 +20,10 @@
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
                     <span>
-                    <div class="btn-group">
-                        <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
-                        <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
-                    </div>
+                        <div class="btn-group">
+                            <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
+                            <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
+                        </div>
                     </span>
                     <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>
 

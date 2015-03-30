@@ -42,7 +42,9 @@
     "passport-local": "~1.0.0",
     "passport-twitter": "~1.0.2",
     "swig": "~1.4.1",
-    "ng-tags-input": "^2.2.0"
+    "ng-tags-input": "^2.2.0",
+    "memcached": "2.0.0",
+    "MD5" : "1.2.1"
   },
   "devDependencies": {
     "supertest": "~0.14.0",

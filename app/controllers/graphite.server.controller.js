@@ -42,47 +42,63 @@ exports.getData = function(req, res) {
 
     var client = requestjson.createClient(config.graphiteHost);
 
-    /* first check memcached */
-    memcached.get( memcachedKey, function( err, result ){
-        if( err ) console.error( err );
+    /* Don't cache live data! */
+    if(until === 'now'){
 
-        if( result ){
+        client.get(graphiteTargetUrl, function (err, response, body) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.set('Content-Type', 'application/javascript');
+                res.jsonp(body);
+            }
+        });
 
-            console.dir("cache hit: " + memcachedKey );
+    }else {
 
-            res.set('Content-Type', 'application/javascript');
-            res.jsonp(result);
+        /* first check memcached */
+        memcached.get(memcachedKey, function (err, result) {
+            if (err) console.error(err);
+
+            if (result) {
+
+                console.dir("cache hit: " + memcachedKey);
+
+                res.set('Content-Type', 'application/javascript');
+                res.jsonp(result);
 
 
-            memcached.end();
+                memcached.end();
 
-        }else{
+            } else {
 
-            /* if no cache hit, go to graphite back end */
-            client.get(graphiteTargetUrl, function (err, response, body) {
-                if (err) {
-                    return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
-                    });
-                } else {
-                    res.set('Content-Type', 'application/javascript');
-                    res.jsonp(body);
-
-                    /* add to memcached if it is a valid response */
-                    if (body != '[]' && body.length > 0 && response.statusCode == 200) {
-
-                        memcached.set(memcachedKey, body, 3600 * 24 * 7, function (err, result) {
-                            if (err) console.error(err);
-                            console.dir("key set " + memcachedKey + " : " + result);
-                            memcached.end();
+                /* if no cache hit, go to graphite back end */
+                client.get(graphiteTargetUrl, function (err, response, body) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
                         });
+                    } else {
+                        res.set('Content-Type', 'application/javascript');
+                        res.jsonp(body);
+
+                        /* add to memcached if it is a valid response */
+                        if (body != '[]' && body.length > 0 && response.statusCode == 200) {
+
+                            memcached.set(memcachedKey, body, 3600 * 24 * 7, function (err, result) {
+                                if (err) console.error(err);
+                                console.dir("key set " + memcachedKey + " : " + result);
+                                memcached.end();
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
+        });
 
-        }
-    });
-
+    }
 
 };
 

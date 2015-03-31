@@ -10,7 +10,7 @@ angular.module('graphs').config(['$stateProvider',
 			templateUrl: 'modules/graphs/views/graphs.client.view.html'
 		}).
 		state('deepLinkGraph', {
-			url: '/graphs/:productName/:dashboardName/:testRunId/:tag/:metricId',
+			url: '/graphs/:productName/:dashboardName/:testRunId/:tag/:metricId?zoomFrom&zoomUntil',
 			templateUrl: 'modules/graphs/views/graphs.client.view.html'
 		}).
 		state('viewLiveGraphs', {

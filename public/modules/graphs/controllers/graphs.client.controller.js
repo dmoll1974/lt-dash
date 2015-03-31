@@ -3,8 +3,14 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
 	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, $log, Tags) {
 
+            /* Get deeplink zoom params from query string */
 
-        $scope.value = $stateParams.tag;
+            if($state.params.zoomFrom) TestRuns.zoomFrom = $state.params.zoomFrom;
+
+            if($state.params.zoomUntil) TestRuns.zoomUntil = $state.params.zoomUntil;
+
+
+            $scope.value = $stateParams.tag;
 
         /* reset zoom*/
         $scope.resetZoom = function(){

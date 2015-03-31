@@ -1,14 +1,21 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', 'TestRuns', '$q','$http', '$log',
-	function($scope, Graphite, $stateParams, TestRuns, $q, $http, $log) {
+angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', '$state', 'TestRuns', '$q','$http', '$log',
+	function($scope, Graphite, $stateParams, $state, TestRuns, $q, $http, $log) {
 
 
         /* generate deeplink to share metric graph */
         $scope.setMetricShareUrl = function (metricId) {
 
 
-            $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId;
+            if(TestRuns.zoomFrom){
+
+                $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId + '?zoomFrom=' + TestRuns.zoomFrom + '&zoomUntil=' + TestRuns.zoomUntil;
+
+            }else{
+
+                $scope.metricShareUrl = location.host + '/#!/graphs/' + $stateParams.productName + '/' + $stateParams.dashboardName + '/' + $stateParams.testRunId + '/' + $stateParams.tag + '/' + metricId;
+            }
 
             if ($scope.showUrl) {
 

@@ -73,9 +73,13 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                 if (newVal !== oldVal) {
                     $scope.config.loading = true;
-                    Graphite.getData(TestRuns.zoomFrom, TestRuns.zoomUntil, $scope.metric.targets, 900, $stateParams.productName, $stateParams.dashboardName).then(function (series) {
 
-                        Graphite.addEvents(series, TestRuns.zoomFrom, TestRuns.zoomUntil, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+                    var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
+                    var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
+
+                    Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
+
+                        Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
 
                             $scope.config.series = seriesEvents;

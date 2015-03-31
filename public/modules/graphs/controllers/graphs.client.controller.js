@@ -15,10 +15,17 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
         /* reset zoom*/
         $scope.resetZoom = function(){
 
-                TestRuns.zoomFrom = TestRuns.selected.start;
-                TestRuns.zoomUntil = TestRuns.selected.end;
+                //TestRuns.zoomFrom = TestRuns.selected.start;
+                //TestRuns.zoomUntil = TestRuns.selected.end;
+
+                /*reset zoom*/
+                TestRuns.zoomFrom = "";
+                TestRuns.zoomUntil = "";
+
                 $state.go($state.current, {}, {reload: true});
-                //$state.go('viewGraphs',{productName: $stateParams.productName, dashboardName: $stateParams.dashboardName, testRunId: $stateParams.testRunId, tag: $stateParams.tag});
+
+
+
         }
 
         /* Zoom lock enabled by default */
@@ -34,6 +41,14 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
                         /* Get tags used in metrics */
                         $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+
+                        TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
+
+                                TestRuns.selected = testRun[0];
+                        });
+
+
+
 
                 })
 

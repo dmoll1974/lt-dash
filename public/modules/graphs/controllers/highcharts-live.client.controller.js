@@ -249,7 +249,11 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
 
-            updateGraph($scope.zoomRange, 'now', metric.targets, true);
+            /* if deeplinked including zoom query params use these */
+            var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : $scope.zoomRange;
+            var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : 'now';
+
+            updateGraph(from, until, metric.targets, true);
 
 
         }

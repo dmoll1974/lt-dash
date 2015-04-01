@@ -72,22 +72,13 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
             function (newVal, oldVal) {
 
                 if (newVal !== oldVal) {
-                    $scope.config.loading = true;
+
 
                     var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
                     var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
 
-                    Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
+                    updateGraph(from, until, $scope.metric.targets, false);
 
-                        Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
-
-
-                            $scope.config.series = seriesEvents;
-
-                            $scope.config.loading = false;
-
-                        });
-                    });
                 }
             }
         );
@@ -139,19 +130,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                         } else {
 
-                            $scope.config.loading = true;
+                            updateGraph(from, until, $scope.metric.targets, true);
 
-                            Graphite.getData(from, until, $scope.metric.targets, 900).then(function (series) {
-
-                                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
-
-                                    $scope.config.series = seriesEvents;
-
-
-                                    $scope.config.loading = false;
-
-                                });
-                            });
                         }
                     }
                 },
@@ -199,17 +179,28 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
                 var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
 
-                Graphite.getData(from, until, metric.targets, 900).then(function (series) {
+                updateGraph(from, until, metric.targets, true);
 
-                    Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+            });
+
+        }
+
+        function updateGraph(from, until, targets, drawEvents){
+
+            $scope.config.loading = true;
+
+            Graphite.getData(from, until, targets, 900).then(function (series) {
+
+                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
 
-                        $scope.config.series = seriesEvents;
+                    $scope.config.series = seriesEvents;
 
+                    if(drawEvents) {
                         /* draw xAxis plotlines for events*/
-                        if(seriesEvents[seriesEvents.length-1].type){
+                        if (seriesEvents[seriesEvents.length - 1].type) {
 
-                            _.each(seriesEvents[seriesEvents.length-1].data, function(flag){
+                            _.each(seriesEvents[seriesEvents.length - 1].data, function (flag) {
 
                                 $scope.config.xAxis.plotLines.push(
                                     {
@@ -221,16 +212,13 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                                 );
                             })
                         }
-                        $scope.config.loading = false;
+                    }
+                    $scope.config.loading = false;
 
-
-
-                    });
                 });
 
             });
 
         }
-
     }
 ]);

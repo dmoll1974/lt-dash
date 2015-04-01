@@ -17,7 +17,7 @@
     </div>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsLiveController"  >
-            <accordion-group heading="{{metric.alias}}"  is-open="metric.isOpen" >
+            <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
                 <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
                     <span>
                     <div class="btn-group">

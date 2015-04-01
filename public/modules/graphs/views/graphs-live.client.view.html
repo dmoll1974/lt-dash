@@ -17,18 +17,19 @@
     </div>
     <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsLiveController"  >
-            <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
-                <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
-                    <span>
-                    <div class="btn-group">
-                        <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
-                        <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
-                    </div>
-                    </span>
-                    <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>
+            <accordion-group is-open="metric.isOpen" >
+                <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
+                    <div data-ng-init="initConfig(chart, metric)" ng-if="metric.isOpen">
+                        <span>
+                        <div class="btn-group">
+                            <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
+                            <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
+                        </div>
+                        </span>
+                        <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>
 
-                    <highchart id="chart1" config="config"></highchart>
-                </div>
+                        <highchart id="chart1" config="config"></highchart>
+                    </div>
             </accordion-group>
         </div>
     </accordion>

@@ -18,7 +18,7 @@ angular.module('graphs').config(['$stateProvider',
 			templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
 		}).
         state('deepLinkLiveGraph', {
-            url: '/graphs-live/:productName/:dashboardName/:tag/:metricId',
+            url: '/graphs-live/:productName/:dashboardName/:tag/:metricId?zoomFrom&zoomUntil',
             templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
         });
 	}

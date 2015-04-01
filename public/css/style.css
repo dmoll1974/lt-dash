@@ -10763,13 +10763,13 @@ button.toast-close-button {
     z-index: 11;
     position: absolute;
     top: 50px;
-    bottom: 0;
+    /*bottom: 0;*/
     left: -220px;
     width: 220px;
     padding: 0;
     background-color: #242633;
-    -webkit-overflow-scrolling: touch;
-    -webkit-overflow-scrolling: -blackberry-touch;
+    /*-webkit-overflow-scrolling: touch;*/
+    /*-webkit-overflow-scrolling: -blackberry-touch;*/
 }
 @media (min-width: 768px) {
     #nav-container {
@@ -10781,16 +10781,16 @@ button.toast-close-button {
     list-style: none;
 }
 #nav-wrapper {
-    -webkit-overflow-scrolling: touch;
-    -webkit-overflow-scrolling: -blackberry-touch;
+    /*-webkit-overflow-scrolling: touch;*/
+    /*-webkit-overflow-scrolling: -blackberry-touch;*/
     width: 100%;
     height: 100%;
 }
 #nav {
     margin: 0;
     padding: 0;
-    -webkit-overflow-scrolling: touch;
-    -webkit-overflow-scrolling: -blackberry-touch;
+    /*-webkit-overflow-scrolling: touch;*/
+    /*-webkit-overflow-scrolling: -blackberry-touch;*/
 }
 #nav > li > a > i,
 #nav > li > a > .nav-icon {

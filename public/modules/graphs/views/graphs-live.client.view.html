@@ -1,5 +1,14 @@
 <div ng-controller="GraphsController"  data-ng-init="init()">
-    <div fix-to-top="fix-to-top">
+    <div fix-to-top="fix-to-top" class="graphs-header">
+        <span>
+            <label class="checkbox">
+                <input title="Apply zoom to all graphs" type="checkbox" ng-model="zoomLock">
+                Zoom lock
+            </label>
+        </span>
+        <span>
+            <button class="btn default" data-ng-click="resetZoom()">Reset zoom</button>
+        </span>
         <div class="btn-group" >
             <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-10min'" uncheckable>10min</label>
             <label class="btn btn-primary" ng-model="zoomRange" btn-radio="'-30min'" uncheckable>30min</label>

@@ -27,6 +27,25 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             }
         }
 
+
+        /* If zoom is applied, replace series */
+        $scope.$watch(function (scope) {
+                return TestRuns.zoomFrom
+            },
+            function (newVal, oldVal) {
+
+                if (newVal !== oldVal) {
+
+
+                    var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
+                    var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
+
+                    updateGraph(from, until, $scope.metric.targets, false);
+
+                }
+            }
+        );
+
         /* Open accordion by default, except for the "All" tab */
 
         $scope.$watch('value', function (newVal, oldVal) {
@@ -182,7 +201,31 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             title: {
                 text: 'Hello'
             },
-            xAxis: {minRange: 10000, type: 'datetime' },
+            xAxis: {minRange: 10000,
+                events: {
+                    setExtremes: function (e) {
+
+                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? $scope.zoomRange : Math.round(e.min);
+                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? 'now' : Math.round(e.max);
+
+                        /* If zoom lock is checked, set zoom timestamps in TestRuns service */
+                        if ($scope.zoomLock) {
+
+                            Interval.clearAll();
+                            TestRuns.zoomFrom = from;
+                            TestRuns.zoomUntil = until;
+                            $scope.$apply();
+
+                        } else {
+
+                            Interval.clearIntervalForMetric($scope.metric._id);
+                            updateGraph(from, until, $scope.metric.targets, true);
+
+                        }
+                    }
+                },
+                plotLines: []
+            },
             yAxis: {
                 min: 0 // this sets minimum values of y to 0
             },
@@ -198,17 +241,45 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
             $scope.metric = metric;
             $scope.config = angular.copy(config);
             $scope.config.title.text = metric.alias;
-            Graphite.getData($scope.zoomRange, 'now', metric.targets, 900, $stateParams.productName, $stateParams.dashboardName).then(function (series) {
 
-                Graphite.addEvents(series, $scope.zoomRange, 'now', $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+            updateGraph($scope.zoomRange, 'now', metric.targets, true);
+
+
+        }
+
+        function updateGraph(from, until, targets, drawEvents){
+
+            $scope.config.loading = true;
+
+            Graphite.getData(from, until, targets, 900).then(function (series) {
+
+                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
 
 
                     $scope.config.series = seriesEvents;
+
+                    if(drawEvents) {
+                        /* draw xAxis plotlines for events*/
+                        if (seriesEvents[seriesEvents.length - 1].type) {
+
+                            _.each(seriesEvents[seriesEvents.length - 1].data, function (flag) {
+
+                                $scope.config.xAxis.plotLines.push(
+                                    {
+                                        value: flag.x,
+                                        width: 1,
+                                        color: 'blue',
+                                        dashStyle: 'dash'
+                                    }
+                                );
+                            })
+                        }
+                    }
                     $scope.config.loading = false;
 
                 });
-            });
 
+            });
 
         }
     }

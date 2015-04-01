@@ -24,7 +24,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
             var flagsData = [];
             var sortedEvents = events.sort(Utils.dynamicSort('eventTimestamp'));
-            var eventDescriptionPattern = new RegExp(/([0-9]+) .*/);
+            var eventDescriptionPattern = new RegExp(/^([0-9]+)/);
             var eventIndex = 1;
 
 

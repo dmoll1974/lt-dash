@@ -11299,10 +11299,20 @@ button.toast-close-button {
 .fix-to-top {
     position: fixed;
     top: 0;
-    background-color: white;
     z-index: 10;
+    background-color: white;
+
 }
 
+.fix-to-top-sidebar{
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+.graphs-header{
+    width: 100%;
+    background-color: white;
+}
 .metric-targets{
 
     width: 98%;
@@ -11315,4 +11325,9 @@ button.toast-close-button {
 
 .timestamp-label {
     margin-right: 20px;
+}
+
+.graph-accordion-group{
+
+    margin-top: 5px;
 }

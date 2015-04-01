@@ -11331,3 +11331,8 @@ button.toast-close-button {
 
     margin-top: 5px;
 }
+
+.tags .graph-input-tags{
+
+    width: 50%;
+}

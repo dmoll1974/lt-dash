@@ -1,17 +1,17 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns','$log', 'Tags',
-	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, $log, Tags) {
+angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns', 'Metrics','$log', 'Tags',
+	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, Metrics, $log, Tags) {
 
 
-	/* Get deeplink zoom params from query string */
+            /* Get deeplink zoom params from query string */
 
          if($state.params.zoomFrom) TestRuns.zoomFrom = $state.params.zoomFrom;
 
          if($state.params.zoomUntil) TestRuns.zoomUntil = $state.params.zoomUntil;
 
 
-         $scope.value = $stateParams.tag;
+         //$scope.value = $stateParams.tag;
 
         /* reset zoom*/
         $scope.resetZoom = function(){
@@ -38,6 +38,9 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                         /* Get tags used in metrics */
                         $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
 
+                        /* if reloading a non-existing tag is in $statParams */
+                        $scope.value = (checkIfTagExists ($stateParams.tag)) ? $stateParams.tag : 'All';
+
                         TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
                                 TestRuns.selected = testRun[0];
@@ -50,6 +53,22 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
         };
 
+        function checkIfTagExists (tag) {
+
+                var exists = false;
+
+                _.each($scope.tags, function(existingTag){
+
+                        if(tag === existingTag.text){
+                                exists = true;
+                                return;
+                        }
+
+                })
+
+                return exists;
+
+        }
         function addAccordionState(metrics){
 
                 _.each(metrics, function(metric){
@@ -75,5 +94,19 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
         }
 
 
-	}
+        $scope.loadTags = function(query){
+
+            var matchedTags = [];
+
+            _.each(Dashboards.selected.tags, function(tag){
+
+                    if(tag.text.toLowerCase().match(query.toLowerCase()))
+                            matchedTags.push(tag);
+            });
+
+            return matchedTags;
+
+       };
+
+    }
 ]);

@@ -1,8 +1,87 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', '$state', 'TestRuns', '$q','$http', '$log',
-	function($scope, Graphite, $stateParams, $state, TestRuns, $q, $http, $log) {
+angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', '$state', 'TestRuns', 'Metrics', 'Dashboards', 'Tags',
+	function($scope, Graphite, $stateParams, $state, TestRuns, Metrics, Dashboards, Tags) {
 
+
+        /* set Tags form graph */
+
+        $scope.setTags = function (){
+
+            if ($scope.showTags) {
+
+                switch ($scope.showTags) {
+
+                    case true:
+                        $scope.showTags = false;
+                        break;
+                    case false:
+                        $scope.showTags = true;
+                        break;
+                }
+
+            } else {
+
+                $scope.showTags = true;
+            }
+
+
+        }
+
+        /* update Tags form graph */
+
+        $scope.updateTags = function(){
+
+            $scope.showTags = false;
+
+            Metrics.update($scope.metric).success(function(metric){
+
+                if(Dashboards.updateTags($scope.metric.tags)){
+
+                    Dashboards.update().success(function(dashboard){
+
+                        $scope.dashboard = Dashboards.selected;
+                        /* Get tags used in metrics */
+                        $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+
+                    });
+
+                }
+
+                $state.go('viewGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $stateParams.testRunId, tag: metric.tags[metric.tags.length -1].text});
+
+
+            });
+
+        }
+
+        $scope.tagRemoved = function(tag){
+
+            if(tag.text === $stateParams.tag){
+
+                Metrics.update($scope.metric).success(function(metric){
+
+                    if(Dashboards.updateTags($scope.metric.tags)){
+
+                        Dashboards.update().success(function(dashboard){
+
+                            $scope.dashboard = Dashboards.selected;
+                            /* Get tags used in metrics */
+                            $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+
+                        });
+
+                    }
+
+                    $state.go($state.current, {}, {reload: true});
+
+
+
+                });
+
+            }
+
+        }
 
         /* generate deeplink to share metric graph */
         $scope.setMetricShareUrl = function (metricId) {

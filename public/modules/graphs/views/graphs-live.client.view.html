@@ -32,11 +32,21 @@
                         <span>
                         <div class="btn-group">
                             <label class="btn default" ng-click="editMetric(metric._id)"><span class="btn btn-xs glyphicon glyphicon-wrench"></span></label>
+                            <label title="Edit tags" class="btn default" ng-click="setTags()"><span class="btn btn-xs glyphicon glyphicon-tag"></span></label>
                             <label class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
                         </div>
                         </span>
                         <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span>
-
+                        <span>
+                          <div class="input-group"  ng-if="showTags" class="graph-input-tags">
+                              <tags-input data-ng-model="metric.tags" on-tag-removed="tagRemoved($tag)">
+                                  <auto-complete source="loadTags($query)" loadOnDownArrow="true"></auto-complete>
+                              </tags-input>
+                                <span class="input-group-btn">
+                                    <button ng-click="updateTags()" class="btn btn-default" type="button"><span class="btn btn-xs glyphicon glyphicon-ok"></button>
+                                </span>
+                          </div>
+                        </span>
                         <highchart id="chart1" config="config"></highchart>
                     </div>
             </accordion-group>

@@ -83,7 +83,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
 
         function getDefaultTag(tags){
 
-            var defaultTag;
+            var defaultTag = 'All';
 
             _.each(tags, function(tag){
 

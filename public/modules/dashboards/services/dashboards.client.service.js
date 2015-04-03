@@ -12,7 +12,9 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             updateTags : updateTags,
             clone : clone,
             create: create,
-            delete: deleteFn
+            delete: deleteFn,
+            defaultTag: '',
+            getDefaultTag: getDefaultTag
 
         };
 
@@ -54,6 +56,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             return $http.get('/clone/dashboards/' + Dashboards.selected._id).success(function (dashboard) {
 
                 Dashboards.selected = dashboard;
+                Dashboards.defaultTag = getDefault(Dashboards.selected.tags)
             });
         }
             
@@ -69,6 +72,7 @@ angular.module('dashboards').factory('Dashboards', ['$http',
             return $http.get('/dashboards/' + productName + '/' + dashboardName).success(function(dashboard){
 
                 Dashboards.selected = dashboard;
+                Dashboards.defaultTag = getDefaultTag(Dashboards.selected.tags)
             });
         }
 
@@ -77,6 +81,20 @@ angular.module('dashboards').factory('Dashboards', ['$http',
         }
 
 
+        function getDefaultTag(tags){
+
+            var defaultTag;
+
+            _.each(tags, function(tag){
+
+                if(tag.default === true){
+                    defaultTag = tag;
+                    return;
+                }
+            })
+
+            return defaultTag.text;
+        }
 
     }
 ]).factory('DashboardTabs', ['$http',
@@ -108,6 +126,9 @@ angular.module('dashboards').factory('Dashboards', ['$http',
                     break;
                 case 'Events':
                     DashboardTabs.tabNumber = 3;
+                    break;
+                case 'Tags':
+                    DashboardTabs.tabNumber = 4;
                     break;
                 default:
                     DashboardTabs.tabNumber = 1;

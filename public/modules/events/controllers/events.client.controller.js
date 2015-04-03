@@ -124,7 +124,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
             var modalInstance = $modal.open({
                 templateUrl: 'myModalContent.html',
                 controller: 'EventModalInstanceCtrl',
-                size: size,
+                size: size
             });
 
             modalInstance.result.then(function (eventId) {

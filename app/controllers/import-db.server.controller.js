@@ -174,7 +174,7 @@ function upload (req, res) {
     //    });
     //
     //})
-    res.redirect('/');
+    res.redirect('/#!');
 
 
 

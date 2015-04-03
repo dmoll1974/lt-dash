@@ -12,7 +12,8 @@ angular.module('metrics').factory('Metrics', ['$http',
             delete : deleteFn,
             create: create,
             selected: {},
-            clone: {}
+            clone: {},
+            removeTag: removeTag
 
         };
 
@@ -36,6 +37,27 @@ angular.module('metrics').factory('Metrics', ['$http',
             return $http.put('/metrics/' + metric._id, metric).success(function(metric){
 
             });
+        }
+
+        function removeTag (metricId, removeTag){
+
+            var updatedTags = [];
+
+            $http.get('/metrics/' + metricId).success(function(metric){
+
+                _.each(metric.tags, function(tag, i){
+
+                    if (tag.text !== removeTag) updatedTags.push(tag);
+                })
+
+                metric.tags = updatedTags;
+
+                return $http.put('/metrics/' + metric._id, metric);
+
+
+            });
+
+
         }
 	}
 ]);

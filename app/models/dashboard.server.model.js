@@ -22,7 +22,7 @@ var dashboardSchema = new mongoose.Schema({
     "hosts": [String],
     "applications": [String],
     "instances": Number,
-    "tags": {type:[{text: String}], default: [{text: 'Load'},{text: 'JVM'}, {text: 'DB'}, {text:'CPU'}, {text:'Frontend'}, {text: 'JDBC'}, {text: 'GC'}, {text: 'Heap'}, {text: 'Sessions'}, {text: 'Threads'}]}
+    "tags": {type:[{text: String, default: Boolean}], default: [{text: 'Load', default: true},{text: 'JVM', default: false}, {text: 'DB', default: false}, {text:'CPU', default: false}, {text:'Frontend', default: false}, {text: 'JDBC', default: false}, {text: 'GC', default: false}, {text: 'Heap', default: false}, {text: 'Sessions', default: false}, {text: 'Threads', default: false}]}
 });
 
 dashboardSchema.pre('remove', function(next){

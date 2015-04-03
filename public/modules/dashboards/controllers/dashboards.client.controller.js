@@ -91,6 +91,14 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
 
         };
 
+        $scope.manageTags = function(){
+
+
+            $state.go('manageTags',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName});
+
+
+        };
+
         $scope.clone = function(){
 
             Dashboards.clone().success(function(dashboard){
@@ -112,7 +120,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
         $scope.viewLiveGraphs = function(){
 
 
-            $state.go('viewLiveGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, tag: 'All'});
+            $state.go('viewLiveGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, tag: Dashboards.getDefaultTag(Dashboards.selected.tags)});
 
 
         };
@@ -180,6 +188,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             Dashboards.get($stateParams.productName, $stateParams.dashboardName).success(function(dashboard){
 
                 $scope.dashboard = Dashboards.selected;
+
 
             });
 

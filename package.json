@@ -44,7 +44,8 @@
     "swig": "~1.4.1",
     "ng-tags-input": "^2.2.0",
     "memcached": "2.0.0",
-    "MD5" : "1.2.1"
+    "MD5": "1.2.1",
+    "nocca": "git+https://github.com/krekkied/nocca/#develop"
   },
   "devDependencies": {
     "supertest": "~0.14.0",

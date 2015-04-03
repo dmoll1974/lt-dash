@@ -11336,3 +11336,13 @@ button.toast-close-button {
 
     width: 50%;
 }
+
+.dashboard-edit-menu-icon{
+
+    margin-left: 5px;
+    margin-right: 10px;
+}
+.dashboard-edit-menu {
+    margin-left: 5px;
+    margin-right: 30px;
+}

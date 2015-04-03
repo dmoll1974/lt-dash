@@ -7,6 +7,7 @@ module.exports = {
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
     graphiteHost : 'http://graphite.klm.com',
+
 	memcachedHost: [ '172.21.42.178:11211'],
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',

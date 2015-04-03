@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').factory('Tags', [
-	function() {
+angular.module('graphs').factory('Tags', ['Utils',
+	function(Utils) {
 
         var Tags = {
             setTags: setTags//,
@@ -27,7 +27,8 @@ angular.module('graphs').factory('Tags', [
 
             })
 
-            return tags;
+
+            return tags.sort(Utils.dynamicSort('text'));
         }
 
         function tagExists(existingTags, newTag){

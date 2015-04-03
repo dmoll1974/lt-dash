@@ -91,7 +91,10 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
 	var dashboard = req.dashboard ;
 
-	dashboard = _.extend(dashboard , req.body);
+	dashboard.name = req.body.name;
+    dashboard.description = req.body.description;
+    dashboard.tags = req.body.tags;
+
 
 	dashboard.save(function(err) {
 		if (err) {

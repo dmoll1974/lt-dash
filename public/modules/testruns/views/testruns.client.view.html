@@ -1,16 +1,5 @@
 <div data-ng-controller="TestrunsController" data-ng-init="listTestRunsForDashboard()">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Confirmation</h3>
-        </div>
-        <div class="modal-body">
-            <p>Delete test run {{selectedTestRun.testRunId}}?</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
+    <div data-ng-include="'modules/testruns/views/delete-testrun-modal.client.view.html'"></div>
     <div>
         <table class="table">
             <thead>
@@ -22,11 +11,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="testRun in testRuns" data-ng-click="testRunDetails($index)">
-                <td>{{testRun.testRunId}}</td>
-                <td>{{testRun.start | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
-                <td>{{testRun.end | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
-                <td><i class="glyphicon glyphicon-trash" data-ng-click="open('', $index)"></i> </th>
+            <tr ng-repeat="testRun in testRuns">
+                <td data-ng-click="testRunDetails($index)">{{testRun.testRunId}}</td>
+                <td data-ng-click="testRunDetails($index)">{{testRun.start | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
+                <td data-ng-click="testRunDetails($index)">{{testRun.end | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
+                <td><i class="glyphicon glyphicon-trash" data-ng-click="openDeleteTestRunModal('', $index)"></i> </th>
             </tr>
             </tbody>
         </table>

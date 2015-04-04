@@ -11,6 +11,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
         $scope.event = Events.selected;
 
 
+
         $scope.initEventForm = function (){
 
 

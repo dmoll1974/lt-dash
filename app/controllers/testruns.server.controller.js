@@ -67,10 +67,10 @@ function createTestrunFromEvents(events) {
 
                     if(events[i].buildResultKey) {
 
-                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, buildResultKey: events[i].buildResultKey, id: [events[i].id, events[j].id]});
+                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, buildResultKey: events[i].buildResultKey, eventIds: [events[i].id, events[j].id]});
                     }else{
 
-                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, id: [events[i].id, events[j].id]});
+                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, eventIds: [events[i].id, events[j].id]});
                     }
 
                     break;

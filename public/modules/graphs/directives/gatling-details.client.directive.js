@@ -36,6 +36,18 @@
 
         ) {
 
+            $scope.tabNumber = 0;
+
+            $scope.setTab = function(newValue){
+                $scope.tabNumber = newValue;
+                $scope.tableParams.reload();
+            }
+
+            $scope.isSet = function(tabNumber){
+                return $scope.tabNumber  === tabNumber;
+            };
+
+
             TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
                 TestRuns.selected = testRun[0];
@@ -45,7 +57,9 @@
                     count: 50,          // count per page
                     sorting: {
                         KO: 'desc',     // initial sorting
-                        OK: 'desc'
+                        OK: 'desc',
+                        numberOfErrors: 'desc',
+
                     }
                 }, {
                     total: 0,           // length of data
@@ -55,12 +69,14 @@
 
                             $timeout(function() {
 
+                                var data = ($scope.tabNumber === 0) ? response.data : response.errors;
+
                                 var filteredData = params.filter() ?
-                                    $filter('filter')(response.data, params.filter()) :
-                                    response.data;
+                                    $filter('filter')(data, params.filter()) :
+                                    data;
                                 var orderedData = params.sorting() ?
                                     $filter('orderBy')(filteredData, params.orderBy()) :
-                                    response.data;
+                                    filteredData;
                                 // update table params
                                 params.total(orderedData.length);
                                 // set new data

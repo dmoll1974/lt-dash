@@ -14,8 +14,7 @@
             </tab>
         </tabset>
     </div>
-    <div gatling-details></div>
-    <accordion close-others="false">
+        <accordion close-others="false">
         <div data-ng-repeat="metric in metrics | tagsFilter:'tags':value" data-ng-controller="HighchartsController">
             <accordion-group is-open="metric.isOpen" class="graph-accordion-group">
                 <accordion-heading><div>{{metric.alias}}</div></accordion-heading>
@@ -44,4 +43,5 @@
             </accordion-group>
         </div>
     </accordion>
+    <div gatling-details ng-if="showGatlingDetails()"></div>
 </div>

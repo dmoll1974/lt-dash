@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').factory('Tags', ['Utils',
-	function(Utils) {
+angular.module('graphs').factory('Tags', ['Utils', 'TestRuns',
+	function(Utils, TestRuns) {
 
         var Tags = {
             setTags: setTags//,
@@ -15,6 +15,11 @@ angular.module('graphs').factory('Tags', ['Utils',
 
             var tags = [];
 
+            //if available, add Gatling-details tab
+            if(TestRuns.selected.buildResultKey){
+                tags.push({text: 'Gatling details', route: {productName: productName, dashboardName: dashBoardName, tag: 'Gatling'}});
+
+            }
             tags.push({text: 'All', route: {productName: productName, dashboardName: dashBoardName, tag: 'All'}});
 
             _.each(metrics, function(metric){

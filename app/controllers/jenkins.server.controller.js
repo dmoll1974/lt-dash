@@ -49,7 +49,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
     /*
     * we use a different url if a test is still running
     * */
-    if(running === "false") {
+    if(running === false) {
 
         consoleUrl = jenkinsUrl + "console";
         separator = "&gt; ";
@@ -68,7 +68,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
         if( result ) {
 
             console.dir("cache hit, offset: " + result);
-            if(running === "false"){ /*no offset needed*/
+            if(running === false){ /*no offset needed*/
 
                 offset = "";
 
@@ -80,7 +80,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
         }else{
 
 
-            if(running === "false"){
+            if(running === false){
 
                 /*no offset needed*/
 
@@ -105,7 +105,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
             console.log(consoleUrl  + offset);
             console.log("X-More-Data:"+ response.headers['x-more-data'] );
 
-            if(response.headers['x-text-size'] && running == "true" ) {
+            if(response.headers['x-text-size'] && running == true ) {
                 memcached.set(consoleUrl, response.headers['x-text-size'], 600, function (err, result) {
                     if (err) console.error(err);
                     console.dir("key set " + consoleUrl + " : " + response.headers['x-text-size']);
@@ -131,7 +131,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
                             var KO = /.*KO=(\d+).*/.exec(consoleLine);
                             var percFailed = (parseInt(OK[1]) + parseInt(KO[1]) > 0) ? ((parseInt(KO[1]) * 100 / (parseInt(OK[1]) + parseInt(KO[1])))).toFixed(2).toString() + "%" : "0%";
 
-                            consoleData.push({"request": request[1], "OK": OK[1], "KO": KO[1], "percFailed": percFailed});
+                            consoleData.push({"request": request[1], "OK": parseInt(OK[1]), "KO": parseInt(KO[1]), "percFailed": percFailed});
 
                         }else{
 
@@ -144,7 +144,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
                                 var error = (error2[1]) ? error1[1] + error2[1] : error1[1];
                                 var numberOfErrors =  /.*\s+(\d+)\s\(\s?\d+\.\d+%\)/g.exec(consoleLine);
 
-                                errorData.push({"error": error, "numberOfErrors": numberOfErrors[1], "percentageOfErrors": percentageOfErrors[1] })
+                                errorData.push({"error": error, "numberOfErrors": parseInt(numberOfErrors[1]), "percentageOfErrors": percentageOfErrors[1] })
                             }
 
                         }
@@ -155,7 +155,7 @@ function getJenkinsData(jenkinsUrl, running, start, end, callback){
                 consoleResponse.errors = errorData;
             }
 
-            callback(consoleResponse);
+                callback(consoleResponse);
 
         });
     });

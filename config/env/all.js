@@ -23,7 +23,7 @@ module.exports = {
 				'public/lib/bootstrap/dist/css/bootstrap.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
                 'public/lib/angular-material/angular-material.min.css',
-                //'public/lib/ng-table/dist/ng-table.css',
+                'public/lib/ng-table/dist/ng-table.css',
                 'public/lib/ng-tags-input/ng-tags-input.min.css',
 				'public/lib/angular-ui-bootstrap-datetimepicker/datetimepicker.css'
 			],
@@ -36,7 +36,7 @@ module.exports = {
                 'public/lib/angular-animate/angular-animate.min.js',
                 'public/lib/angular-aria/angular-aria.min.js',
                 //'public/lib/angular-material/angular-material.min.js',
-                //'public/lib/ng-table/dist/ng-table.js',
+                'public/lib/ng-table/dist/ng-table.js',
                 'public/lib/ng-tags-input/ng-tags-input.min.js',
                 'public/lib/underscore/underscore-min.js',
                 'public/lib/angular-modal-service/dst/angular-modal-service.min.js',

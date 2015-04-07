@@ -15,11 +15,7 @@ angular.module('graphs').factory('Tags', ['Utils', 'TestRuns',
 
             var tags = [];
 
-            //if available, add Gatling-details tab
-            if(TestRuns.selected.buildResultKey){
-                tags.push({text: 'Gatling details', route: {productName: productName, dashboardName: dashBoardName, tag: 'Gatling'}});
-
-            }
+            
             tags.push({text: 'All', route: {productName: productName, dashboardName: dashBoardName, tag: 'All'}});
 
             _.each(metrics, function(metric){
@@ -33,7 +29,17 @@ angular.module('graphs').factory('Tags', ['Utils', 'TestRuns',
             })
 
 
-            return tags.sort(Utils.dynamicSort('text'));
+            tags.sort(Utils.dynamicSort('text'));
+            
+            //if available, add Gatling-details tab
+            if(TestRuns.selected.buildResultKey){
+                tags.unshift({text: 'Gatling', route: {productName: productName, dashboardName: dashBoardName, tag: 'Gatling'}});
+
+            }
+            
+           
+
+            return tags;
         }
 
         function tagExists(existingTags, newTag){

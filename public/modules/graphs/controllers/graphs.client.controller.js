@@ -31,6 +31,12 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
 
                 Dashboards.get($stateParams.productName, $stateParams.dashboardName).then(function (dashboard){
 
+
+                        TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
+
+                                TestRuns.selected = testRun[0];
+                        });
+
                         $scope.dashboard = Dashboards.selected;
 
                         $scope.metrics = addAccordionState(Dashboards.selected.metrics);
@@ -41,10 +47,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                         /* if reloading a non-existing tag is in $statParams */
                         $scope.value = (checkIfTagExists ($stateParams.tag)) ? $stateParams.tag : 'All';
 
-                        TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
-                                TestRuns.selected = testRun[0];
-                        });
 
 
 

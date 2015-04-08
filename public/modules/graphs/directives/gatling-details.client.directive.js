@@ -40,6 +40,7 @@
 
             $scope.setTab = function(newValue){
                 $scope.tabNumber = newValue;
+                $scope.tableParams.filter({});
                 $scope.tableParams.reload();
             }
 
@@ -58,7 +59,7 @@
                     sorting: {
                         KO: 'desc',     // initial sorting
                         OK: 'desc',
-                        numberOfErrors: 'desc',
+                        numberOfErrors: 'desc'
 
                     }
                 }, {

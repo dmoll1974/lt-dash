@@ -33,6 +33,18 @@ exports.getData = function(req, res) {
     var targets = req.query.target;
     var maxDataPoints = req.query.maxDataPoints;
 
+
+    getGraphiteData (from, until, targets, maxDataPoints, function(body){
+
+        res.set('Content-Type', 'application/javascript');
+        res.jsonp(body);
+    });
+
+
+}
+
+exports.getGraphiteData = function (from, until, targets, maxDataPoints, callback){
+
     /* memcached stuff*/
 
     var memcachedKey = createMemcachedKey (from, until, targets);
@@ -51,8 +63,9 @@ exports.getData = function(req, res) {
                     message: errorHandler.getErrorMessage(err)
                 });
             } else {
-                res.set('Content-Type', 'application/javascript');
-                res.jsonp(body);
+
+                callback(body);
+
             }
         });
 
@@ -66,8 +79,7 @@ exports.getData = function(req, res) {
 
                 console.dir("cache hit: " + memcachedKey);
 
-                res.set('Content-Type', 'application/javascript');
-                res.jsonp(result);
+                callback(body);
 
 
                 memcached.end();
@@ -81,8 +93,8 @@ exports.getData = function(req, res) {
                             message: errorHandler.getErrorMessage(err)
                         });
                     } else {
-                        res.set('Content-Type', 'application/javascript');
-                        res.jsonp(body);
+
+                        callback(body);
 
                         /* add to memcached if it is a valid response */
                         if (body != '[]' && body.length > 0 && response.statusCode == 200) {

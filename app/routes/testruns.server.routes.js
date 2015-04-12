@@ -9,4 +9,7 @@ module.exports = function(app) {
 
     app.route('/testrun/:productName/:dashboardName/:testRunId')
         .get(testruns.testRunById);
+
+    app.route('/running-test/:productName/:dashboardName')
+        .get(testruns.runningTest);
 };

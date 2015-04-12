@@ -11,17 +11,23 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
             zoomFrom: '',
             zoomUntil: '',
             zoomRange: '',
-            getTestRunById: getTestRunById
+            getTestRunById: getTestRunById,
+            getRunningTest: getRunningTest
 
         };
 
         return TestRuns;
 
+        function getRunningTest(productName, dashboardName){
+
+            return $http.get('/running-test/' + productName + '/' + dashboardName);
+        }
+
         function getTestRunById(productName, dashboardName, testRunId){
 
             return $http.get('/testrun/' + productName + '/' + dashboardName + '/' + testRunId);//.success(function(testRun){
             //
-            //    TestRuns.selected = testRun[0];
+            //    TestRuns.selected = testRun;
             //
             //});
 

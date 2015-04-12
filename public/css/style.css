@@ -11364,3 +11364,7 @@ button.toast-close-button {
     background-color: white;
     opacity: 0.5;
 }
+
+.ng-table th.text-left {
+    text-align: left;
+}

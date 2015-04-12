@@ -55,7 +55,7 @@
                         <label ng-disabled="enableRequirement==='disabled'" class="control-label" for="requirementOperator">Should be</label>
                         <div class="controls">
                             <select ng-disabled="enableRequirement==='disabled'" id="requirementOperator" data-ng-model="metric.requirementOperator">
-                                <option data-ng-repeat="requirementOperator in requirementOperatorOptions" value="{{requirementOperator.value}}">{{requirementOperator.alias}}</option>
+                                <option data-ng-repeat="operator in operatorOptions" value="{{operator.value}}">{{operator.alias}}</option>
                             </select>
                             <input ng-disabled="enableRequirement==='disabled'" type="text" id="requirementValue" data-ng-model="metric.requirementValue" placeholder="Enter value" >
                         </div>

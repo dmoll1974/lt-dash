@@ -153,8 +153,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 if (newVal !== oldVal) {
 
 
-                    var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
-                    var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
+                    var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.startEpoch;
+                    var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.endEpoch;
 
                     updateGraph(from, until, $scope.metric.targets, false);
 
@@ -197,8 +197,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 events: {
                     setExtremes: function (e) {
 
-                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.start : Math.round(e.min);
-                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.end : Math.round(e.max);
+                        var from = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.startEpoch : Math.round(e.min);
+                        var until = (typeof e.min == 'undefined' && typeof e.max == 'undefined') ? TestRuns.selected.endEpoch : Math.round(e.max);
 
                         /* If zoom lock is checked, set zoom timestamps in TestRuns service */
                         if ($scope.zoomLock) {
@@ -251,12 +251,12 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
-                TestRuns.selected = testRun[0];
+                TestRuns.selected = testRun;
 
                 /* If zoom range is set, use these to init the graph*/
 
-                var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.start;
-                var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.end;
+                var from = (TestRuns.zoomFrom) ? TestRuns.zoomFrom : TestRuns.selected.startEpoch;
+                var until = (TestRuns.zoomUntil) ? TestRuns.zoomUntil : TestRuns.selected.endEpoch;
 
                 updateGraph(from, until, metric.targets, true);
 

@@ -21,6 +21,7 @@ Memcached.config.reconnect = 1000;
 Memcached.config.maxValue = 10480000;
 Memcached.config.poolSize = 50;
 
+exports.getGraphiteData = getGraphiteData;
 
 /**
  * Get  Graphite data
@@ -34,6 +35,7 @@ exports.getData = function(req, res) {
     var maxDataPoints = req.query.maxDataPoints;
 
 
+
     getGraphiteData (from, until, targets, maxDataPoints, function(body){
 
         res.set('Content-Type', 'application/javascript');
@@ -43,7 +45,7 @@ exports.getData = function(req, res) {
 
 }
 
-exports.getGraphiteData = function (from, until, targets, maxDataPoints, callback){
+function getGraphiteData(from, until, targets, maxDataPoints, callback){
 
     /* memcached stuff*/
 
@@ -56,6 +58,7 @@ exports.getGraphiteData = function (from, until, targets, maxDataPoints, callbac
 
     /* Don't cache live data! */
     if(until === 'now'){
+
 
         client.get(graphiteTargetUrl, function (err, response, body) {
             if (err) {
@@ -79,19 +82,18 @@ exports.getGraphiteData = function (from, until, targets, maxDataPoints, callbac
 
                 console.dir("cache hit: " + memcachedKey);
 
-                callback(body);
+                callback(result);
 
 
                 memcached.end();
 
             } else {
 
+                //console.log(graphiteTargetUrl);
                 /* if no cache hit, go to graphite back end */
                 client.get(graphiteTargetUrl, function (err, response, body) {
                     if (err) {
-                        return res.status(400).send({
-                            message: errorHandler.getErrorMessage(err)
-                        });
+                        callback(err);
                     } else {
 
                         callback(body);

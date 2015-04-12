@@ -32,22 +32,25 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                 Dashboards.get($stateParams.productName, $stateParams.dashboardName).then(function (dashboard){
 
 
-                        TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
+                        $scope.dashboard = Dashboards.selected;
 
-                                TestRuns.selected = testRun[0];
+                        $scope.metrics = addAccordionState(Dashboards.selected.metrics);
 
-                                $scope.dashboard = Dashboards.selected;
+                        /* Get tags used in metrics */
+                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
 
-                                $scope.metrics = addAccordionState(Dashboards.selected.metrics);
+                        /* if reloading a non-existing tag is in $statParams */
+                        $scope.value = (checkIfTagExists($stateParams.tag)) ? $stateParams.tag : 'All';
 
-                                /* Get tags used in metrics */
-                                $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+                        if($stateParams.testRunId) {
 
-                                /* if reloading a non-existing tag is in $statParams */
-                                $scope.value = (checkIfTagExists ($stateParams.tag)) ? $stateParams.tag : 'All';
-                        });
+                                TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
+                                        TestRuns.selected = testRun;
 
+                                });
+
+                        }
                 });
 
         };

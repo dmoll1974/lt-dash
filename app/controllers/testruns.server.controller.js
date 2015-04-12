@@ -8,14 +8,17 @@ var mongoose = require('mongoose'),
     Event = mongoose.model('Event'),
     Testrun = mongoose.model('Testrun'),
     Dashboard = mongoose.model('Dashboard'),
+    Product = mongoose.model('Product'),
     _ = require('lodash'),
     graphite = require('./graphite.server.controller'),
+    utils = require('./utils.server.controller'),
     async = require('async');
 
 /**
  * select test runs for dashboard
  */
 exports.testRunsForDashboard = function(req, res) {
+
     Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-eventTimestamp').exec(function(err, storedEvents) {
         if (err) {
             return res.status(400).send({
@@ -30,25 +33,56 @@ exports.testRunsForDashboard = function(req, res) {
 
             }
 
-            res.jsonp(createTestrunFromEvents(events));
+            var testRuns = createTestrunFromEvents(events);
+
+            /* persist test runs */
+            var persistedTestruns = [];
+
+            async.forEachLimit(testRuns, 16, function (testRun, callback) {
+
+                getAndPersistTestRunById(req.params.productName, req.params.dashboardName, testRun.testRunId, function(persistedTestRun){
+
+                    persistedTestruns.push(persistedTestRun);
+                    callback();
+
+
+                });
+            }, function (err) {
+            if (err) return next(err);
+
+            res.jsonp(persistedTestruns.sort(utils.dynamicSort('-start')));
+
+        });
+
+
         }
+
     });
 };
 
 exports.testRunById = function(req, res) {
 
-    Testrun.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName }, { testRunId: req.params.testRunId } ] } ).exec(function(err, testrun) {
+    getAndPersistTestRunById(req.params.productName, req.params.dashboardName, req.params.testRunId, function(testRun){
 
-        if(testrun!= null){
+        res.jsonp(testRun);
+    });
 
-            res.jsonp(testrun);
+}
+function getAndPersistTestRunById(productName, dashboardName, testRunId, callback){
+
+
+    Testrun.findOne( { $and: [ { productName: productName }, { dashboardName: dashboardName }, { testRunId: testRunId } ] } ).exec(function(err, testrun) {
+
+        if(testrun){
+
+            callback(testrun.toObject());
 
         }else{
 
             Event.find({ $and: [
-                { productName: req.params.productName },
-                { dashboardName: req.params.dashboardName },
-                { testRunId: req.params.testRunId }
+                { productName: productName },
+                { dashboardName: dashboardName },
+                { testRunId: testRunId }
             ] }).sort('-eventTimestamp').exec(function (err, storedEvents) {
                 if (err) {
                     return res.status(400).send({
@@ -65,11 +99,11 @@ exports.testRunById = function(req, res) {
 
                     var testrun = createTestrunFromEvents(events);
 
-                    getDataForTestrun(req.params.productName, req.params.dashboardName, testrun[0].start, testrun[0].end, function (metrics) {
+                    getDataForTestrun(productName, dashboardName, testrun[0].start, testrun[0].end, function (metrics) {
 
                         saveTestrun(testrun[0], metrics, function (savedTestrun) {
 
-                            res.jsonp(savedTestrun);
+                            callback(savedTestrun.toObject());
 
                         });
 
@@ -83,47 +117,63 @@ exports.testRunById = function(req, res) {
 
 function getDataForTestrun(productName, dashboardName, start, end, callback){
 
-    Dashboard.findQ( { $and: [ { productName: productName }, { dashboardName: dashboardName } ] } ).populate('metrics').then(function(dashboard){
+    Product.findOne({name: productName}).exec(function(err, product){
+        if(err) console.log(err);
 
-        var metrics = [];
+        Dashboard.findOne( { $and: [ { productId: product._id }, { name: dashboardName } ] } ).populate('metrics').exec(function(err, dashboard){
 
-        _.each(dashboard.metrics, function(metric){
+            if(err) console.log(err);
+            var metrics = [];
 
-            var targets = [];
+            // _.each(dashboard.metrics, function(metric){
 
-            async.forEachLimit(metric.targets, 5, function (target, callback) {
+            async.forEachLimit(dashboard.metrics, 16, function (metric, callback) {
 
-                graphite.getGraphiteData(start, end, target, 900, function(body){
+                var targets = [];
 
-                    targets.push({
-                        target: body.target,
-                        value: calculateAverage(body.datapoints)
+                async.forEachLimit(metric.targets, 16, function (target, callback) {
+
+                    graphite.getGraphiteData(Math.round(start / 1000), Math.round(end / 1000), target, 900, function(body){
+
+                        _.each(body, function(target){
+
+                            targets.push({
+                                target: target.target,
+                                value: calculateAverage(target.datapoints)
+                            });
+
+                        })
+                        callback();
                     });
 
-                    callback();
-                });
+                }, function (err) {
+                    if (err) return next(err);
 
-            }}, function (err) {
+                    metrics.push({
+                        _id: metric._id,
+                        tags: metric.tags,
+                        alias: metric.alias,
+                        type: metric.type,
+                        benchmarkValue: metric.benchmarkValue,
+                        benchmarkOperator: metric.benchmarkOperator,
+                        requirementValue: metric.requirementValue,
+                        requirementOperator: metric.requirementOperator,
+                        targets: targets
+                    });
+
+                    targets = [];
+                    callback();
+
+                });
+            }, function (err) {
                 if (err) return next(err);
 
-                metrics.push({
-                    alias: metric.alias,
-                    type: metric.type,
-                    benchmarkValue: metric.benchmarkValue,
-                    benchmarkOperator: metric.benchmarkOperator,
-                    requirementValue: metric.requirementValue,
-                    requirementOperator: metric.requirementOperator,
-                    targets: targets
-                });
-
-                targets = [];
+                callback(metrics);
 
             });
-        })
 
-        callback(metrics);
-    })
-
+        });
+    });
 }
 
 function calculateAverage(datapoints){
@@ -146,22 +196,44 @@ function calculateAverage(datapoints){
 
 function saveTestrun(testrun, metrics, callback){
 
-    var persistTestrun = {};
+    var persistTestrun = new Testrun();
 
     persistTestrun.productName = testrun.productName;
     persistTestrun.dashboardName = testrun.dashboardName;
-    persistTestrun.testRunId = testrun.dashboardName;
-    persistTestrun.start = testrun.dashboardName;
-    persistTestrun.end = testrun.dashboardName;
-    persistTestrun.baseline = testrun.dashboardName;
+    persistTestrun.testRunId = testrun.testRunId;
+    persistTestrun.start = testrun.start;
+    persistTestrun.end = testrun.end;
+    persistTestrun.baseline = testrun.baseline;
+    persistTestrun.buildResultKey = testrun.buildResultKey;
 
-    persistTestrun.metrics(setRequirementResults(metrics));
+    var metricsIncludingReqs = setMetricRequirementResults(metrics);
 
+    _.each(metricsIncludingReqs, function(metric, i){
+
+        persistTestrun.metrics.push({
+            _id: metric._id,
+            tags: metric.tags,
+            alias: metric.alias,
+            type: metric.type,
+            metricMeetsRequirement: metric.metricMeetsRequirement
+        });
+
+        _.each(metric.targets, function(target){
+
+            persistTestrun.metrics[i].targets.push({
+                targetMeetsRequirement: target.targetMeetsRequirement,
+                target: target.target,
+                value: target.value
+            })
+        })
+
+    })
+
+    persistTestrun.testrunMeetsRequirement = setTestrunRequirementResults(persistTestrun.metrics)
     persistTestrun.save(function(err) {
         if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
+            console.log(err);
+            callback(err);
         } else {
             callback(persistTestrun);
         }
@@ -170,37 +242,61 @@ function saveTestrun(testrun, metrics, callback){
 
 }
 
-function setRequirementResults(metrics){
+function setTestrunRequirementResults(metrics){
+
+    var testrunMeetsRequirement = true;
+
+    _.each(metrics, function(metric){
+
+        if(metric.metricMeetsRequirement === false) {
+
+            testrunMeetsRequirement = false;
+            return;
+        }
+    })
+
+    return testrunMeetsRequirement;
+}
+function setMetricRequirementResults(metrics){
 
     var updatedMetrics = [];
     var updatedTargets = [];
 
     _.each(metrics, function(metric){
 
-        var metricRequirementResult = 'ok';
+        if(metric.requirementValue) {
 
-        _.each(metric.targets, function(target){
+            var metricMeetsRequirement = true;
 
-            var targetRequirementResult = evaluateRequirement(target.value, metric.requirementOperator, metric.requirementValue);
+            _.each(metric.targets, function (target) {
 
-            if (targetRequirementResult === 'issue') metricRequirementResult = 'issue';
+                var targetMeetsRequirement = evaluateRequirement(target.value, metric.requirementOperator, metric.requirementValue);
 
-            updatedTargets.push({
-                targetRequirementResult: targetRequirementResult ,
-                target: target.target,
-                value: target.value
+                if (targetMeetsRequirement === false) metricMeetsRequirement = false;
+
+                updatedTargets.push({
+                    targetMeetsRequirement: targetMeetsRequirement,
+                    target: target.target,
+                    value: target.value
+                })
             })
-        })
 
-        updatedMetrics.push({
-            alias: metric.alias,
-            type: metric.type,
-            metricRequirementResult: metricRequirementResult,
-            targets: updatedTargets
-        });
+            updatedMetrics.push({
+                _id: metric._id,
+                tags: metric.tags,
 
-        updatedTargets = [];
+                alias: metric.alias,
+                type: metric.type,
+                benchmarkOperator: metric.benchmarkOperator,
+                benchmarkValue: metric.benchmarkValue,
+                requirementOperator: metric.requirementOperator,
+                requirementValue: metric.requirementValue,
+                metricMeetsRequirement: metricMeetsRequirement,
+                targets: updatedTargets
+            });
 
+            updatedTargets = [];
+        }
     })
 
     return updatedMetrics;
@@ -208,9 +304,18 @@ function setRequirementResults(metrics){
 
 function evaluateRequirement(value, requirementOperator, requirementValue){
 
-    var requirementResult = (value requirementOperator requirementValue)? 'ok' : 'issue';
+    var requirementResult;
 
+    if((requirementOperator === "<" && value > requirementValue) || requirementOperator === ">" && value < requirementValue){
 
+        var requirementResult = false;
+
+    }else{
+
+        var requirementResult = true;
+    }
+
+    return requirementResult;
 }
 
 function createTestrunFromEvents(events) {
@@ -248,10 +353,66 @@ function createTestrunFromEvents(events) {
 /**
  * Show the current Testrun
  */
-exports.read = function(req, res) {
+exports.runningTest = function (req, res){
 
-};
+    var currentTime = new Date();
+    var anyEventFound = false;
 
+    Event.find({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] }).sort({eventTimestamp: -1}).lean().exec(function(err, events){
+
+        if(err) throw err;
+
+        for(var i=0;i<events.length;i++) {
+
+            if (events[i].eventDescription === 'start') {
+
+                var endEventFound = false;
+                var tooOld = false;
+                var anyEventFound = true;
+
+                for (var j = 0; j < events.length; j++) {
+
+                    if (events[i].testRunId == events[j].testRunId && events[j].eventDescription === 'end')
+                        endEventFound = true;
+
+                }
+
+
+                if (endEventFound == false && (currentTime.getTime() - events[i].eventTimestamp.getTime()  < 176400000)) {
+
+                    var returnEvent = events[i];
+                    /* Only show Gatling details if testrun duration < 8 hours */
+                    //if (currentTime.getTime() - events[i].timestamp.getTime()  < 28800000) {
+                    //
+                    //    returnEvent.showGatlingDetails = true;
+                    //
+                    //}else{
+                    //
+                    //    returnEvent.showGatlingDetails = false;
+                    //
+                    //}
+
+                    res.jsonp(returnEvent);
+                    break;
+
+                /* If running test is older than 48 hours, leave it*/
+                } else if( (currentTime.getTime() - events[i].eventTimestamp.getTime()) > 176400000){
+                    tooOld = true
+                }
+
+
+            }
+        }
+
+        if (endEventFound === true || tooOld === true || anyEventFound === false ) {
+            res.jsonp(null);
+
+        }
+
+
+    });
+
+}
 /**
  * Update a Testrun
  */

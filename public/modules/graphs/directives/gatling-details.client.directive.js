@@ -51,7 +51,7 @@
 
             TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
 
-                TestRuns.selected = testRun[0];
+                TestRuns.selected = testRun;
 
                 $scope.tableParams = new ngTableParams({
                     page: 1,            // show first page

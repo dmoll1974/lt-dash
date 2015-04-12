@@ -7,6 +7,7 @@
                 <th>Test run ID</th>
                 <th>Start</th>
                 <th>End</th>
+                <th>Requirements</th>
                 <th></th>
             </tr>
             </thead>
@@ -15,6 +16,7 @@
                 <td data-ng-click="testRunDetails($index)">{{testRun.testRunId}}</td>
                 <td data-ng-click="testRunDetails($index)">{{testRun.start | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
                 <td data-ng-click="testRunDetails($index)">{{testRun.end | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
+                <td data-ng-click="testRunRequirements($index)"><span ng-class="testRun.testrunMeetsRequirement ? 'fa-lg fa fa-check-circle-o text-success center' : 'fa-lg fa fa-exclamation-circle text-danger center'"></span></td>
                 <td><i class="glyphicon glyphicon-trash" data-ng-click="openDeleteTestRunModal('', $index)"></i> </th>
             </tr>
             </tbody>

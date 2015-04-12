@@ -6,8 +6,8 @@ module.exports = {
 		description: 'Performance test dashboard',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
-    graphiteHost : 'http://graphite.klm.com',
-
+    graphiteHost: 'http://graphite.klm.com',
+	graphiteRetentionPeriod: '90d', /*90 days*/
 	memcachedHost: [ '172.21.42.178:11211'],
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
@@ -18,8 +18,7 @@ module.exports = {
 			css: [
                 //'public/css/bootstrap.css',
                 'public/css/style.css',
-                'public/lib/font-awesome/css/font-awesome.css',
-
+                'public/lib/components-font-awesome/css/font-awesome.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
                 'public/lib/angular-material/angular-material.min.css',

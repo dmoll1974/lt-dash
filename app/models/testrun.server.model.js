@@ -47,6 +47,7 @@ var TestrunSchema = new Schema({
     "baseline" : String,
     "testrunMeetsRequirement": Boolean,
     "buildResultKey": String,
+    "eventIds": [String],
     "metrics":[testRunMetricSchema]
     },
     {

@@ -25,8 +25,12 @@
         /* @ngInject */
         function RunningTestController (
             $scope,
+            $modal,
             $stateParams,
-            TestRuns
+            $state,
+            TestRuns,
+            Events,
+            ConfirmModal
         ) {
 
 
@@ -37,9 +41,78 @@
 
             });
 
+            $scope.openDeleteEventModal = function (size) {
 
+                ConfirmModal.itemType = 'Delete event';
+                ConfirmModal.selectedItemId = $scope.runningTest._id;
+                ConfirmModal.selectedItemDescription = $scope.runningTest.eventDescription;
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'ConfirmDelete.html',
+                    controller: 'ModalInstanceController',
+                    size: size//,
+                });
+
+                modalInstance.result.then(function (eventId) {
+
+                    Events.delete(eventId).success(function(event){
+
+                        //TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
+                        //
+                        //    $scope.runningTest = runningTest;
+                            $state.go($state.current, {}, {reload: true});
+
+                        //});
+
+                    });
+
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            $scope.openSendEndEventModal = function (size) {
+
+                ConfirmModal.itemType = 'Send end event for test run ID ';
+                ConfirmModal.selectedItemId = $scope.runningTest.testRunId;
+                ConfirmModal.selectedItemDescription = $scope.runningTest.testRunId;
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'ConfirmDelete.html',
+                    controller: 'ModalInstanceController',
+                    size: size//,
+                });
+
+                modalInstance.result.then(function (eventId) {
+
+                    var endEvent = {
+                        productName: $scope.runningTest.productName,
+                        dashboardName: $scope.runningTest.dashboardName,
+                        testRunId: $scope.runningTest.testRunId,
+                        eventDescription: 'end',
+                        baseline: $scope.runningTest.baseline,
+                        buildResultKey: $scope.runningTest.buildResultKey
+                    };
+
+                    Events.create(endEvent).success(function(event){
+
+                        //TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
+                        //
+                        //    $scope.runningTest = runningTest;
+                        $state.go($state.current, {}, {reload: true});
+
+                        //});
+
+                    });
+
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
 
         }
+
+
     }
 
 }());

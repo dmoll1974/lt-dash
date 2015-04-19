@@ -1,3 +1,4 @@
+<div data-ng-include="'modules/core/views/confirm-delete-modal.client.view.html'"></div>
 <div class="row">
     <div class="col-lg-4">
         <div ng-if="runningTest" class="panel panel-primary">
@@ -8,10 +9,10 @@
                 <h4>{{runningTest.testRunId}}</h4>
                 <h5>Start: {{runningTest.eventTimestamp | date:'EEEE, dd-M-yyyy H:mm:ss'}}</h5>
                  <span class="pull-left">
-                     <button type="button" class="btn btn-primary">Send end event</button>
+                     <button type="button" class="btn btn-primary" ng-click="openSendEndEventModal('')">Send end event</button>
                  </span>
                  <span class="pull-right">
-                     <button type="button" class="btn btn-danger">Delete start event</button>
+                     <button type="button" class="btn btn-danger" ng-click="openDeleteEventModal('')">Delete start event</button>
                  </span>
             </div>
         </div>

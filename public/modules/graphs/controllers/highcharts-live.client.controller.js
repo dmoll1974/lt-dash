@@ -277,6 +277,9 @@ angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Inte
                     enabled:true,
                     shared: false,
                     valueDecimals: 1
+                },
+                exporting: {
+                    filename: TestRuns.selected.testRunId + '_' + $scope.metric.alias
                 }
 
             },

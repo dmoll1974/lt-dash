@@ -205,6 +205,7 @@ function saveTestrun(testrun, metrics, callback){
     persistTestrun.end = testrun.end;
     persistTestrun.baseline = testrun.baseline;
     persistTestrun.buildResultKey = testrun.buildResultKey;
+    persistTestrun.eventIds = testrun.eventIds;
 
     var metricsIncludingReqs = setMetricRequirementResults(metrics);
 
@@ -381,18 +382,9 @@ exports.runningTest = function (req, res){
                 if (endEventFound == false && (currentTime.getTime() - events[i].eventTimestamp.getTime()  < 176400000)) {
 
                     var returnEvent = events[i];
-                    /* Only show Gatling details if testrun duration < 8 hours */
-                    //if (currentTime.getTime() - events[i].timestamp.getTime()  < 28800000) {
-                    //
-                    //    returnEvent.showGatlingDetails = true;
-                    //
-                    //}else{
-                    //
-                    //    returnEvent.showGatlingDetails = false;
-                    //
-                    //}
 
                     res.jsonp(returnEvent);
+
                     break;
 
                 /* If running test is older than 48 hours, leave it*/

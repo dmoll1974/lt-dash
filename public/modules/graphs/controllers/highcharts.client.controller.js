@@ -185,6 +185,9 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     shared: false,
                     valueDecimals: 1
 
+                },
+                exporting: {
+                    filename: ''
                 }
 
             },
@@ -293,6 +296,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         }
                     }
                     $scope.config.loading = false;
+                    $scope.config.options.exporting.filename = TestRuns.selected.testRunId + '_' + $scope.metric.alias;
 
                 });
 

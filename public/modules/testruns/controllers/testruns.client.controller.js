@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('testruns').controller('TestrunsController', ['$scope', '$stateParams', '$state', 'TestRuns', 'Dashboards', 'Events', '$modal', '$q',
-	function($scope, $stateParams, $state, TestRuns, Dashboards, Events, $modal, $q) {
+angular.module('testruns').controller('TestrunsController', ['$scope', '$stateParams', '$state', 'TestRuns', 'Dashboards', 'Events', '$modal', '$q', 'ConfirmModal',
+	function($scope, $stateParams, $state, TestRuns, Dashboards, Events, $modal, $q, ConfirmModal) {
 
 
         $scope.productName = $stateParams.productName;
@@ -40,18 +40,15 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
 
         $scope.openDeleteTestRunModal = function (size, index) {
 
+
+            ConfirmModal.itemType = 'Delete test run ';
+            ConfirmModal.selectedItemId = index;
+            ConfirmModal.selectedItemDescription = $scope.testRuns[index].testRunId;
+
             var modalInstance = $modal.open({
-                templateUrl: 'deleteTestRun.html',
-                controller: 'DeleteTestRunModalInstanceCtrl',
-                size: size,
-                resolve: {
-                    selectedIndex: function(){
-                        return index;
-                    },
-                    selectedTestRunId: function(){
-                        return $scope.testRuns[index].testRunId;
-                    }
-                }
+                templateUrl: 'ConfirmDelete.html',
+                controller: 'ModalInstanceController',
+                size: size//,
             });
 
             modalInstance.result.then(function (selectedIndex) {
@@ -84,18 +81,4 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
         };
 
     }
-]).controller('DeleteTestRunModalInstanceCtrl',['$scope','$modalInstance', 'selectedIndex', 'selectedTestRunId', function($scope, $modalInstance, selectedIndex, selectedTestRunId) {
-
-    $scope.selectedTestRunId = selectedTestRunId;
-
-    $scope.ok = function () {
-        $modalInstance.close(selectedIndex);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-}
-
 ]);

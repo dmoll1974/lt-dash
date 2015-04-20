@@ -1,8 +1,8 @@
 'use strict';
 
 // Dashboards controller
-angular.module('dashboards').controller('DashboardsController', ['$scope', '$rootScope', '$modal', '$log', '$stateParams', '$state', '$location', 'Authentication', 'Dashboards', 'Products', 'Metrics', 'DashboardTabs',
-	function($scope, $rootScope, $modal, $log, $stateParams, $state, $location, Authentication, Dashboards, Products, Metrics, DashboardTabs) {
+angular.module('dashboards').controller('DashboardsController', ['$scope', '$rootScope', '$modal', '$log', '$stateParams', '$state', '$location', 'ConfirmModal', 'Dashboards', 'Products', 'Metrics', 'DashboardTabs',
+	function($scope, $rootScope, $modal, $log, $stateParams, $state, $location, ConfirmModal, Dashboards, Products, Metrics, DashboardTabs) {
 
         
         
@@ -38,7 +38,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
 
         $scope.dashboardName = $stateParams.dashboardName;
 
-		$scope.authentication = Authentication;
+		//$scope.authentication = Authentication;
 
         $scope.addMetric = function() {
 
@@ -197,16 +197,20 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
         $scope.openDeleteMetricModal = function (size, index) {
 
             Metrics.selected = $scope.dashboard.metrics[index];
-            
+
+            ConfirmModal.itemType = 'Delete metric ';
+            ConfirmModal.selectedItemId = Metrics.selected._id;
+            ConfirmModal.selectedItemDescription = Metrics.selected.alias;
+
             var modalInstance = $modal.open({
-                templateUrl: 'deleteMetric.html',
-                controller: 'DeleteMetricModalInstanceCtrl',
+                templateUrl: 'ConfirmDelete.html',
+                controller: 'ModalInstanceController',
                 size: size//,
             });
 
-            modalInstance.result.then(function (metricId) {
+            modalInstance.result.then(function () {
 
-                Metrics.delete(metricId).success(function(metric){
+                Metrics.delete(Metrics.selected._id).success(function(metric){
 
                     /* refresh dashboard*/
                     Dashboards.get($scope.productName, $scope.dashboardName).success(function(dashboard){
@@ -224,17 +228,19 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
 
         $scope.openDeleteDashboardModal = function (size, index) {
 
-
+            ConfirmModal.itemType = 'Delete dashboard ';
+            ConfirmModal.selectedItemId = Dashboards.selected._id;
+            ConfirmModal.selectedItemDescription = Dashboards.selected.name;
 
             var modalInstance = $modal.open({
-                templateUrl: 'deleteDashboard.html',
-                controller: 'DeleteDashboardModalInstanceCtrl',
+                templateUrl: 'ConfirmDelete.html',
+                controller: 'ModalInstanceController',
                 size: size//,
             });
 
-            modalInstance.result.then(function (dashboardId) {
+            modalInstance.result.then(function () {
 
-                Dashboards.delete(dashboardId).success(function(dashboard){
+                Dashboards.delete(Dashboards.selected._id).success(function(dashboard){
 
                     /* Refresh sidebar */
                     Products.fetch().success(function(products){
@@ -252,30 +258,4 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
         };
 
     }
-]).controller('DeleteMetricModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
-
-    $scope.selectedMetric = Metrics.selected;
-    
-    $scope.ok = function () {
-        $modalInstance.close($scope.selectedMetric._id);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-}
-]).controller('DeleteDashboardModalInstanceCtrl',['$scope','$modalInstance', 'Dashboards', function($scope, $modalInstance, Dashboards) {
-
-    $scope.selectedDashboard = Dashboards.selected;
-
-    $scope.ok = function () {
-        $modalInstance.close($scope.selectedDashboard._id);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-}
 ]);

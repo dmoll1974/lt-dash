@@ -1,8 +1,8 @@
 'use strict';
 
 // Metrics controller
-angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '$log', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Metrics','Dashboards',
-	function($scope, $modal, $log, $rootScope, $stateParams, $state, $location, Authentication, Metrics, Dashboards) {
+angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '$log', '$rootScope', '$stateParams', '$state', '$location', 'Authentication', 'Metrics','Dashboards', 'ConfirmModal',
+	function($scope, $modal, $log, $rootScope, $stateParams, $state, $location, Authentication, Metrics, Dashboards, ConfirmModal) {
 		$scope.authentication = Authentication;
 
         $scope.productName = $stateParams.productName;
@@ -168,10 +168,14 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
             Metrics.selected = $scope.metric;
 
+            ConfirmModal.itemType = 'Delete metric ';
+            ConfirmModal.selectedItemId = $scope.metric._id;
+            ConfirmModal.selectedItemDescription = $scope.metric.alias;
+
             var modalInstance = $modal.open({
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl',
-                size: size
+                templateUrl: 'ConfirmDelete.html',
+                controller: 'ModalInstanceController',
+                size: size//,
             });
 
             modalInstance.result.then(function (metricId) {
@@ -197,17 +201,4 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
 
     }
-]).controller('ModalInstanceCtrl',['$scope','$modalInstance', 'Metrics', function($scope, $modalInstance, Metrics) {
-
-    $scope.selectedMetric = Metrics.selected;
-
-    $scope.ok = function () {
-        $modalInstance.close($scope.selectedMetric._id);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-}
 ]);

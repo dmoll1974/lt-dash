@@ -1,8 +1,8 @@
 'use strict';
 
 // Products controller
-angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Products',
-	function($scope, $rootScope, $stateParams, $state, $location, $modal, Products) {
+angular.module('products').controller('ProductsController', ['$scope', '$rootScope', '$stateParams', '$state', '$location', '$modal', 'Products', 'ConfirmModal',
+	function($scope, $rootScope, $stateParams, $state, $location, $modal, Products, ConfirmModal) {
 
 
         $scope.initCreateForm = function(){
@@ -103,12 +103,15 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         $scope.openDeleteProductModal = function (size) {
 
 
+            ConfirmModal.itemType = 'Delete product ';
+            ConfirmModal.selectedItemId = Products.selected._id;
+            ConfirmModal.selectedItemDescription = Products.selected.name;
 
-        var modalInstance = $modal.open({
-            templateUrl: 'deleteProduct.html',
-            controller: 'DeleteProductModalInstanceCtrl',
-            size: size//,
-        });
+            var modalInstance = $modal.open({
+                templateUrl: 'ConfirmDelete.html',
+                controller: 'ModalInstanceController',
+                size: size//,
+            });
 
         modalInstance.result.then(function (productName) {
 
@@ -131,19 +134,6 @@ angular.module('products').controller('ProductsController', ['$scope', '$rootSco
         }, function () {
             //$log.info('Modal dismissed at: ' + new Date());
         });
-    };
-
-}
-]).controller('DeleteProductModalInstanceCtrl',['$scope','$modalInstance', 'Products', function($scope, $modalInstance, Products) {
-
-    $scope.selectedProduct = Products.selected;
-
-    $scope.ok = function () {
-        $modalInstance.close($scope.selectedProduct._id);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
     };
 
 }

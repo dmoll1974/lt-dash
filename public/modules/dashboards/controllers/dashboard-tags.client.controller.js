@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('dashboards').controller('DashboardTagsController', ['$scope', 'Dashboards', '$modal', 'Metrics',
-	function($scope, Dashboards, $modal, Metrics	) {
+angular.module('dashboards').controller('DashboardTagsController', ['$scope', 'Dashboards', '$modal', 'Metrics', 'ConfirmModal',
+	function($scope, Dashboards, $modal, Metrics, ConfirmModal	) {
 
 
 		$scope.tags = Dashboards.selected.tags;
@@ -59,27 +59,22 @@ angular.module('dashboards').controller('DashboardTagsController', ['$scope', 'D
 
 	$scope.openDeleteTagModal = function (size, index) {
 
-
+		ConfirmModal.itemType = 'Delete tag ';
+		ConfirmModal.selectedItemId = index;
+		ConfirmModal.selectedItemDescription = Dashboards.selected.tags[index].text;
 
 		var modalInstance = $modal.open({
-			templateUrl: 'deleteTag.html',
-			controller: 'DeleteTagModalInstanceCtrl',
-			size: size,
-			resolve: {
-				selectedIndex: function(){
-					return index;
-				},
-				selectedTag: function(){
-					return $scope.tags[index].text;
-				}
-			}
+			templateUrl: 'ConfirmDelete.html',
+			controller: 'ModalInstanceController',
+			size: size//,
 		});
 
-		modalInstance.result.then(function (selectedIndex) {
 
-			var selectedTagsText = Dashboards.selected.tags[selectedIndex].text;
+		modalInstance.result.then(function (index) {
 
-			Dashboards.selected.tags.splice(selectedIndex,1);
+			var selectedTagsText = ConfirmModal.selectedItemDescription;
+
+			Dashboards.selected.tags.splice(index,1);
 
 			Dashboards.update().success(function(dashboard){
 
@@ -99,18 +94,4 @@ angular.module('dashboards').controller('DashboardTagsController', ['$scope', 'D
 	};
 
 }
-]).controller('DeleteTagModalInstanceCtrl',['$scope','$modalInstance', 'selectedIndex', 'selectedTag', function($scope, $modalInstance, selectedIndex, selectedTag) {
-
-	$scope.selectedTag = selectedTag;
-
-	$scope.ok = function () {
-		$modalInstance.close(selectedIndex);
-	};
-
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
-	};
-
-}
-
 ]);

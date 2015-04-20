@@ -1,16 +1,5 @@
 <section data-ng-controller="MetricsController" data-ng-init="findOne()">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Confirmation</h3>
-        </div>
-        <div class="modal-body">
-            <p>Delete metric {{selectedMetric.alias}}?</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
+    <div data-ng-include="'modules/core/views/confirm-delete-modal.client.view.html'"></div>
     <div class="page-header">
         <h1>Edit Metric</h1>
     </div>

@@ -23,6 +23,8 @@ var testRunMetricSchema = new Schema({
     "alias": String,
     "type": String,
     "tags": [{text: String}],
+    "requirementOperator": String,
+    "requirementValue": String,
     "metricMeetsRequirement": Boolean,
     "metricBenchmarkResultFixed": String,
     "metricBenchmarkResultPrevious": String,

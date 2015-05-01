@@ -22,6 +22,9 @@ Memcached.config.maxValue = 10480000;
 Memcached.config.poolSize = 50;
 
 exports.getGraphiteData = getGraphiteData;
+exports.flushMemcachedKey = flushMemcachedKey;
+exports.createMemcachedKey = createMemcachedKey;
+
 
 /**
  * Get  Graphite data
@@ -160,4 +163,19 @@ function createMemcachedKey (from, until, targets){
     return hashedMemcachedKey;
 
 //    return memcachedKey.replace(/\s/g,'');
+}
+
+function flushMemcachedKey(key, callback){
+
+    var memcached = new Memcached(config.memcachedHost);
+
+   memcached.del( key, function( err, result ){
+        if( err ) callback( err );
+        console.info( "deleted key: " + key + " : " + result );
+        callback();
+   });
+
+
+    memcached.end(); // as we are 100% certain we are not going to use the connection again, we are going to end it
+
 }

@@ -11,6 +11,8 @@ var mongoose = require('mongoose'),
  */
 var metricSchema = new mongoose.Schema({
     "dashboardId": { type: Schema.Types.ObjectId, ref: "Dashboard"},
+    "dashboardName": String,
+    "productName": String,
     "alias": {type: String, default: null},
     "targets": [String],
     "benchmarkValue": {type: Number, default: null},

@@ -6,6 +6,7 @@
                  <tr>
                      <th>Metric</th>
                      <th>Tag</th>
+                     <th>Requirement</th>
                      <th><i class="glyphicon glyphicon-plus" data-ng-click="addMetric()"></i></th>
                  </tr>
              </thead>
@@ -15,6 +16,7 @@
                     <td>
                         <span ng-repeat="tag in metric.tags track by $index">{{tag.text}}<span data-ng-show="!$last">, </span></span>
                     </td>
+                    <td><span>{{metric.requirementOperator}} {{metric.requirementValue}}</span></td>
                     <td><i class="glyphicon glyphicon-trash" data-ng-click="openDeleteMetricModal('', $index)"></i> </th>
                 </tr>
              </tbody>

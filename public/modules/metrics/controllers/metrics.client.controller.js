@@ -37,6 +37,19 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
             {alias: '500%', value: '5.00'},
         ];
 
+        $scope.$watch('enableRequirement', function (newVal, oldVal) {
+
+            if (newVal !== oldVal) {
+
+                if($scope.enableRequirement === 'disabled'){
+
+                    $scope.metric.requirementOperator = null;
+                    $scope.metric.requirementValue = null;
+
+                }
+            }
+        });
+
         $scope.addTarget = function() {
 
             $scope.metric.targets.push('');
@@ -75,6 +88,9 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
             if(Dashboards.updateTags($scope.metric.tags)) Dashboards.update().success(function(dashboard){});
 
+            $scope.metric.productName = $stateParams.productName;
+            $scope.metric.dashboardName = $stateParams.dashboardName;
+
             Metrics.create($scope.metric).success(function (metric) {
 
             /* reset cloned metric */
@@ -109,6 +125,8 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
 
             if(Dashboards.updateTags($scope.metric.tags)) Dashboards.update().success(function(dashboard){});
 
+            $scope.metric.productName = $stateParams.productName;
+            $scope.metric.dashboardName = $stateParams.dashboardName;
 
             Metrics.update($scope.metric).success(function (metric) {
 

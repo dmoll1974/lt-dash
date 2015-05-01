@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Metric = mongoose.model('Metric'),
+	testruns = require('./testruns.server.controller'),
 	_ = require('lodash');
 
 /**
@@ -38,6 +39,13 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var metric = req.metric ;
+
+	/* update testruns if requirements have changed */
+
+	if (req.metric.requirementValue !== req.body.requirementValue || req.metric.requirementOperator !== req.body.requirementOperator){
+
+		testruns.updateTestRunRequirementForMetric(req.body)
+	}
 
 	metric = _.extend(metric , req.body);
 

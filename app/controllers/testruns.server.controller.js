@@ -14,6 +14,9 @@ var mongoose = require('mongoose'),
     utils = require('./utils.server.controller'),
     async = require('async');
 
+
+exports.updateTestRunRequirementForMetric = updateTestRunRequirementForMetric;
+
 /**
  * select test runs for dashboard
  */
@@ -207,16 +210,22 @@ function saveTestrun(testrun, metrics, callback){
     persistTestrun.buildResultKey = testrun.buildResultKey;
     persistTestrun.eventIds = testrun.eventIds;
 
-    var metricsIncludingReqs = setMetricRequirementResults(metrics);
 
-    _.each(metricsIncludingReqs, function(metric, i){
+    _.each(metrics, function(metric, i){
+
+        if(metric.requirementValue) {
+            metric.targets = setTargetRequirementResults(metric.targets, metric.requirementOperator, metric.requirementValue);
+            metric.metricMeetsRequirement = setMetricRequirementResults(metric.targets);
+        }
 
         persistTestrun.metrics.push({
             _id: metric._id,
             tags: metric.tags,
             alias: metric.alias,
             type: metric.type,
-            metricMeetsRequirement: metric.metricMeetsRequirement
+            metricMeetsRequirement: metric.metricMeetsRequirement,
+            requirementOperator: metric.requirementOperator,
+            requirementValue: metric.requirementValue
         });
 
         _.each(metric.targets, function(target){
@@ -258,50 +267,51 @@ function setTestrunRequirementResults(metrics){
 
     return testrunMeetsRequirement;
 }
-function setMetricRequirementResults(metrics){
 
-    var updatedMetrics = [];
-    var updatedTargets = [];
+function setMetricRequirementResults(targets){
 
-    _.each(metrics, function(metric){
+    var metricMeetsRequirement = true;
 
-        if(metric.requirementValue) {
+    _.each(targets, function(target){
 
-            var metricMeetsRequirement = true;
+        if(target.targetMeetsRequirement === false) {
 
-            _.each(metric.targets, function (target) {
-
-                var targetMeetsRequirement = evaluateRequirement(target.value, metric.requirementOperator, metric.requirementValue);
-
-                if (targetMeetsRequirement === false) metricMeetsRequirement = false;
-
-                updatedTargets.push({
-                    targetMeetsRequirement: targetMeetsRequirement,
-                    target: target.target,
-                    value: target.value
-                })
-            })
-
-            updatedMetrics.push({
-                _id: metric._id,
-                tags: metric.tags,
-
-                alias: metric.alias,
-                type: metric.type,
-                benchmarkOperator: metric.benchmarkOperator,
-                benchmarkValue: metric.benchmarkValue,
-                requirementOperator: metric.requirementOperator,
-                requirementValue: metric.requirementValue,
-                metricMeetsRequirement: metricMeetsRequirement,
-                targets: updatedTargets
-            });
-
-            updatedTargets = [];
+            metricMeetsRequirement = false;
+            return;
         }
     })
 
-    return updatedMetrics;
+    return metricMeetsRequirement;
 }
+
+//function setMetricRequirementResults(metric){
+//
+//
+//    var updatedTargets = [];
+//
+//    var metricMeetsRequirement = true;
+//
+//    _.each(metric.targets, function (target) {
+//
+//        var targetMeetsRequirement = evaluateRequirement(target.value, metric.requirementOperator, metric.requirementValue);
+//
+//        updatedTargets.push({
+//            targetMeetsRequirement: targetMeetsRequirement,
+//            target: target.target,
+//            value: target.value,
+//            _id: target._id
+//        });
+//
+//        if (targetMeetsRequirement === false) metricMeetsRequirement = false;
+//
+//    })
+//
+//    metric.targets = updatedTargets;
+//    metric.metricMeetsRequirement = metricMeetsRequirement;
+//
+//
+//    return metric;
+//}
 
 function evaluateRequirement(value, requirementOperator, requirementValue){
 
@@ -408,10 +418,108 @@ exports.runningTest = function (req, res){
 /**
  * Update a Testrun
  */
-exports.update = function(req, res) {
+function updateTestRunRequirementForMetric(metric) {
+
+    Testrun.find( { $and: [ { productName: metric.productName }, { dashboardName: metric.dashboardName } ] } ).exec(function(err, testruns) {
+
+        _.each(testruns, function(testrun){
+
+
+            var metricToUpdate = testrun.metrics.id(metric._id);
+
+            metricToUpdate.requirementOperator = metric.requirementOperator;
+            metricToUpdate.requirementValue = metric.requirementValue;
+
+            metricToUpdate.targets = setTargetRequirementResults( metricToUpdate.targets, metricToUpdate.requirementOperator, metricToUpdate.requirementValue );
+            metricToUpdate.metricMeetsRequirement = setMetricRequirementResults(metricToUpdate.targets)
+
+            testrun.testrunMeetsRequirement = setTestrunRequirementResults(testrun.metrics);
+
+            testrun.save(function(err){
+                if (err) console.log("bla: " + err.stack);
+            })
+
+        })
+    })
+
 
 };
+function setTargetRequirementResults(targets,requirementOperator, requirementValue){
 
+    var updatedTargets = [];
+
+    _.each(targets, function(target){
+
+        var targetMeetsRequirement = evaluateRequirement(target.value, requirementOperator, requirementValue);
+
+        updatedTargets.push({
+            targetMeetsRequirement: targetMeetsRequirement,
+            target: target.target,
+            value: target.value,
+            _id: target._id
+        });
+
+    })
+
+    return updatedTargets;
+}
+
+
+function updateTestRunMetric(testrun, metric){
+
+
+    var updatedMetric;
+
+    updatedMetric.requirementOperator = metric.requirementOperator;
+    updatedMetric.requirementValue = metric.requirementValue;
+
+
+    //var updatedMetrics = [];
+    //
+    //
+    //_.each(testrun.metrics, function(testrunMetric){
+    //
+    //    if (testrunMetric._id.toString() === updatedMetric._id){
+    //
+    //        /* update requirement values */
+    //        testrunMetric.requirementOperator = updatedMetric.requirementOperator;
+    //        testrunMetric.requirementValue = updatedMetric.requirementValue;
+    //
+    //        updatedMetrics.push(setMetricRequirementResults(testrunMetric));
+    //
+    //    }else{
+    //
+    //        updatedMetrics.push(updatedMetric);
+    //    }
+    //
+    //
+    //})
+    //
+    //return updatedMetrics;
+
+}
+
+function getTargets(metrics, metricId){
+
+   var targets = [];
+
+    _.each(metrics, function(metric){
+
+        if (metric._id === metricId){
+
+            _.each(metric.targets, function(target){
+
+                targets.push(target);
+            })
+
+            return targets;
+        }
+
+    })
+
+    return targets;
+
+}
 /**
  * Delete an Testrun
  */

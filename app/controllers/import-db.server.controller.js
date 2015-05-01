@@ -77,6 +77,8 @@ function upload (req, res) {
                             var tags = [];
                             tags.push({text: importDashboardMetric.tag});
                             newMetric.dashboardId = newDashboard._id;
+                            newMetric.dashboardName = newDashboard.name;
+                            newMetric.productName = newProduct.name;
                             newMetric.alias = importDashboardMetric.alias;
                             newMetric.targets = importDashboardMetric.target;
                             newMetric.benchmarkWarning = importDashboardMetric.benchmarkWarning;
@@ -136,45 +138,50 @@ function upload (req, res) {
     /* clean db */
 
 
+    setTimeout(function(){
 
-    //Dashboard.find().exec(function(err, dashboards){
-    //
-    //    var activeDashboards = [];
-    //
-    //    _.each(dashboards, function(dashboard){
-    //
-    //        activeDashboards.push(dashboard._id.toString());
-    //    })
-    //
-    //    Product.find().exec(function(err, products){
-    //
-    //            var productId;
-    //
-    //            _.each(products, function(product){
-    //
-    //                productId = product.toObject()._id.toString();
-    //                var updatedDashboards = [];
-    //
-    //                _.each(product.dashboards, function(dashboardId){
-    //
-    //                    if(_.indexOf(activeDashboards, dashboardId.toString()) !== -1)updatedDashboards.push(dashboardId)
-    //                })
-    //
-    //                Product.findOne({ _id: productId}, function (err, updateProduct) {
-    //
-    //                    updateProduct.dashboards = updatedDashboards;
-    //                    updateProduct.save(function(err, updateProduct){
-    //
-    //                    });
-    //                })
-    //
-    //
-    //
-    //            })
-    //    });
-    //
-    //})
-    res.redirect('/#!');
+
+        Dashboard.find().exec(function(err, dashboards){
+
+            var activeDashboards = [];
+
+            _.each(dashboards, function(dashboard){
+
+                activeDashboards.push(dashboard._id.toString());
+            })
+
+            Product.find().exec(function(err, products){
+
+                var productId;
+
+                _.each(products, function(product){
+
+                    productId = product.toObject()._id.toString();
+                    var updatedDashboards = [];
+
+                    _.each(product.dashboards, function(dashboardId){
+
+                        if(_.indexOf(activeDashboards, dashboardId.toString()) !== -1)updatedDashboards.push(dashboardId)
+                    })
+
+                    Product.findOne({ _id: productId}, function (err, updateProduct) {
+
+                        updateProduct.dashboards = updatedDashboards;
+                        updateProduct.save(function(err, updateProduct){
+
+                        });
+                    })
+
+
+
+                })
+            });
+            res.redirect('/#!');
+        })
+
+    }, 30000);
+
+
 
 
 

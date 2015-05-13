@@ -188,6 +188,37 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 },
                 exporting: {
                     filename: ''
+                },
+                plotOptions: {
+                    series: {
+                        events: {
+                            legendItemClick: function(e) {
+                                // Upon cmd-click of a legend item, rather than toggling visibility, we want to hide all other items.
+                                var hideAllOthers = e.browserEvent.metaKey || e.browserEvent.ctrlKey;
+                                if (hideAllOthers) {
+                                    var seriesIndex = this.index;
+                                    var series = this.chart.series;
+
+
+                                    for (var i = 0; i < series.length; i++) {
+                                        // rather than calling 'show()' and 'hide()' on the series', we use setVisible and then
+                                        // call chart.redraw --- this is significantly faster since it involves fewer chart redraws
+                                        if (series[i].index === seriesIndex) {
+                                            if (!series[i].visible) series[i].setVisible(true, false);
+                                        } else {
+                                            if (series[i].visible) {
+                                                series[i].setVisible(false, false);
+                                            } else {
+                                                series[i].setVisible(true, false);
+                                            }
+                                        }
+                                    }
+                                    this.chart.redraw();
+                                    return false;
+                                }
+                            }
+                        }
+                    }
                 }
 
             },

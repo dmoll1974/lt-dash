@@ -58,6 +58,8 @@
                                 targetMeetsRequirement: target.targetMeetsRequirement,
                                 metric: metric.alias,
                                 metricId: metric._id,
+                                requirementOperator: metric.requirementOperator,
+                                requirementValue: metric.requirementValue,
                                 testRunId: testRun.testRunId,
                                 productName: $stateParams.productName,
                                 dashboardName: $stateParams.dashboardName,

@@ -18,6 +18,7 @@
         <td sortable="value" data-title="'Value'">
             {{target.value}}
         </td>
+        <td data-title="'Requirement'">{{target.requirementOperator}} {{target.requirementValue}}</td>
         <td data-title="'Requirement'">
             <span title="Go to graph" ui-sref="deepLinkGraph({productName: target.productName, dashboardName:target.dashboardName, testRunId: target.testRunId, tag: target.tag, metricId: target.metricId})" ng-class="target.targetMeetsRequirement ? 'fa-lg fa fa-check-circle-o text-success center' : 'fa-lg fa fa-exclamation-circle text-danger center'"></span>
             <span title="Configure metric" ui-sref="editMetric({productName: target.productName, dashboardName:target.dashboardName, metricId: target.metricId})" class="fa-lg fa fa-wrench pull-right"></span>

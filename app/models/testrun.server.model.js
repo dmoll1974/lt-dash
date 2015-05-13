@@ -10,8 +10,8 @@ var mongoose = require('mongoose'),
 
 var testRunTargetSchema = new Schema({
     "targetMeetsRequirement": Boolean,
-    "targetBenchmarkResultFixed": String,
-    "targetBenchmarkResultPrevious": String,
+    "targetBenchmarkResultFixedOK": Boolean,
+    "targetBenchmarkResultPreviousOK": Boolean,
     "target": String,
     "value": Number
 });
@@ -26,8 +26,8 @@ var testRunMetricSchema = new Schema({
     "requirementOperator": String,
     "requirementValue": String,
     "metricMeetsRequirement": Boolean,
-    "metricBenchmarkResultFixed": String,
-    "metricBenchmarkResultPrevious": String,
+    "metricBenchmarkResultFixedOK": Boolean,
+    "metricBenchmarkResultPreviousOK": Boolean,
     "annotation": String,
     "targets": [testRunTargetSchema]
 
@@ -48,6 +48,8 @@ var TestrunSchema = new Schema({
     "end": Date,
     "baseline" : String,
     "testrunMeetsRequirement": Boolean,
+    "testrunBenchmarkResultFixedOK": Boolean,
+    "testrunBenchmarkResultPreviousOK": Boolean,
     "buildResultKey": String,
     "eventIds": [String],
     "metrics":[testRunMetricSchema]

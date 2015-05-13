@@ -11368,3 +11368,7 @@ button.toast-close-button {
 .ng-table th.text-left {
     text-align: left;
 }
+
+.pointer {
+    cursor: pointer;
+}

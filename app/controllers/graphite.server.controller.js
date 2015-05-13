@@ -65,7 +65,7 @@ function getGraphiteData(from, until, targets, maxDataPoints, callback){
 
         client.get(graphiteTargetUrl, function (err, response, body) {
             if (err) {
-                return res.status(400).send({
+                return response.status(400).send({
                     message: errorHandler.getErrorMessage(err)
                 });
             } else {

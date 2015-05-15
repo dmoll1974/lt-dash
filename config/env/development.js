@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/lt-dash-dev',
+	db: 'mongodb://172.17.0.12/lt-dash-dev',
 	app: {
 		title: 'lt-dash - Development Environment'
 	},

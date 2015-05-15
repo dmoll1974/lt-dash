@@ -37,7 +37,6 @@
     "mongoose-q": "0.0.17",
     "morgan": "~1.4.1",
     "ng-tags-input": "^2.2.0",
-   // "nocca": "git+https://github.com/krekkied/nocca/#develop",
     "nodemailer": "~1.3.0",
     "passport": "~0.2.0",
     "passport-facebook": "~1.0.2",

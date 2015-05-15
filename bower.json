@@ -1,20 +1,42 @@
 {
   "name": "lt-dash",
   "version": "0.0.1",
+  "homepage": "https://github.com/dmoll1974/lt-dash",
+  "authors": [
+    "Daniel Moll <dmoll1974@gmail.com>"
+  ],
   "description": "Performance test dashboard",
+  "main": "server.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/lib",
+    "test",
+    "tests"
+  ],
   "dependencies": {
     "bootstrap": "~3",
     "angular": "~1.2",
-    "angular-resource": "~1.2",
-    "angular-mocks": "~1.2",
     "angular-bootstrap": "~0.11.2",
+    "angular-material": "~0.8.3",
+    "angular-mocks": "~1.2",
+    "angular-resource": "~1.2",
     "angular-ui-utils": "~0.1.1",
-    "angular-ui-router": "~0.2.11",
-    "bootstrap-sass-official": "~3.3.3",
-    "ng-tags-input": "~2.2.0",
+    "highcharts-ng": "~0.0.8",
+    "highcharts": "~4.1.4",
+    "highstock-release": "~2.1.4",
+    "ng-table": "~0.4.3",
+    "ngDraggable": "~0.1.3",
     "underscore": "1.8.2",
+    "angular-tree-control": "~0.2.8",
+    "angular-ui-router": "~0.2.11",
     "angular-modal-service": "~0.6.3",
+    "bootstrap-sass-official": "~3.3.3",
     "angular-ui-bootstrap-datetimepicker": "~0.11.2",
-    "components-font-awesome": "~4.3.0"
+    "ng-sortable": "~1.2.0",
+    "components-font-awesome": "~4.3.0",
+    "ng-tags-input": "~2.2.0"
   }
 }

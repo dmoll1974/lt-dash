@@ -47,7 +47,7 @@
     "passport-twitter": "~1.0.2",
     "request-json": "~0.5.2",
     "connect-multiparty": "~1.2.5",
-    "swig": "~1.4.1",
+    "swig": "~1.4.1"
   },
   "devDependencies": {
     "supertest": "~0.14.0",

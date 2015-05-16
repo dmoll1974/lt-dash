@@ -10,7 +10,7 @@ RUN npm install -g bower
 
 # Install Mean.JS packages
 ADD package.json /home/mean/package.json
-RUN npm install
+RUN npm install -g
 
 # Manually trigger bower. Why doesnt this work via npm install?
 ADD .bowerrc /home/mean/.bowerrc

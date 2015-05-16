@@ -21,7 +21,7 @@ RUN bower install --config.interactive=false --allow-root
 ADD . /home/mean
 
 # currently only works for development
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 # Port 3000 for server
 # Port 35729 for livereload

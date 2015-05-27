@@ -12,17 +12,41 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
 		/* List test runs for dashboard */
 
 
-        $scope.listTestRunsForDashboard = function() {
+        $scope.listTestRunsForDashboard = function () {
 
-            TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName).success(function (testRuns){
+            var intervalId = setInterval(function(){
 
-                $scope.testRuns = testRuns;
+                TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName).success(function (testRuns){
 
-            }, function(errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
+                    $scope.testRuns = testRuns;
+                    /* if all testruns have been persisted, stop polling */
+                    if (testRunsCompletelyPersisted(testRuns)) clearInterval(intervalId);
+
+                }, function(errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+
+
+
+            }, 10000);
 
         };
+
+        function testRunsCompletelyPersisted(testRuns){
+
+            var testRunsCompletelyPersisted = true;
+
+            _.each(testRuns, function(testRun){
+
+                if(!testRun.testrunMeetsRequirement) {
+                    testRunsCompletelyPersisted = false;
+                    return;
+                }
+
+            })
+
+            return testRunsCompletelyPersisted;
+        }
 
         $scope.testRunDetails = function(index){
 

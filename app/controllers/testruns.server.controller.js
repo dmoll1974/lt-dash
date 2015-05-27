@@ -43,7 +43,7 @@ exports.testRunsForDashboard = function(req, res) {
 
             async.forEachLimit(testRuns, 16, function (testRun, callback) {
 
-                getAndPersistTestRunById(req.params.productName, req.params.dashboardName, testRun.testRunId, function(persistedTestRun){
+                getAndPersistTestRunById(req.params.productName, req.params.dashboardName, testRun, function(persistedTestRun){
 
                     persistedTestruns.push(persistedTestRun);
                     callback();
@@ -71,21 +71,33 @@ exports.testRunById = function(req, res) {
     });
 
 }
-function getAndPersistTestRunById(productName, dashboardName, testRunId, callback){
 
+function getAndPersistTestRunById(productName, dashboardName, testRun, callback){
 
-    Testrun.findOne( { $and: [ { productName: productName }, { dashboardName: dashboardName }, { testRunId: testRunId } ] } ).exec(function(err, testrun) {
+    var testRunUnPersisted = {};
 
-        if(testrun){
+    Testrun.findOne( { $and: [ { productName: productName }, { dashboardName: dashboardName }, { testRunId: testRun.testRunId } ] } ).exec(function(err, storedTestrun) {
 
-            callback(testrun.toObject());
+        if(storedTestrun){
+
+            callback(storedTestrun.toObject());
 
         }else{
+
+            testRunUnPersisted.start = testRun.start;
+            testRunUnPersisted.end = testRun.end;
+            testRunUnPersisted.productName = testRun.productName;
+            testRunUnPersisted.dashboardName = testRun.dashboardName;
+            testRunUnPersisted.testRunId = testRun.testRunId;
+            testRunUnPersisted.eventIds = testRun.eventIds;
+
+
+            callback(testRunUnPersisted);
 
             Event.find({ $and: [
                 { productName: productName },
                 { dashboardName: dashboardName },
-                { testRunId: testRunId }
+                { testRunId: testRun.testRunId }
             ] }).sort('-eventTimestamp').exec(function (err, storedEvents) {
                 if (err) {
                     return res.status(400).send({
@@ -106,7 +118,6 @@ function getAndPersistTestRunById(productName, dashboardName, testRunId, callbac
 
                         saveTestrun(testrun[0], metrics, function (savedTestrun) {
 
-                            callback(savedTestrun.toObject());
 
                         });
 

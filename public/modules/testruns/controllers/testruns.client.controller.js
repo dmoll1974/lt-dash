@@ -53,6 +53,9 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
             switch (status){
 
                 case null:
+
+                    $scope.testRuns[index].testrunMeetsRequirement = "pending";
+
                     TestRuns.persistTestRunByIdFromEvents($stateParams.productName,$stateParams.dashboardName, $scope.testRuns[index].testRunId).success(function (testRun){
 
                         $scope.testRuns[index] = testRun;

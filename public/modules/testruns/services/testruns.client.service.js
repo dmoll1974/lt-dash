@@ -12,7 +12,8 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
             zoomUntil: '',
             zoomRange: '',
             getTestRunById: getTestRunById,
-            getRunningTest: getRunningTest
+            getRunningTest: getRunningTest,
+            persistTestRunByIdFromEvents: persistTestRunByIdFromEvents
 
         };
 
@@ -35,10 +36,15 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
 
         function listTestRunsForDashboard(productName, dashboardName){
 
-            return $http.get('/testruns-dashboard/' + productName + '/' + dashboardName);
+            return $http.get('/testruns-dashboard/' + productName + '/' + dashboardName );
 
         };
 
+        function persistTestRunByIdFromEvents(productName, dashboardName , testRunId){
+
+            return $http.get('/persist-testrun/' + productName + '/' + dashboardName + '/' + testRunId );
+
+        };
 
     }
 ]);

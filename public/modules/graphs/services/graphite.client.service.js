@@ -29,7 +29,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
 
             _.each(sortedEvents, function(event, i){
-                if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
+                //if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
 
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
 
@@ -38,7 +38,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
                     flagsData.push({x: epochTimestamp, title: eventTitle, text: event.eventDescription});
                     eventIndex++;
-                }
+                //}
             })
 
             flags.data = flagsData;
@@ -81,8 +81,15 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
                 for (var i = 0; i < graphiteData[j].datapoints.length; i++) {
 
-                    if (graphiteData[j].datapoints[i][0] !== null)
-                        data.push([graphiteData[j].datapoints[i][1] * 1000, graphiteData[j].datapoints[i][0]]);
+                    if (graphiteData[j].datapoints[i][0] !== null) {
+                        if (graphiteData[j].datapoints[i][0] === 0) {
+
+                            data.push([graphiteData[j].datapoints[i][1] * 1000, null]);
+
+                        }else{
+                                data.push([graphiteData[j].datapoints[i][1] * 1000, graphiteData[j].datapoints[i][0]]);
+                        }
+                    }
 
                 }
 

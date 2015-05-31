@@ -92,7 +92,8 @@ $ fig up
 $ docker build -t mean .
 $ docker run -p 27017:27017 -d --name db mongo
 $ docker run -p 3000:3000 --link db:db_1 mean
-$
+$ docker inspect $(docker ps -q) | grep IPA
+
 ```
 
 * To enable live reload forward 35729 port and mount /app and /public as volumes:

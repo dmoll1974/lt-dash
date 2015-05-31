@@ -22,111 +22,251 @@ exports.updateTestRunRequirementForMetric = updateTestRunRequirementForMetric;
  */
 exports.testRunsForDashboard = function(req, res) {
 
-    Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-eventTimestamp').exec(function(err, storedEvents) {
+    Testrun.find({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] }).sort('-end').exec(function(err, testRuns) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
 
-            var events = [];
-            for (var i=0;i<storedEvents.length;i++){
-
-                events.push({"id" : storedEvents[i].toObject()._id, "eventTimestamp" : storedEvents[i].toObject().eventTimestamp.getTime() , "baseline" : storedEvents[i].toObject().baseline, "eventDescription" : storedEvents[i].toObject().eventDescription, "testRunId" : storedEvents[i].toObject().testRunId, "productName" : storedEvents[i].toObject().productName, "dashboardName" : storedEvents[i].toObject().dashboardName, "buildResultKey" : storedEvents[i].toObject().buildResultKey});
-
-            }
-
-            var testRuns = createTestrunFromEvents(events);
-
-            /* persist test runs */
-            var persistedTestruns = [];
-
-            async.forEachLimit(testRuns, 16, function (testRun, callback) {
-
-                getAndPersistTestRunById(req.params.productName, req.params.dashboardName, testRun, function(persistedTestRun){
-
-                    persistedTestruns.push(persistedTestRun);
-                    callback();
-
-
-                });
-            }, function (err) {
-            if (err) return next(err);
-
-            res.jsonp(persistedTestruns.sort(utils.dynamicSort('-start')));
-
-        });
-
-
-        }
-
-    });
-};
-
-exports.testRunById = function(req, res) {
-
-    getAndPersistTestRunById(req.params.productName, req.params.dashboardName, req.params.testRunId, function(testRun){
-
-        res.jsonp(testRun);
-    });
-
-}
-
-function getAndPersistTestRunById(productName, dashboardName, testRun, callback){
-
-    var testRunUnPersisted = {};
-
-    Testrun.findOne( { $and: [ { productName: productName }, { dashboardName: dashboardName }, { testRunId: testRun.testRunId } ] } ).exec(function(err, storedTestrun) {
-
-        if(storedTestrun){
-
-            callback(storedTestrun.toObject());
-
-        }else{
-
-            testRunUnPersisted.start = testRun.start;
-            testRunUnPersisted.end = testRun.end;
-            testRunUnPersisted.productName = testRun.productName;
-            testRunUnPersisted.dashboardName = testRun.dashboardName;
-            testRunUnPersisted.testRunId = testRun.testRunId;
-            testRunUnPersisted.eventIds = testRun.eventIds;
-
-
-            callback(testRunUnPersisted);
-
-            Event.find({ $and: [
-                { productName: productName },
-                { dashboardName: dashboardName },
-                { testRunId: testRun.testRunId }
-            ] }).sort('-eventTimestamp').exec(function (err, storedEvents) {
+            Event.find({$and: [{productName: req.params.productName}, {dashboardName: req.params.dashboardName}]}).sort('-eventTimestamp').exec(function (err, events) {
                 if (err) {
                     return res.status(400).send({
                         message: errorHandler.getErrorMessage(err)
                     });
                 } else {
 
-                    var events = [];
-                    for (var i = 0; i < storedEvents.length; i++) {
-
-                        events.push({"id": storedEvents[i].toObject()._id, "eventTimestamp": storedEvents[i].toObject().eventTimestamp.getTime(), "baseline": storedEvents[i].toObject().baseline, "eventDescription": storedEvents[i].toObject().eventDescription, "testRunId": storedEvents[i].toObject().testRunId, "productName": storedEvents[i].toObject().productName, "dashboardName": storedEvents[i].toObject().dashboardName, "buildResultKey": storedEvents[i].toObject().buildResultKey});
-
-                    }
-
-                    var testrun = createTestrunFromEvents(events);
-
-                    getDataForTestrun(productName, dashboardName, testrun[0].start, testrun[0].end, function (metrics) {
-
-                        saveTestrun(testrun[0], metrics, function (savedTestrun) {
-
-
-                        });
-
-                    });
+                    res.jsonp(addTestrunsFromEvents(testRuns,createTestrunFromEvents(events)));
 
                 }
+
             });
         }
     });
+
+    function addTestrunsFromEvents(testRuns, testRunsFromEvents){
+
+        _.each(testRunsFromEvents, function (testRunFromEvents){
+
+            var exists = false;
+
+            _.each(testRuns, function (testRun){
+
+                if (testRun.testRunId === testRunFromEvents.testRunId ){
+                    exists = true;
+                    return exists;
+                }
+
+            })
+
+            if (exists === false) testRuns.push(testRunFromEvents);
+        })
+
+        return testRuns;
+
+    }
+    //Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-eventTimestamp').exec(function(err, storedEvents) {
+    //    if (err) {
+    //        return res.status(400).send({
+    //            message: errorHandler.getErrorMessage(err)
+    //        });
+    //    } else {
+    //
+    //        var events = [];
+    //        for (var i=0;i<storedEvents.length;i++){
+    //
+    //            events.push({"id" : storedEvents[i].toObject()._id, "eventTimestamp" : storedEvents[i].toObject().eventTimestamp.getTime() , "baseline" : storedEvents[i].toObject().baseline, "eventDescription" : storedEvents[i].toObject().eventDescription, "testRunId" : storedEvents[i].toObject().testRunId, "productName" : storedEvents[i].toObject().productName, "dashboardName" : storedEvents[i].toObject().dashboardName, "buildResultKey" : storedEvents[i].toObject().buildResultKey});
+    //
+    //        }
+    //
+    //        var testRuns = createTestrunFromEvents(events);
+    //
+    //        /* persist test runs */
+    //        var persistedTestrunsPending = [];
+    //        var persistedTestruns = [];
+    //        var pendingStatus = false;
+    //        var testRunsPendingResponse = {};
+    //
+    //
+    //
+    //        async.forEachLimit(testRuns, 30, function (testRun, callback) {
+    //
+    //            getAndPersistTestRunById(req.params.productName, req.params.dashboardName, testRun, req.params.pending, function(result){
+    //
+    //                persistedTestrunsPending.push(result);
+    //                callback();
+    //
+    //
+    //            });
+    //        }, function (err) {
+    //        if (err) return next(err);
+    //
+    //            _.each(persistedTestrunsPending, function(testRunPending){
+    //
+    //                persistedTestruns.push(testRunPending.testRun);
+    //                if (testRunPending.persisted === false)  pendingStatus = true;
+    //
+    //            })
+    //
+    //        testRunsPendingResponse.testRuns = persistedTestruns.sort(utils.dynamicSort('-start'));
+    //        testRunsPendingResponse.pending  = pendingStatus;
+    //        res.jsonp(testRunsPendingResponse);
+    //
+    //    });
+    //
+    //
+    //    }
+    //
+    //});
+};
+
+exports.testRunById = function(req, res) {
+
+    Testrun.findOne({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName },{ testRunId: req.params.testRunId }  ] }).sort('-end').exec(function(err, testRun) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+
+            if(testRun) {
+                var testRunEpoch = testRun.toObject();
+                testRunEpoch.startEpoch = testRun.startEpoch;
+                testRunEpoch.endEpoch = testRun.endEpoch;
+                res.jsonp(testRunEpoch);
+            }else{
+
+                Event.find({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName },{ testRunId: req.params.testRunId }  ] }).sort('-end').exec(function(err, events) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+
+                        res.jsonp(createTestrunFromEvents(events)[0]);
+                    }
+                });
+            }
+        }
+    });
+    //getAndPersistTestRunById(req.params.productName, req.params.dashboardName, req.params.testRunId, false, function(result){
+    //
+    //    res.jsonp(result.testRun);
+    //});
+
+}
+
+exports.persistTestRunByIdFromEvents = function (req, res) {
+
+    Event.find({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName },{ testRunId: req.params.testRunId }  ] }).sort('-end').exec(function(err, events) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+
+            getAndPersistTestRunById(req.params.productName, req.params.dashboardName, createTestrunFromEvents(events)[0], function (persistedTestrun) {
+
+                res.jsonp(persistedTestrun);
+            })
+        }
+    });
+}
+
+
+
+exports.persistTestRunById = function (productName, dashboardName, testRun, callback) {
+
+    getAndPersistTestRunById (productName, dashboardName, testRun, function(persistedTestrun){
+
+        callback(persistedTestrun);
+    })
+}
+
+
+function  getAndPersistTestRunById (productName, dashboardName, testRun, callback){
+
+    getDataForTestrun(productName, dashboardName, testRun.start, testRun.end, function (metrics) {
+
+        saveTestrun(testRun, metrics, function (savedTestrun) {
+
+            callback(savedTestrun);
+        });
+
+    });
+
+
+    //var result = {};
+    //var testRunUnPersisted = {};
+    //
+    //Testrun.findOne( { $and: [ { productName: productName }, { dashboardName: dashboardName }, { testRunId: testRun.testRunId } ] } ).exec(function(err, storedTestrun) {
+    //
+    //    if(storedTestrun){
+    //
+    //        result.persisted = true;
+    //        result.testRun = storedTestrun.toObject();
+    //        callback(result);
+    //
+    //    }else{
+    //
+    //        testRunUnPersisted.start = testRun.start;
+    //        testRunUnPersisted.end = testRun.end;
+    //        testRunUnPersisted.productName = testRun.productName;
+    //        testRunUnPersisted.dashboardName = testRun.dashboardName;
+    //        testRunUnPersisted.testRunId = testRun.testRunId;
+    //        testRunUnPersisted.eventIds = testRun.eventIds;
+    //
+    //        result.persisted = false;
+    //        result.testRun = testRunUnPersisted;
+    //        callback(result);
+    //
+    //        /* if persisting was not yet initiated, get Graphite data and persist it */
+    //        if (pending === false) {
+    //            //Event.find({
+    //            //    $and: [
+    //            //        {productName: productName},
+    //            //        {dashboardName: dashboardName},
+    //            //        {testRunId: testRun.testRunId}
+    //            //    ]
+    //            //}).sort('-eventTimestamp').exec(function (err, storedEvents) {
+    //            //    if (err) {
+    //            //        return res.status(400).send({
+    //            //            message: errorHandler.getErrorMessage(err)
+    //            //        });
+    //            //    } else {
+    //            //
+    //            //        var events = [];
+    //            //        for (var i = 0; i < storedEvents.length; i++) {
+    //            //
+    //            //            events.push({
+    //            //                "id": storedEvents[i].toObject()._id,
+    //            //                "eventTimestamp": storedEvents[i].toObject().eventTimestamp.getTime(),
+    //            //                "baseline": storedEvents[i].toObject().baseline,
+    //            //                "eventDescription": storedEvents[i].toObject().eventDescription,
+    //            //                "testRunId": storedEvents[i].toObject().testRunId,
+    //            //                "productName": storedEvents[i].toObject().productName,
+    //            //                "dashboardName": storedEvents[i].toObject().dashboardName,
+    //            //                "buildResultKey": storedEvents[i].toObject().buildResultKey
+    //            //            });
+    //            //
+    //            //        }
+    //            //
+    //            //        var testrun = createTestrunFromEvents(events);
+    //
+    //                    getDataForTestrun(productName, dashboardName, testrun[0].start, testrun[0].end, function (metrics) {
+    //
+    //                        saveTestrun(testrun[0], metrics, function (savedTestrun) {
+    //
+    //
+    //                        });
+    //
+    //                    });
+    //
+    //                }
+    //            });
+    //        }
+    //    }
+    //});
 };
 
 function getDataForTestrun(productName, dashboardName, start, end, callback){
@@ -355,10 +495,10 @@ function createTestrunFromEvents(events) {
 
                     if(events[i].buildResultKey) {
 
-                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, buildResultKey: events[i].buildResultKey, eventIds: [events[i].id, events[j].id]});
+                        testRuns.push({start: events[i].eventTimestamp, startEpoch: events[i].eventTimestamp.getTime(), end: events[j].eventTimestamp, endEpoch: events[j].eventTimestamp.getTime(), productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, buildResultKey: events[i].buildResultKey, eventIds: [events[i].id, events[j].id], testrunMeetsRequirement: null});
                     }else{
 
-                        testRuns.push({start: events[i].eventTimestamp, end: events[j].eventTimestamp, productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, eventIds: [events[i].id, events[j].id]});
+                        testRuns.push({start: events[i].eventTimestamp, startEpoch: events[i].eventTimestamp.getTime(), end: events[j].eventTimestamp, endEpoch: events[j].eventTimestamp.getTime(), productName: events[i].productName, dashboardName: events[i].dashboardName, testRunId: events[i].testRunId, eventIds: [events[i].id, events[j].id], testrunMeetsRequirement: null});
                     }
 
                     break;

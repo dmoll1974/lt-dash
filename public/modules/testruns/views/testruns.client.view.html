@@ -16,7 +16,7 @@
                 <td class="pointer" data-ng-click="testRunDetails($index)">{{testRun.testRunId}}</td>
                 <td class="pointer" data-ng-click="testRunDetails($index)">{{testRun.start | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
                 <td class="pointer" data-ng-click="testRunDetails($index)">{{testRun.end | date:'EEEE, dd-M-yyyy H:mm:ss'}}</td>
-                <td class="pointer" data-ng-click="testRunRequirements($index)"><span ng-class="testRun.testrunMeetsRequirement ? 'fa-lg fa fa-check-circle-o text-success center' : (!testRun.testrunMeetsRequirement ? 'fa-lg fa fa-refresh fa-spin center' : 'fa-lg fa fa-exclamation-circle text-danger center')"></span></td>
+                <td class="pointer" data-ng-click="testRunRequirements($index, testRun.testrunMeetsRequirement)"><span ng-class="testRun.testrunMeetsRequirement ? 'fa-lg fa fa-check-circle-o text-success center' : (testRun.testrunMeetsRequirement === false ? 'fa-lg fa fa-exclamation-circle text-danger center' : 'fa-lg fa fa-question-circle text-alert center')"></span></td>
                 <td class="pointer"><i class="glyphicon glyphicon-trash" data-ng-click="openDeleteTestRunModal('', $index)"></i> </th>
             </tr>
             </tbody>

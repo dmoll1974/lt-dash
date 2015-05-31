@@ -14,13 +14,20 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
 
         $scope.listTestRunsForDashboard = function () {
 
-            var intervalId = setInterval(function(){
+            //var pending = false;
+            //var intervalId = setInterval(function(){
 
-                TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName).success(function (testRuns){
+                TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName, false).success(function (testRuns){
+
+                    //$scope.testRuns = result.testRuns;
+                    ///* if all testruns have been persisted, stop polling */
+                    //if (result.pending === false){
+                    //    clearInterval(intervalId);
+                    //}else{
+                    //    pending = true;
+                    //}
 
                     $scope.testRuns = testRuns;
-                    /* if all testruns have been persisted, stop polling */
-                    if (testRunsCompletelyPersisted(testRuns)) clearInterval(intervalId);
 
                 }, function(errorResponse) {
                     $scope.error = errorResponse.data.message;
@@ -28,25 +35,10 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
 
 
 
-            }, 10000);
+            //}, 10000);
 
         };
 
-        function testRunsCompletelyPersisted(testRuns){
-
-            var testRunsCompletelyPersisted = true;
-
-            _.each(testRuns, function(testRun){
-
-                if(!testRun.testrunMeetsRequirement) {
-                    testRunsCompletelyPersisted = false;
-                    return;
-                }
-
-            })
-
-            return testRunsCompletelyPersisted;
-        }
 
         $scope.testRunDetails = function(index){
 
@@ -54,10 +46,27 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
             $state.go('viewGraphs',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId, tag: Dashboards.getDefaultTag(Dashboards.selected.tags) });
         }
 
-        $scope.testRunRequirements = function(index){
+        $scope.testRunRequirements = function(index, status){
 
             TestRuns.selected = $scope.testRuns[index];
-            $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId });
+
+            switch (status){
+
+                case null:
+                    TestRuns.persistTestRunByIdFromEvents($stateParams.productName,$stateParams.dashboardName, $scope.testRuns[index].testRunId).success(function (testRun){
+
+                        $scope.testRuns[index] = testRun;
+
+                    }, function(errorResponse) {
+                        $scope.error = errorResponse.data.message;
+                    });
+                    break;
+
+                default:
+                    $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId });
+
+            }
+
         }
 
 

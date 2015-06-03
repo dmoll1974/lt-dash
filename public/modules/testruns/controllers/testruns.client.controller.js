@@ -66,7 +66,10 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
                     break;
 
                 default:
-                    $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId });
+
+                    var requirementsResult = $scope.testRuns[index].testrunMeetsRequirement ? "passed" : "failed";
+
+                    $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : $scope.testRuns[index].testRunId, "requirementsResult" : requirementsResult });
 
             }
 

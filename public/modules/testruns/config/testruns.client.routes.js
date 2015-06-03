@@ -10,7 +10,7 @@ angular.module('testruns').config(['$stateProvider',
 			templateUrl: 'modules/testruns/views/testruns.client.view.html'
 		}).
 		state('requirementsTestRun', {
-			url: '/requirements/:productName/:dashboardName/:testRunId',
+			url: '/requirements/:productName/:dashboardName/:testRunId/:requirementsResult',
 			templateUrl: 'modules/graphs/views/requirements.client.view.html'
 		});
 	}

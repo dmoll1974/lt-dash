@@ -27,28 +27,34 @@
             $scope,
             $timeout,
             $filter,
+            $state,
             $stateParams,
             TestRuns,
             ngTableParams
 
         ) {
 
-            /* set tab number based on testRunMeetsRequirements */
 
-            $scope.tabNumber = TestRuns.selected.testrunMeetsRequirement ? 0 : 1;
+            $scope.showPassedRequirements = $stateParams.requirementsResult === "passed" ? true : false;
+
+            /* set tab number based on url */
+
+            $scope.tabNumber = $stateParams.requirementsResult === "passed" ? 0 : 1;
 
             $scope.setTab = function(newValue){
                 $scope.tabNumber = newValue;
-                if (newValue === 0) {
-                    $scope.showPassedRequirements = true;
-                }else{
-                    $scope.showPassedRequirements = false;
+                switch (newValue) {
+                    case 0:
+                        $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : TestRuns.selected.testRunId, "requirementsResult" : "passed" });
+                        break;
+                    case 1:
+                        $state.go('requirementsTestRun',{"productName":$stateParams.productName, "dashboardName":$stateParams.dashboardName, "testRunId" : TestRuns.selected.testRunId, "requirementsResult" : "failed" });
+                        break;
                 }
-                setTimeout(function(){
-                    $scope.tableParams.orderBy({});
-                    $scope.tableParams.reload();
 
-                }, 3000)
+                $scope.tableParams.filter({});
+                $scope.tableParams.reload();
+
 
             };
 
@@ -57,47 +63,9 @@
             };
 
 
-            $scope.$watch('showPassedRequirements', function (newVal, oldVal) {
+//            $scope.$watch('showPassedRequirements', function (newVal, oldVal) {
 
 //                    if (newVal !== oldVal) {
-
-
-                        TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
-
-                            TestRuns.selected = testRun;
-                            var showPassedRequirements = $scope.showPassedRequirements || TestRuns.selected.testrunMeetsRequirement;
-
-                            var data = [];
-
-
-                            _.each(testRun.metrics, function (metric) {
-
-                                /* only show metrics have requirements */
-                                if (metric.metricMeetsRequirement === showPassedRequirements ) {
-
-                                    var tag = (metric.tags) ? metric.tags[0].text : 'All';
-
-                                    _.each(metric.targets, function (target) {
-
-
-                                        data.push({
-
-                                            target: target.target,
-                                            value: target.value,
-                                            targetMeetsRequirement: target.targetMeetsRequirement,
-                                            metric: metric.alias,
-                                            metricId: metric._id,
-                                            requirementOperator: metric.requirementOperator,
-                                            requirementValue: metric.requirementValue,
-                                            testRunId: testRun.testRunId,
-                                            productName: $stateParams.productName,
-                                            dashboardName: $stateParams.dashboardName,
-                                            tag: tag
-
-                                        });
-                                    });
-                                }
-                            });
 
 
 
@@ -107,26 +75,66 @@
 
                             }, {
                                 groupBy: 'metric',
-                                total: data.length,
+                                total: 0, //data.length,
                                 getData: function($defer, params) {
-                                    var orderedData = params.sorting() ?
-                                        $filter('orderBy')(data, $scope.tableParams.orderBy()) :
-                                        data;
 
-                                    $defer.resolve(orderedData);
+                                    TestRuns.getTestRunById($stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).success(function (testRun) {
+
+                                        $timeout(function () {
+
+                                            TestRuns.selected = testRun;
+                                            var showPassedRequirements = $scope.showPassedRequirements || TestRuns.selected.testrunMeetsRequirement;
+
+                                            var data = [];
+
+
+                                            _.each(testRun.metrics, function (metric) {
+
+                                                /* only show metrics have requirements */
+                                                if (metric.metricMeetsRequirement === showPassedRequirements) {
+
+                                                    var tag = (metric.tags) ? metric.tags[0].text : 'All';
+
+                                                    _.each(metric.targets, function (target) {
+
+
+                                                        data.push({
+
+                                                            target: target.target,
+                                                            value: target.value,
+                                                            targetMeetsRequirement: target.targetMeetsRequirement,
+                                                            metric: metric.alias,
+                                                            metricId: metric._id,
+                                                            requirementOperator: metric.requirementOperator,
+                                                            requirementValue: metric.requirementValue,
+                                                            testRunId: testRun.testRunId,
+                                                            productName: $stateParams.productName,
+                                                            dashboardName: $stateParams.dashboardName,
+                                                            tag: tag
+
+                                                        });
+                                                    });
+                                                }
+                                            });
+                                            var orderedData = params.sorting() ?
+                                            $filter('orderBy')(data, $scope.tableParams.orderBy()) : data;
+                                            // update table params
+                                            params.total(orderedData.length);
+                                            $defer.resolve(orderedData);
+
+                                        }, 500);
+                                    });
                                 }
                             });
 
 
-                        });
-
-//                    }
-
-                }
-            );
+//                        });
 
         }
+
     }
+
+
 
     function LoadingContainerDirective (){
 

@@ -83,15 +83,14 @@
                                         $timeout(function () {
 
                                             TestRuns.selected = testRun;
-                                            var showPassedRequirements = $scope.showPassedRequirements || TestRuns.selected.testrunMeetsRequirement;
 
                                             var data = [];
 
 
                                             _.each(testRun.metrics, function (metric) {
 
-                                                /* only show metrics have requirements */
-                                                if (metric.metricMeetsRequirement === showPassedRequirements) {
+                                                /* only show metrics failed / passed requirements */
+                                                if (metric.metricMeetsRequirement === $scope.showPassedRequirements) {
 
                                                     var tag = (metric.tags) ? metric.tags[0].text : 'All';
 

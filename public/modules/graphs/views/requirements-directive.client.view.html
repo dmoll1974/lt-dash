@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>Requirement details</h1>
 </div>
-<ul class="nav nav-pills nav-justified">
+<ul class="nav nav-tabs nav-justified">
     <li ng-class="{active: isSet(0)}" >
         <a href ng-click="setTab(0)" >Passed</a></li>
     <li ng-class="{active: isSet(1)}">
@@ -25,7 +25,7 @@
             {{target.value}}
         </td>
         <td data-title="'Requirement'">{{target.requirementOperator}} {{target.requirementValue}}</td>
-        <td data-title="'Requirement'">
+        <td data-title="'Result'">
             <span title="Go to graph" ui-sref="deepLinkGraph({productName: target.productName, dashboardName:target.dashboardName, testRunId: target.testRunId, tag: target.tag, metricId: target.metricId})" ng-class="target.targetMeetsRequirement ? 'fa-lg fa fa-check-circle-o text-success center' : 'fa-lg fa fa-exclamation-circle text-danger center'"></span>
             <span title="Configure metric" ui-sref="editMetric({productName: target.productName, dashboardName:target.dashboardName, metricId: target.metricId})" class="fa-lg fa fa-wrench pull-right"></span>
         </td>

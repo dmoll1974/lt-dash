@@ -1,6 +1,12 @@
 <div class="page-header">
     <h1>Requirement details</h1>
 </div>
+<ul class="nav nav-pills nav-justified">
+    <li ng-class="{active: isSet(0)}" >
+        <a href ng-click="setTab(0)" >Passed</a></li>
+    <li ng-class="{active: isSet(1)}">
+        <a href  ng-click="setTab(1)">Failed</a></li>
+</ul>
 <table ng-table="tableParams" class="table">
     <tbody ng-repeat="group in $groups">
     <tr class="ng-table-group">

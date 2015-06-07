@@ -40,10 +40,15 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
             Events.create($scope.event).then(function (event) {
                 Events.selected = {};
-                $state.go('viewDashboard', {
-                    "productName": $scope.event.productName,
-                    "dashboardName": $scope.event.dashboardName
-                });
+                //$state.go('viewDashboard', {
+                //    "productName": $scope.event.productName,
+                //    "dashboardName": $scope.event.dashboardName
+                //});
+
+                if ($rootScope.previousStateParams)
+                    $state.go($rootScope.previousState, $rootScope.previousStateParams);
+                else
+                    $state.go($rootScope.previousState);
 
             }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;

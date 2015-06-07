@@ -29,7 +29,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
 
             _.each(sortedEvents, function(event, i){
-                //if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
+                if(event.eventDescription !== 'start' && event.eventDescription !== 'end') {
 
                     var epochTimestamp = new Date(event.eventTimestamp).getTime();
 
@@ -38,7 +38,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
                     flagsData.push({x: epochTimestamp, title: eventTitle, text: event.eventDescription});
                     eventIndex++;
-                //}
+                }
             })
 
             flags.data = flagsData;

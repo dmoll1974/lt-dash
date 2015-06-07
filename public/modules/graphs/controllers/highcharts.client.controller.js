@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', '$state', 'TestRuns', 'Metrics', 'Dashboards', 'Tags',
-	function($scope, Graphite, $stateParams, $state, TestRuns, Metrics, Dashboards, Tags) {
+angular.module('graphs').controller('HighchartsController', ['$scope','Graphite','$stateParams', '$state', 'TestRuns', 'Metrics', 'Dashboards', 'Tags','Events',
+	function($scope, Graphite, $stateParams, $state, TestRuns, Metrics, Dashboards, Tags, Events) {
 
 
         /* set Tags form graph */
@@ -168,7 +168,25 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                 chart: {
                     type: 'line',
                     zoomType: 'x',
-                    height: 500
+                    height: 500,
+                    events: {
+                        click: function (e) {
+                            // Upon cmd-click of the chart area, go to add Event dialog
+                            //var hideAllOthers = e.browserEvent.metaKey || e.browserEvent.ctrlKey;
+                            //if (hideAllOthers) {
+                                var eventTimestamp = new Date( Math.round(e.xAxis[0].value));
+                                Events.selected.productName = $stateParams.productName
+                                Events.selected.dashboardName = $stateParams.dashboardName
+                                Events.selected.eventTimestamp = eventTimestamp;
+                                Events.selected.testRunId = $stateParams.testRunId;
+                                $state.go('createEvent', {
+                                    productName: $stateParams.productName,
+                                    dashboardName: $stateParams.dashboardName
+                                });
+                            //}
+                        }
+                    }
+
                 },
                 rangeSelector: {
                     enabled: false

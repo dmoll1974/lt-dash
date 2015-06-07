@@ -56,17 +56,15 @@
                         <hr>
                     </div>
                     <div class="col-lg-9">
-                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="benchmarkOperator">Raise a warning if benchmark value is </label>
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="benchmarkOperator">Allow a </label>
                         <div class="controls">
-                            <select ng-disabled="enableBenchmarking==='disabled'" id="benchmarkValue" data-ng-model="metric.benchmarkValue" data-ng-init="options[0]">
-                                <option data-ng-repeat="percentage in percentageOptions" value="{{percentage.value}}">{{percentage.alias}}</option>
+                            <select ng-disabled="enableBenchmarking==='disabled'" id="benchmarkOperator" data-ng-model="metric.benchmarkOperator" data-ng-init="options[0]">
+                                <option data-ng-repeat="deviation in deviationOptions" value="{{deviation.value}}">{{deviation.alias}}</option>
                             </select>
                         </div>
+                        <label ng-disabled="enableBenchmarking==='disabled'" class="control-label" for="benchmarkOperator">of </label>
                         <div class="controls">
-                            <select ng-disabled="enableBenchmarking==='disabled'" id="benchmarkOperator" data-ng-model="metric.benchmarkOperator">
-                                <option data-ng-repeat="operator in operatorOptions" value="{{operator.value}}">{{operator.alias}}</option>
-                            </select>
-                            <label ng-disabled="enableBenchmarking==='disabled'">than baseline value</label>
+                            <input ng-disabled="enableBenchmarking==='disabled'" id="benchmarkValue" data-ng-model="metric.benchmarkValue" placeholder="Enter value">
                         </div>
                     </div>
                 </div>    

@@ -13,7 +13,9 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
         $scope.metricTypes = ['Average', 'Maximum', 'Minimum', 'Last', 'Slope'];
 
         $scope.operatorOptions = [{alias: 'lower than', value: '<'}, {alias: 'higher than', value: '>'}];
-                
+
+        $scope.deviationOptions = [{alias: 'negative deviation', value: '<'}, {alias: 'positive deviation', value: '>'}, {alias: '', value: ''}];
+
         $scope.targets = [''];
 
         $scope.metric = {};
@@ -154,7 +156,7 @@ angular.module('metrics').controller('MetricsController', ['$scope', '$modal', '
                 if($scope.metric.requirementValue)
                     $scope.enableRequirement ='enabled';
 
-                if($scope.metric.benchmarkWarning)
+                if($scope.metric.benchmarkValue)
                     $scope.enableBenchmarking = 'enabled';
 
 

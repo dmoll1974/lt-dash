@@ -82,13 +82,9 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
                 for (var i = 0; i < graphiteData[j].datapoints.length; i++) {
 
                     if (graphiteData[j].datapoints[i][0] !== null) {
-                        if (graphiteData[j].datapoints[i][0] === 0) {
 
-                            data.push([graphiteData[j].datapoints[i][1] * 1000, null]);
+                        data.push([graphiteData[j].datapoints[i][1] * 1000, graphiteData[j].datapoints[i][0]]);
 
-                        }else{
-                                data.push([graphiteData[j].datapoints[i][1] * 1000, graphiteData[j].datapoints[i][0]]);
-                        }
                     }
 
                 }

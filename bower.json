@@ -37,7 +37,10 @@
     "angular-ui-bootstrap-datetimepicker": "~0.11.2",
     "ng-sortable": "~1.2.0",
     "components-font-awesome": "~4.3.0",
-    "ng-tags-input": "~2.2.0"
+    "ng-tags-input": "~2.2.0",
+    "angular-tooltips": "~0.1.11",
+    "zeroclipboard": "~2.2.0",
+    "ng-clip": "~0.2.6"
   },
   "resolutions": {
     "angular-bootstrap": "~0.12.1",

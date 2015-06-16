@@ -24,7 +24,8 @@ module.exports = {
                 'public/lib/angular-material/angular-material.min.css',
                 'public/lib/ng-table/dist/ng-table.css',
                 'public/lib/ng-tags-input/ng-tags-input.min.css',
-				'public/lib/angular-ui-bootstrap-datetimepicker/datetimepicker.css'
+				'public/lib/angular-ui-bootstrap-datetimepicker/datetimepicker.css',
+				'public/lib/angular-tooltips/dist/angular-tooltips.min.css'
 			],
 			js: [
 				'public/lib/angular/angular.min.js',
@@ -45,7 +46,10 @@ module.exports = {
                 //'http://code.highcharts.com/stock/highstock.js',
                 'public/lib/highcharts-ng/dist/highcharts-ng.min.js',
 				'public/lib/highstock-release/exporting.js',
-                'public/lib/angular-ui-bootstrap-datetimepicker/datetimepicker.js'
+                'public/lib/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
+				'public/lib/angular-tooltips/dist/angular-tooltips.min.js',
+				'public/lib/ng-clip/dest/ng-clip.min.js',
+				'public/lib/zeroclipboard/dist/ZeroClipboard.min.js'
 
 			]
 		},

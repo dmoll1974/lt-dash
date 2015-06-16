@@ -3,6 +3,8 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns', 'Metrics','$log', 'Tags',
 	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, Metrics, $log, Tags) {
 
+
+
          $scope.gatlingDetails = ($stateParams.tag === 'Gatling') ? true : false;
             /* Get deeplink zoom params from query string */
 

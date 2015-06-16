@@ -1,8 +1,11 @@
 'use strict';
 
 //Setting up route
-angular.module('graphs').config(['$stateProvider',
-	function($stateProvider) {
+angular.module('graphs').config(['ngClipProvider', function(ngClipProvider) {
+		ngClipProvider.setPath("lib/zeroclipboard/dist/ZeroClipboard.swf");
+
+	}]).config(['$stateProvider',
+		function($stateProvider) {
 		// Graphs state routing
 		$stateProvider.
 		state('viewGraphs', {
@@ -17,7 +20,7 @@ angular.module('graphs').config(['$stateProvider',
 			url: '/graphs-live/:productName/:dashboardName/:tag',
 			templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
 		}).
-        state('deepLinkLiveGraph', {
+        	state('deepLinkLiveGraph', {
             url: '/graphs-live/:productName/:dashboardName/:tag/:metricId?zoomFrom&zoomUntil',
             templateUrl: 'modules/graphs/views/graphs-live.client.view.html'
         });

@@ -19,7 +19,7 @@ module.exports = {
 	//	css: 'public/dist/application.min.css',
 	//	js: 'public/dist/application.min.js'
 	//},
-    db: 'mongodb://localhost/lt-dash-dev',
+    db: 'mongodb://172.17.0.39/lt-dash-dev',
     memcachedHost: [ '172.21.42.178:11211'],
     assets: {
         lib: {

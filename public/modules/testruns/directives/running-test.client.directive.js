@@ -32,11 +32,18 @@
             Events,
             ConfirmModal
         ) {
-
+    
+            $scope.showDialog = false;
 
             TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
 
-                $scope.runningTest = runningTest;
+                if(runningTest !== 'null'){
+
+                    $scope.runningTest = runningTest;
+                    $scope.showDialog = true;
+
+                }
+                
 
 
             });
@@ -60,7 +67,8 @@
                         //TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
                         //
                         //    $scope.runningTest = runningTest;
-                            $state.go($state.current, {}, {reload: true});
+                        $scope.showDialog = false;
+                        $state.go($state.current, {}, {reload: true});
 
                         //});
 
@@ -99,6 +107,7 @@
                         //TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
                         //
                         //    $scope.runningTest = runningTest;
+                        $scope.showDialog = false;
                         $state.go($state.current, {}, {reload: true});
 
                         //});

@@ -226,7 +226,7 @@ angular.module('dashboards').controller('DashboardsController', ['$scope', '$roo
             });
         };
 
-        $scope.openDeleteDashboardModal = function (size, index) {
+        $scope.openDeleteDashboardModal = function (size) {
 
             ConfirmModal.itemType = 'Delete dashboard ';
             ConfirmModal.selectedItemId = Dashboards.selected._id;

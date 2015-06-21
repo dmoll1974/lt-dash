@@ -19,8 +19,8 @@ module.exports = {
 	//	css: 'public/dist/application.min.css',
 	//	js: 'public/dist/application.min.js'
 	//},
-    db: 'mongodb://172.17.0.6/lt-dash-dev',
-    memcachedHost: [ '172.17.0.5:11211'],
+    db: 'mongodb://172.17.0.1/lt-dash-dev',
+    memcachedHost: [ '172.17.0.3:11211'],
     assets: {
         lib: {
             css: [

@@ -8,7 +8,8 @@ module.exports = function(app) {
         .get(testruns.testRunsForDashboard);
 
     app.route('/testrun/:productName/:dashboardName/:testRunId')
-        .get(testruns.testRunById);
+        .get(testruns.testRunById)
+        .delete(testruns.deleteTestRunById);
 
     app.route('/persist-testrun/:productName/:dashboardName/:testRunId')
         .get(testruns.persistTestRunByIdFromEvents);

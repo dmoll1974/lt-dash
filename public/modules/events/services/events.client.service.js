@@ -19,8 +19,8 @@ angular.module('events').factory('Events', ['$http', 'Products', 'Dashboards',
 
         return Events;
 
-        function deleteFn(metricId){
-            return $http.delete('/events/' + metricId);
+        function deleteFn(eventId){
+            return $http.delete('/events/' + eventId);
         }
 
         function listEventsForDashboard(productName, dashboardName){

@@ -13,7 +13,8 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
             zoomRange: '',
             getTestRunById: getTestRunById,
             getRunningTest: getRunningTest,
-            persistTestRunByIdFromEvents: persistTestRunByIdFromEvents
+            persistTestRunByIdFromEvents: persistTestRunByIdFromEvents,
+            delete: deleteFn
 
         };
 
@@ -45,6 +46,10 @@ angular.module('events').factory('TestRuns', ['$http', 'Products', 'Dashboards',
             return $http.get('/persist-testrun/' + productName + '/' + dashboardName + '/' + testRunId );
 
         };
+
+        function deleteFn(productName, dashboardName, testRunId){
+            return $http.delete('/testrun/' + productName + '/' + dashboardName + '/' +  testRunId);
+        }
 
     }
 ]);

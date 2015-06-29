@@ -120,6 +120,31 @@ exports.testRunsForDashboard = function(req, res) {
     //});
 };
 
+exports.deleteTestRunById = function (req, res) {
+
+    Testrun.findOne({$and: [{productName: req.params.productName}, {dashboardName: req.params.dashboardName}, {testRunId: req.params.testRunId}]}).sort('-end').exec(function (err, testRun) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+
+            if (testRun) {
+
+                testRun.remove(function (err) {
+
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    }
+                })
+            }
+        }
+
+    });
+}
+
 exports.testRunById = function(req, res) {
 
     Testrun.findOne({ $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName },{ testRunId: req.params.testRunId }  ] }).sort('-end').exec(function(err, testRun) {

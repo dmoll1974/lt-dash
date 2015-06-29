@@ -29,7 +29,7 @@
                                 <label title="Share URL" class="btn default" ng-click="setMetricShareUrl(metric._id)"><span class="btn btn-xs glyphicon glyphicon-share"></span></label>
                             </div>
                         </span>
-                        <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span><span><button ng-if="showUrl && hasFlash()" tooltip-size="medium" title="Copy graph URL" tooltip-side="top"  clip-copy="metricShareUrl" clip-click="clipClicked()" clip-hide-on-no-flash>Copy</button></span>
+                        <span><input ng-readonly="true" ng-model="metricShareUrl" ng-if="showUrl" style="width:50%;" share-graph-url/></span><span><button ng-if="showUrl && hasFlash()" tooltip-size="medium" title="Copy graph URL" tooltip-side="top"  clip-copy="metricShareUrl" clip-click="clipClicked()">Copy</button></span>
                         <span>
                               <div class="input-group"  ng-if="showTags" class="graph-input-tags">
                                   

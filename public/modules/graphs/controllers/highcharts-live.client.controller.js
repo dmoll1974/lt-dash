@@ -3,6 +3,32 @@
 angular.module('graphs').controller('HighchartsLiveController', ['$scope', 'Interval', '$stateParams', '$state', 'Graphite', 'TestRuns', 'Metrics', 'Dashboards', 'Tags', '$q','$http', '$log',
     function($scope, Interval, $stateParams, $state, Graphite, TestRuns, Metrics, Dashboards, Tags,  $q, $http, $log) {
 
+        /* Zero copied logic */
+
+        $scope.clipClicked = function(){
+
+            $scope.showUrl = false;
+
+        }
+
+        $scope.hasFlash = function () {
+            var hasFlash = false;
+            try {
+                var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+                if (fo) {
+                    hasFlash = true;
+                    return hasFlash;
+                }
+            } catch (e) {
+                if (navigator.mimeTypes
+                    && navigator.mimeTypes['application/x-shockwave-flash'] != undefined
+                    && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
+                    hasFlash = true;
+                    return hasFlash;
+                }
+            }
+        }
+
         /* set Tags form graph */
 
         $scope.setTags = function (){

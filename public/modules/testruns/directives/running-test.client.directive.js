@@ -37,7 +37,7 @@
 
             TestRuns.getRunningTest($stateParams.productName, $stateParams.dashboardName).success(function (runningTest) {
 
-                if(runningTest !== null){
+                if(Object.keys(runningTest).length !== 0){
 
                     $scope.runningTest = runningTest;
                     $scope.showDialog = true;

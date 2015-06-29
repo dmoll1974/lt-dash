@@ -583,7 +583,7 @@ exports.runningTest = function (req, res){
         }
 
         if (endEventFound === true || tooOld === true || anyEventFound === false ) {
-            res.jsonp(null);
+            res.jsonp({});
 
         }
 

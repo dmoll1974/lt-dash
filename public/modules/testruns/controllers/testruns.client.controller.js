@@ -92,25 +92,21 @@ angular.module('testruns').controller('TestrunsController', ['$scope', '$statePa
 
             modalInstance.result.then(function (selectedIndex) {
 
-                $q.all([Events.delete($scope.testRuns[selectedIndex].eventIds[0]), Events.delete($scope.testRuns[selectedIndex].eventIds[1])])
-                    .then(TestRuns.delete($scope.productName, $scope.dashboardName, $scope.testRuns[selectedIndex].testRunId))
-                    .then(function(results){
+            $q.all([Events.delete($scope.testRuns[selectedIndex].eventIds[0]), Events.delete($scope.testRuns[selectedIndex].eventIds[1])])
+                .then(TestRuns.delete($scope.productName, $scope.dashboardName, $scope.testRuns[selectedIndex].testRunId))
+                .then(function(results){
 
-                        /* refresh test runs*/
-                        TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName).success(function (testRuns){
+                    /* refresh test runs*/
+                    TestRuns.listTestRunsForDashboard($scope.productName, $scope.dashboardName).success(function (testRuns){
 
-                            $scope.testRuns = testRuns;
+                        $scope.testRuns = testRuns;
 
-                        }, function(errorResponse) {
-                            $scope.error = errorResponse.data.message;
-                        });
-
-                        /* refresh view*/
-
-                        $state.go($state.current, {}, {reload: true});
+                    }, function(errorResponse) {
+                        $scope.error = errorResponse.data.message;
+                    });
 
 
-                    })
+                })
 
             }, function () {
                 //$log.info('Modal dismissed at: ' + new Date());

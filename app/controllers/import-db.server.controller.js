@@ -25,6 +25,39 @@ function upload (req, res) {
 
     };
 
+/* empty all collections*/
+
+    Event.remove(function(err, p){
+        if(err){
+            throw err;
+        } else{
+            console.log('No Of Documents deleted:' + p);
+        }
+    });
+
+    Metric.remove(function(err, p){
+        if(err){
+            throw err;
+        } else{
+            console.log('No Of Documents deleted:' + p);
+        }
+    });
+
+    Dashboard.remove(function(err, p){
+        if(err){
+            throw err;
+        } else{
+            console.log('No Of Documents deleted:' + p);
+        }
+    });
+
+    Product.remove(function(err, p){
+        if(err){
+            throw err;
+        } else{
+            console.log('No Of Documents deleted:' + p);
+        }
+    });
 
     _.each(products, function(importProduct){
 

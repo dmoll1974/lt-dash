@@ -64,9 +64,9 @@ function upload (req, res) {
                             _.each(importProductDashboards, function(importDashboard){
 
                                 var newDashboard = new Dashboard();
-                                var dashboardName = importDashboard.name.split('-');
+                                //var dashboardName = importDashboard.name.split('-');
                                 newDashboard.productId = newProduct._id;
-                                newDashboard.name = dashboardName[1];
+                                newDashboard.name = importDashboard.name;
                                 newDashboard.description = importDashboard.description;
                                 newDashboard.metrics = importDashboard.metrics;
                                 newDashboard.granularity = importDashboard.granularity;
@@ -101,7 +101,7 @@ function upload (req, res) {
                                             newMetric.benchmarkIssue = importDashboardMetric.benchmarkIssue;
                                             newMetric.requirementValue = importDashboardMetric.requirementValue;
                                             newMetric.requirementOperator = importDashboardMetric.requirementOperator;
-                                            newMetric.tags = tags;
+                                            newMetric.tags = importDashboardMetric.tags;
                                             newMetric.type = importDashboardMetric.type;
 
                                             newMetric.save(function (err, newMetric) {
@@ -138,15 +138,16 @@ function upload (req, res) {
                                 eventDesciption = importEvent.eventDescription;
 
                         }
-                        event.eventTimestamp = importEvent.timestamp;
-                        event.productName = splitDashboardName[0];
-                        event.dashboardName = splitDashboardName[1];
+                        event.eventTimestamp = importEvent.eventTimestamp;
+                        event.productName = importEvent.productName
+                        event.dashboardName = importEvent.dashboardName
                         event.testRunId = importEvent.testRunId;
                         event.eventDescription = eventDesciption;
                         event.baseline = importEvent.baseline;
                         event.buildResultKey = importEvent.buildResultKey;
 
                         event.save(function (err) {
+                        if(err) console.log(err);
                         });
 
                     });

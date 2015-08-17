@@ -16,9 +16,10 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
             var flags  = {
                 "type": "flags",
-                //"onSeries": series[0],
+                //"onSeries": series,
                 showInLegend: false,
-                "shape": "squarepin"
+                "shape": "squarepin",
+                "visible": true
 
             };
 

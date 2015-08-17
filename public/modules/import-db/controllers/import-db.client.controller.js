@@ -9,4 +9,11 @@ angular.module('import-db').controller('ImportDbController', ['$scope', 'FileUpl
 		FileUpload.uploadFileToUrl(file, uploadUrl);
 	};
 
+	$scope.uploadFileLegacy = function(){
+		var file = $scope.myFile;
+		//console.log('file is ' + JSON.stringify(file));
+		var uploadUrl = "/upload-legacy";
+		FileUpload.uploadFileToUrl(file, uploadUrl);
+	};
+
 }]);

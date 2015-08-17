@@ -7,6 +7,7 @@ module.exports = {
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
 	graphiteHost: 'http://graphite',
+	graphiteRetentionPeriod: '90d', /*90 days*/
 	db: 'mongodb://db/lt-dash-dev',
 	memcachedHost: [ 'memcached:11211'],
     port: process.env.PORT || 3000,

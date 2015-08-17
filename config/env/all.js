@@ -6,10 +6,10 @@ module.exports = {
 		description: 'Performance test dashboard',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
-    graphiteHost: 'http://graphite.klm.com',
-	graphiteRetentionPeriod: '90d', /*90 days*/
-	memcachedHost: [ '172.21.42.178:11211'],
-	port: process.env.PORT || 3000,
+	graphiteHost: 'http://graphite',
+	db: 'mongodb://db/lt-dash-dev',
+	memcachedHost: [ 'memcached:11211'],
+    port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
 	sessionCollection: 'sessions',

@@ -196,8 +196,8 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                     events: {
                         click: function (e) {
                             // Upon cmd-click of the chart area, go to add Event dialog
-                            //var hideAllOthers = e.browserEvent.metaKey || e.browserEvent.ctrlKey;
-                            //if (hideAllOthers) {
+                            var addEvent = e.metaKey || e.ctrlKey;
+                            if (addEvent) {
                                 var eventTimestamp = new Date( Math.round(e.xAxis[0].value));
                                 Events.selected.productName = $stateParams.productName
                                 Events.selected.dashboardName = $stateParams.dashboardName
@@ -207,7 +207,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                                     productName: $stateParams.productName,
                                     dashboardName: $stateParams.dashboardName
                                 });
-                            //}
+                            }
                         }
                     }
 

@@ -56,16 +56,22 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
 
         };
 
-        // Create new Event
+        // Update Event
         $scope.update = function () {
 
-            Events.update($scope.event).then(function (event) {
+            Events.update(Events.selected).then(function (event) {
 
                 Events.selected = {};
-                $state.go('viewDashboard', {
-                    "productName": $stateParams.productName,
-                    "dashboardName": $stateParams.dashboardName
-                });
+
+                /* reset form*/
+                $scope.eventForm.$setPristine();
+
+                /* return to previous state */
+                if ($rootScope.previousStateParams)
+                    $state.go($rootScope.previousState, $rootScope.previousStateParams);
+                else
+                    $state.go($rootScope.previousState);
+
 
             }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
@@ -110,7 +116,7 @@ angular.module('events').controller('EventsController', ['$scope', '$rootScope',
             $state.go('editEvent', {
                 "productName": $stateParams.productName,
                 "dashboardName": $stateParams.dashboardName,
-                "eventId": $scope.event._id
+                "eventId": Events.selected._id
             });
 
         };

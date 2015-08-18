@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'Utils',
-	function($http, $q, $log, Events, Utils) {
+angular.module('graphs').factory('Graphite', ['$http','$q', '$log', '$state', 'Events', 'Utils',
+	function($http, $q, $log, $state, Events, Utils) {
 
         var Graphite = {
             getData: getData,
@@ -12,14 +12,35 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
         return Graphite;
 
-        function addFlagData (series, events){
+
+        function addFlagData (series, events, productName, dashboardName, testRunId){
 
             var flags  = {
                 "type": "flags",
                 //"onSeries": series,
                 showInLegend: false,
                 "shape": "squarepin",
-                "visible": true
+                "events":{
+                    "click" : function (e){
+
+                        Events.selected = {};
+
+                        Events.selected.productName = productName;
+                        Events.selected.dashboardName = dashboardName;
+                        Events.selected.testRunId = testRunId;
+                        Events.selected._id = e.point.id;
+                        Events.selected.eventTimestamp = e.point.x;
+                        Events.selected.eventDescription = e.point.text;
+
+
+                        $state.go('editEvent', {
+                            "productName": productName,
+                            "dashboardName": dashboardName,
+                            "eventId": e.point.id
+                        });
+
+                    }
+                }
 
             };
 
@@ -37,12 +58,17 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
                     var eventTitle = (eventDescriptionPattern.test(event.eventDescription)) ? event.eventDescription.match(eventDescriptionPattern)[1] : eventIndex;
 
 
-                    flagsData.push({x: epochTimestamp, title: eventTitle, text: event.eventDescription});
+                    flagsData.push({x: epochTimestamp,
+                                    title: eventTitle,
+                                    text: event.eventDescription,
+                                    id: event._id
+                                    });
                     eventIndex++;
                 }
             })
 
             flags.data = flagsData;
+
 
             series.push(flags);
 
@@ -50,7 +76,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
 
         }
 
-        function addEvents(series, from, until, productName, dashboardName){
+        function addEvents(series, from, until, productName, dashboardName, testRunId){
 
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -61,7 +87,7 @@ angular.module('graphs').factory('Graphite', ['$http','$q', '$log', 'Events', 'U
             Events.listEventsForTestRun(productName, dashboardName, convertedFrom, convertedUntil)
                 .success(function(events){
                     deferred.resolve(
-                        addFlagData (series, events)
+                        addFlagData (series, events, productName, dashboardName, testRunId)
                     )
                 }).error(function(msg, code) {
                     deferred.reject(msg);

@@ -346,7 +346,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
             Graphite.getData(from, until, targets, 900).then(function (series) {
 
-                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName).then(function (seriesEvents) {
+                Graphite.addEvents(series, from, until, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId).then(function (seriesEvents) {
 
 
                     $scope.config.series = seriesEvents;
@@ -369,6 +369,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
                         }
                     }
                     $scope.config.loading = false;
+
                     $scope.config.options.exporting.filename = TestRuns.selected.testRunId + '_' + $scope.metric.alias;
 
                 });

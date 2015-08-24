@@ -96,7 +96,7 @@ function upload (req, res) {
                                             newMetric.dashboardName = newDashboard.name;
                                             newMetric.productName = newProduct.name;
                                             newMetric.alias = importDashboardMetric.alias;
-                                            newMetric.targets = importDashboardMetric.target;
+                                            newMetric.targets = importDashboardMetric.targets;
                                             newMetric.benchmarkWarning = importDashboardMetric.benchmarkWarning;
                                             newMetric.benchmarkIssue = importDashboardMetric.benchmarkIssue;
                                             newMetric.requirementValue = importDashboardMetric.requirementValue;

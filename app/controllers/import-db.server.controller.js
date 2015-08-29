@@ -74,7 +74,7 @@ function upload (req, res) {
                                 newDashboard.hosts = importDashboard.hosts;
                                 newDashboard.applications = importDashboard.applications;
                                 newDashboard.instances = importDashboard.instances;
-                                //newDashboard.tags = importDashboard.tags;
+                                newDashboard.tags = importDashboard.tags;
                                 //
                                 newDashboard.save(function(err,newDashboard){
                                     if(err) console.log(err);

@@ -1,0 +1,28 @@
+<script type="text/ng-template" id="tagFilterModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Filter on tags</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div>
+                <select id="type" data-ng-model="filterOperator" placeholder="Select filterOperator" required>
+                    <option value=" AND ">AND</option>
+                    <option value=" OR ">OR</option>
+                </select>
+            </div>
+            <tags-input data-ng-model="filterTags" placeholder="Add tags to filter"  class="graph-filter-tags">
+                <auto-complete source="loadTags($query)" loadOnDownArrow="true" ></auto-complete>
+            </tags-input>
+            <span>
+            <label class="checkbox">
+                <input title="Save as dashboard tag?" type="checkbox" ng-model="persistTag">
+                Save as dashboard tag?
+            </label>
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

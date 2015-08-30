@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns', 'Metrics','$log', 'Tags',
-	function($scope, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, Metrics, $log, Tags) {
+angular.module('graphs').controller('GraphsController', ['$scope', '$modal', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns', 'Metrics','$log', 'Tags', 'ConfirmModal',
+	function($scope, $modal, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, Metrics, $log, Tags, ConfirmModal) {
 
-
+        $scope.filterOperator = " AND ";
 
          $scope.gatlingDetails = ($stateParams.tag === 'Gatling') ? true : false;
             /* Get deeplink zoom params from query string */
@@ -39,7 +39,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
                         $scope.metrics = addAccordionState(Dashboards.selected.metrics);
 
                         /* Get tags used in metrics */
-                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+                        $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId, Dashboards.selected.tags);
 
                         /* if reloading a non-existing tag is in $statParams */
                         $scope.value = (checkIfTagExists($stateParams.tag)) ? $stateParams.tag : 'All';
@@ -111,6 +111,92 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$rootScope',
             return matchedTags;
 
        };
+
+        function updateFilterTags  (filterTags, filterOperator, persistTag) {
+
+
+            var combinedTag;
+            var newTags = [];
+
+            _.each(filterTags, function (filterTag, index) {
+
+                switch (index) {
+
+                    case 0:
+                        combinedTag = filterTag.text + filterOperator;
+                        break;
+                    case filterTags.length - 1:
+                        combinedTag += filterTag.text;
+                        break;
+                    default:
+                        combinedTag += filterTag.text + filterOperator;
+
+
+                }
+
+            })
+
+            newTags.push({text: combinedTag})
+
+            /* if persist tag is checked, update dashboard tags*/
+            if (persistTag) {
+                if (Dashboards.updateTags(newTags)) {
+
+                    Dashboards.update().success(function (dashboard) {
+
+                        $scope.dashboard = Dashboards.selected;
+                        /* Get tags used in metrics */
+                        $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId, Dashboards.selected.tags);
+
+                    });
+
+                }
+            }
+
+            return newTags;
+            //$state.go('viewGraphs', {
+            //    "productName": $stateParams.productName,
+            //    "dashboardName": $stateParams.dashboardName,
+            //    "testRunId": $stateParams.testRunId,
+            //    tag: newTags[0].text
+            //});
+
+        }
+
+    $scope.removeTag = function(removeTag)    {
+
+        var updatedTags = [];
+
+        _.each(Dashboards.selected.tags, function(tag){
+
+            if(tag !== removeTag) updatedTags.push({text: tag.text});
+        })
+
+        Dashboards.selected.tags = updatedTags;
+        Dashboards.update().success(function(dashboard){});
+
+    }
+
+    $scope.openTagsFilterModal = function (size) {
+
+        ConfirmModal.filterOperator = " AND ";
+        ConfirmModal.persistTag = false;
+        ConfirmModal.dashboardTags
+
+        var modalInstance = $modal.open({
+            templateUrl: 'tagFilterModal.html',
+            controller: 'TagFilterModalInstanceController',
+            size: size//,
+        });
+
+        modalInstance.result.then(function (filterTags, filterOperator, persistTag) {
+
+            $scope.tags.push(updateFilterTags  (filterTags, filterOperator, persistTag));
+
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 
     }
 ]);

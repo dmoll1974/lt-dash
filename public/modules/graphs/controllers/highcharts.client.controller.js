@@ -66,7 +66,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                         $scope.dashboard = Dashboards.selected;
                         /* Get tags used in metrics */
-                        $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+                        $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId, Dashboards.selected.tags);
 
                     });
 
@@ -91,7 +91,7 @@ angular.module('graphs').controller('HighchartsController', ['$scope','Graphite'
 
                             $scope.dashboard = Dashboards.selected;
                             /* Get tags used in metrics */
-                            $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId);
+                            $scope.tags = Tags.setTags(Dashboards.selected.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId, Dashboards.selected.tags);
 
                         });
 

@@ -2,6 +2,8 @@
 
 module.exports = {
 	db: 'mongodb://localhost/lt-dash-dev',
+	graphiteHost: 'http://unity-ci.powerhouse.local:8090',
+	memcachedHost: [ 'http://unity-ci.powerhouse.local:11211'],
 	app: {
 		title: 'lt-dash - Development Environment'
 	},

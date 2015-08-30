@@ -11372,3 +11372,7 @@ button.toast-close-button {
 .pointer {
     cursor: pointer;
 }
+
+.btn .btn-primary .toggle :checked {
+    background-color:#bbb;
+}

@@ -11,20 +11,27 @@ angular.module('graphs').factory('Tags', ['Utils', 'TestRuns',
 
         return Tags;
 
-        function setTags (metrics, productName, dashBoardName, testRunId){
+        function setTags (metrics, productName, dashBoardName, testRunId, dashboardTags){
 
             var tags = [];
 
             
             tags.push({text: 'All', route: {productName: productName, dashboardName: dashBoardName, tag: 'All'}});
 
-            _.each(metrics, function(metric){
+            //_.each(metrics, function(metric){
+            //
+            //    _.each(metric.tags, function(tag){
+            //
+            //        if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text, testRunId: testRunId}});
+            //
+            //    })
+            //
+            //})
 
-                _.each(metric.tags, function(tag){
 
-                    if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text, testRunId: testRunId}});
+            _.each(dashboardTags, function(dashboardTag){
 
-                })
+                tags.push({text: dashboardTag.text, route: {productName: productName, dashboardName: dashBoardName, tag: dashboardTag.text, testRunId: testRunId}});
 
             })
 

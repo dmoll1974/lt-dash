@@ -17,11 +17,26 @@ angular.module('graphs').filter('tagsFilter', [
                 return value;
             }
 
-            return function (array, propertyString, target) {
-                var properties = parseString(propertyString);
+        return function (array, propertyString, inputTarget) {
+            var properties = parseString(propertyString);
+            var filterOperator;
 
+            if (inputTarget.indexOf(" AND ")> -1){
+
+                filterOperator = " AND ";
+
+            }else if (inputTarget.indexOf(" OR ") > -1) {
+
+                filterOperator = " OR ";
+            }
+
+            var target = inputTarget.split(filterOperator);
+
+
+            /* if single target*/
+            if (target.length == 1) {
                 /* if target is 'All', filter none */
-                if (target === 'All'){
+                if (target[0] === 'All') {
                     return array;
                 } else {
                     return _.filter(array, function (item) {
@@ -30,13 +45,41 @@ angular.module('graphs').filter('tagsFilter', [
 
                         _.each(getValue(item, properties), function (arrayItem) {
 
-                            if (target === arrayItem.text) matchResult = true;
+                            if (target[0] === arrayItem.text) matchResult = true;
 
                         })
                         return matchResult;
                     });
                 }
+            }else{
+
+                return _.filter(array, function (item) {
+
+                    var matchResults = [];
+
+                    _.each(target, function(matchtarget){
+
+                        var targetMatchResult = false;
+
+                        _.each(getValue(item, properties),function (arrayItem) {
+
+                            if (matchtarget === arrayItem.text)targetMatchResult = true;
+
+
+                        })
+
+                        matchResults.push(targetMatchResult);
+
+                    })
+
+
+                    return matchResults.indexOf(false) > -1 ? false : true;
+                });
+
+
+
             }
+        }
         }
 
 ]);

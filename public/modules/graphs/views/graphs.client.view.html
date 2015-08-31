@@ -15,8 +15,7 @@
         </span>
 
         <tabset>
-            <tab data-ng-repeat="tag in tags"  data-ng-model="value"  disabled="tag.disabled"  active="isActive(tag.text)"  >
-                <tab-heading ui-sref="viewGraphs(tag.route)">{{tag.text}}<a ng-click="removeTag(tag)" href=''><i class="glyphicon glyphicon-remove small"></i></a></tab-heading>
+            <tab data-ng-repeat="tag in tags" heading="{{tag.text}}"  data-ng-model="value"  disabled="tag.disabled"  active="isActive(tag.text)" ui-sref="viewGraphs(tag.route)" >
             </tab>
         </tabset>
     </div>    

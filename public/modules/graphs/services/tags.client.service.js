@@ -18,22 +18,31 @@ angular.module('graphs').factory('Tags', ['Utils', 'TestRuns',
             
             tags.push({text: 'All', route: {productName: productName, dashboardName: dashBoardName, tag: 'All'}});
 
-            //_.each(metrics, function(metric){
-            //
-            //    _.each(metric.tags, function(tag){
-            //
-            //        if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text, testRunId: testRunId}});
-            //
-            //    })
-            //
-            //})
+            _.each(metrics, function(metric){
 
+                _.each(metric.tags, function(tag){
 
+                    if(tagExists(tags, tag)) tags.push({text: tag.text, route: {productName: productName, dashboardName: dashBoardName, tag: tag.text, testRunId: testRunId}});
+
+                })
+
+            });
+
+            /* add filter tags */
             _.each(dashboardTags, function(dashboardTag){
 
-                tags.push({text: dashboardTag.text, route: {productName: productName, dashboardName: dashBoardName, tag: dashboardTag.text, testRunId: testRunId}});
+                if(dashboardTag.text.indexOf(" AND ") > -1 || dashboardTag.text.indexOf(" OR ") > -1 ) {
 
-            })
+                    tags.push({text: dashboardTag.text,
+                        route: {
+                            productName: productName,
+                            dashboardName: dashBoardName,
+                            tag: dashboardTag.text,
+                            testRunId: testRunId
+                        }
+                    });
+                }
+            });
 
 
             tags.sort(Utils.dynamicSort('text'));

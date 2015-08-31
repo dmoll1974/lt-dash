@@ -3,23 +3,35 @@
         <h3 class="modal-title">Filter on tags</h3>
     </div>
     <div class="modal-body">
-        <div>
             <div>
-                <select id="type" data-ng-model="filterOperator" placeholder="Select filterOperator" required>
-                    <option value=" AND ">AND</option>
-                    <option value=" OR ">OR</option>
-                </select>
+                <span>
+                    <label>Filter operator</label>
+                </span>
+                <span>
+                    <select ng-init="filterOperator=filterOperatorOptions[0]"
+                            ng-model="filterOperator"
+                            ng-options="item as item.label for item in filterOperatorOptions"></select>
+
+                    <!--<select id="type" data-ng-model="filterOperator" placeholder="Select filterOperator" required>-->
+                        <!--<option ng-repeat="item in list" ng-selected="{{selected.label == item.label}}">{{item.label}}</option>-->
+                    <!--</select>-->
+                </span>
             </div>
-            <tags-input data-ng-model="filterTags" placeholder="Add tags to filter"  class="graph-filter-tags">
-                <auto-complete source="loadTags($query)" loadOnDownArrow="true" ></auto-complete>
-            </tags-input>
-            <span>
-            <label class="checkbox">
-                <input title="Save as dashboard tag?" type="checkbox" ng-model="persistTag">
-                Save as dashboard tag?
-            </label>
-            </span>
-        </div>
+            <div>
+                <tags-input data-ng-model="filterTags" placeholder="Add tags to filter"  class="graph-filter-tags">
+                    <auto-complete source="loadTags($query)" loadOnDownArrow="true" ></auto-complete>
+                </tags-input>
+            </div>
+            <div>
+                <span>
+                      <input class="checkbox tags-filter-checkbox" title="Save as dashboard tag?" type="checkbox" data-ng-model="persistTag">
+
+                </span>
+                <span>
+                        <label>Save as dashboard tag?</label>
+                </span>
+            </div>
+
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>

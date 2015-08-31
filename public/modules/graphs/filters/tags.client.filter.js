@@ -21,11 +21,11 @@ angular.module('graphs').filter('tagsFilter', [
             var properties = parseString(propertyString);
             var filterOperator;
 
-            if (inputTarget.indexOf(" AND ")> -1){
+            if (inputTarget.indexOf(" AND ") > -1) {
 
                 filterOperator = " AND ";
 
-            }else if (inputTarget.indexOf(" OR ") > -1) {
+            } else if (inputTarget.indexOf(" OR ") > -1) {
 
                 filterOperator = " OR ";
             }
@@ -51,35 +51,57 @@ angular.module('graphs').filter('tagsFilter', [
                         return matchResult;
                     });
                 }
-            }else{
+            } else {
 
-                return _.filter(array, function (item) {
+                if (filterOperator === " AND ") {
 
-                    var matchResults = [];
+                    return _.filter(array, function (item) {
 
-                    _.each(target, function(matchtarget){
+                        var matchResults = [];
 
-                        var targetMatchResult = false;
+                        _.each(target, function (matchtarget) {
 
-                        _.each(getValue(item, properties),function (arrayItem) {
+                            var targetMatchResult = false;
 
-                            if (matchtarget === arrayItem.text)targetMatchResult = true;
+                            _.each(getValue(item, properties), function (arrayItem) {
 
+                                if (matchtarget === arrayItem.text)targetMatchResult = true;
+
+
+                            })
+
+                            matchResults.push(targetMatchResult);
 
                         })
 
-                        matchResults.push(targetMatchResult);
 
-                    })
+                        return matchResults.indexOf(false) > -1 ? false : true;
+                    });
+
+                    /* filterOperator = OR*/
+                } else {
+
+                    return _.filter(array, function (item) {
+
+                        var targetMatchResult = false;
+
+                        _.each(target, function (matchtarget) {
+
+                            _.each(getValue(item, properties), function (arrayItem) {
+
+                                if (matchtarget === arrayItem.text)targetMatchResult = true;
+
+                            })
+
+                        })
 
 
-                    return matchResults.indexOf(false) > -1 ? false : true;
-                });
+                        return targetMatchResult;
+                    });
 
-
-
+                }
             }
         }
-        }
+    }
 
 ]);

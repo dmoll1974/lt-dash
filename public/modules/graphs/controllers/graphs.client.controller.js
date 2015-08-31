@@ -3,7 +3,6 @@
 angular.module('graphs').controller('GraphsController', ['$scope', '$modal', '$rootScope', '$state', '$stateParams', 'Dashboards','Graphite','TestRuns', 'Metrics','$log', 'Tags', 'ConfirmModal',
 	function($scope, $modal, $rootScope, $state, $stateParams, Dashboards, Graphite, TestRuns, Metrics, $log, Tags, ConfirmModal) {
 
-        $scope.filterOperator = " AND ";
 
          $scope.gatlingDetails = ($stateParams.tag === 'Gatling') ? true : false;
             /* Get deeplink zoom params from query string */
@@ -154,12 +153,7 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$modal', '$r
             }
 
             return newTags;
-            //$state.go('viewGraphs', {
-            //    "productName": $stateParams.productName,
-            //    "dashboardName": $stateParams.dashboardName,
-            //    "testRunId": $stateParams.testRunId,
-            //    tag: newTags[0].text
-            //});
+
 
         }
 
@@ -179,19 +173,24 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$modal', '$r
 
     $scope.openTagsFilterModal = function (size) {
 
-        ConfirmModal.filterOperator = " AND ";
-        ConfirmModal.persistTag = false;
-        ConfirmModal.dashboardTags
-
         var modalInstance = $modal.open({
             templateUrl: 'tagFilterModal.html',
             controller: 'TagFilterModalInstanceController',
-            size: size//,
+            size: size
+
         });
 
-        modalInstance.result.then(function (filterTags, filterOperator, persistTag) {
+        modalInstance.result.then(function (data) {
 
-            $scope.tags.push(updateFilterTags  (filterTags, filterOperator, persistTag));
+            var newTag = updateFilterTags(data.filterTags, data.filterOperator, data.persistTag);
+
+            /* Get tags used in metrics */
+            $scope.tags = Tags.setTags($scope.metrics, $stateParams.productName, $stateParams.dashboardName, $stateParams.testRunId, Dashboards.selected.tags);
+            /* add new tag */
+            $scope.tags.push({text: newTag[0].text, route: {productName: $stateParams.productName, dashboardName: $stateParams.dashBoardName, tag: newTag, testRunId: $stateParams.testRunId}});
+
+            $scope.value = newTag[0].text;
+
 
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());

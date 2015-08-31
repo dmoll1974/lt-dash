@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     Product = mongoose.model('Product'),
     _ = require('lodash'),
     graphite = require('./graphite.server.controller'),
-    utils = require('./utils.server.controller'),
+    Utils = require('./utils.server.controller'),
     async = require('async');
 
 
@@ -62,7 +62,7 @@ exports.testRunsForDashboard = function(req, res) {
             if (exists === false) testRuns.push(testRunFromEvents);
         })
 
-        return testRuns;
+        return testRuns.sort(Utils.dynamicSort('-start'));
 
     }
     //Event.find( { $and: [ { productName: req.params.productName }, { dashboardName: req.params.dashboardName } ] } ).sort('-eventTimestamp').exec(function(err, storedEvents) {
